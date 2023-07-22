@@ -1,15 +1,10 @@
 import React from "react";
 import {createRoot} from "react-dom/client";
 
-// Import styles
+import {App} from "./components/App.jsx";
+
 import "lowcss/dist/low.css";
 
-const App = props => {
-    return (
-        <div align="center">
-            Hello world
-        </div>
-    );
-};
+const rootElement = document.getElementById("root");
 
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(rootElement).render(<App />);
