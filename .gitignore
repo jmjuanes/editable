@@ -1,0 +1,7 @@
+## Node.js files and folder
+node_modules
+package-lock.json
+yarn.lock
+
+## Output folders
+www
