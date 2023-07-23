@@ -1,52 +1,31 @@
 import React from "react";
-
-import {Input} from "./Input.jsx";
-import {Result} from "./Result.jsx";
+import {BLOCK_TYPES} from "../constants.js";
+import {CodeBlock} from "./CodeBlock.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
-
-import * as runner from "../runner.js";
 
 export const Layout = () => {
     const notebook = useNotebook();
 
-    // Handle submit
-    const handleSubmit = (id, value) => {
-        if (!value) {
-            return;
-        }
-        // Execute run
-        runner.execute(value)
-            .then(result => {
-                notebook.updateBlock(id, {
-                    value: value,
-                    result: {
-                        date: Date.now(),
-                        value: result,
-                    },
-                });
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    };
-
     return (
-        <div className="">
+        <div className="w-full maxw-5xl mx-auto">
             {notebook.blocks.map(block => (
-                <div key={block.id}>
-                    <Input
-                        key={block.id}
-                        ref={inputRef}
-                        initialValue={block.value}
-                        onSubmit={handleSubmit}
-                    />
-                    {block.result && (
-                        <Result
-                            key={block.id}
-                            result={block.result}
+                <React.Fragment key={block.id}>
+                    {block.type === BLOCK_TYPES.CODE && (
+                        <CodeBlock
+                            key={"block:" + block.id}
+                            id={block.id}
+                            initialValue={block.value}
+                            onUpdate={newValue => {
+                                notebook.updateBlock(block.id, {
+                                    value: newValue,
+                                });
+                            }}
+                            onDelete={() => {
+                                notebook.deleteBlock(block.id);
+                            }}
                         />
                     )}
-                </div>
+                </React.Fragment>
             ))}
         </div>
     );

@@ -1,14 +1,15 @@
 import React from "react";
 import {uid} from "uid/secure";
+import {BLOCK_TYPES} from "../constants.js";
 
 // Notebook context object
 const NotebookContext = React.createContext({});
 
 // Create a new block element
-const createNewBlock = () => ({
+const createNewBlock = type => ({
     id: uid(20),
+    type: type || BLOCK_TYPES.CODE,
     value: "",
-    result: null,
 });
 
 // Use notebook hook
@@ -22,11 +23,28 @@ export const useNotebook = () => {
         updateTitle: newTitle => {
             notebook.setState({title: newTitle});
         },
-        updateBlock: (id, newBlock) => {
+        updateBlock: (id, newData) => {
+            const blocks = notebook.currentState.blocks;
+            const updatedBlocks = blocks.map(block => {
+                return block.id === id ? ({...block, ...newData}) : block;
+            });
+            // Check if we have updated the last block for creating a new
+            // empty block automatically
+            const index = blocks.findIndex(block => block.id === id);
+            if (index === blocks.length - 1) {
+                updatedBlocks.push(createNewBlock());
+            }
+            // Save state
             notebook.setState({
-                blocks: notebook.currentState.blocks.map(block => {
-                    return block.id === id ? ({...block, ...newBlock}) : block;
-                }),
+                blocks: updatedBlocks,
+                updatedAt: Date.now(),
+            });
+        },
+        deleteBlock: id => {
+            const blocks = notebook.currentState.blocks;
+            notebook.setState({
+                blocks: blocks.filter(block => block.id !== id),
+                updatedAt: Date.now(),
             });
         },
     };

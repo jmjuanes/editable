@@ -10,7 +10,7 @@
     "scripts": {
         "build": "yarn clean && yarn build:app",
         "build:app": "cross-env NODE_ENV=production webpack build",
-        "dev ": "webpack serve",
+        "dev": "webpack serve",
         "clean": "rm -rf ./www",
         "test": "jest"
     },
