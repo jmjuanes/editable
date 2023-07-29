@@ -18,13 +18,15 @@ export const useNotebook = () => {
 
     // Export public notebook api
     return {
-        title: notebook.currentState.title,
-        blocks: notebook.currentState.blocks,
+        state: notebook.state,
+        setEditingBlock: id => {
+            notebook.setState({editingBlock: id});
+        },
         updateTitle: newTitle => {
             notebook.setState({title: newTitle});
         },
         updateBlock: (id, newData) => {
-            const blocks = notebook.currentState.blocks;
+            const blocks = notebook.state.blocks;
             const updatedBlocks = blocks.map(block => {
                 return block.id === id ? ({...block, ...newData}) : block;
             });
@@ -41,7 +43,7 @@ export const useNotebook = () => {
             });
         },
         deleteBlock: id => {
-            const blocks = notebook.currentState.blocks;
+            const blocks = notebook.state.blocks;
             notebook.setState({
                 blocks: blocks.filter(block => block.id !== id),
                 updatedAt: Date.now(),
@@ -57,10 +59,11 @@ export const NotebookProvider = props => {
         blocks: [
             createNewBlock(),
         ],
+        editingBlock: "",
     });
     const contextValue = {
         listeners: props.listeners,
-        currentState: state,
+        state: state,
         setState: newState => {
             setState(prevState => ({...prevState, ...newState}));
         },

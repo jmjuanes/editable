@@ -4,5 +4,11 @@ export const KEYS = {
 };
 
 export const BLOCK_TYPES = {
-    CODE: "codeblock",
+    TEXT: "block_text",
+    CODE: "block_code",
+};
+
+export const LANGUAGES = {
+    MARKDOWN: "markdown",
+    JAVASCRIPT: "javascript"
 };

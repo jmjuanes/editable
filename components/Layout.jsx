@@ -1,6 +1,5 @@
 import React from "react";
-import {BLOCK_TYPES} from "../constants.js";
-import {CodeBlock} from "./CodeBlock.jsx";
+import {Block} from "./Block.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
 
 export const Layout = () => {
@@ -8,23 +7,23 @@ export const Layout = () => {
 
     return (
         <div className="w-full maxw-5xl mx-auto">
-            {notebook.blocks.map(block => (
+            {notebook.state.blocks.map(block => (
                 <React.Fragment key={block.id}>
-                    {block.type === BLOCK_TYPES.CODE && (
-                        <CodeBlock
-                            key={"block:" + block.id}
-                            id={block.id}
-                            initialValue={block.value}
-                            onUpdate={newValue => {
-                                notebook.updateBlock(block.id, {
-                                    value: newValue,
-                                });
-                            }}
-                            onDelete={() => {
-                                notebook.deleteBlock(block.id);
-                            }}
-                        />
-                    )}
+                    <Block
+                        key={"block:" + block.id}
+                        id={block.id}
+                        type={block.type}
+                        value={block.value}
+                        editing={block.id === notebook.state.editingBlock}
+                        onUpdate={value => {
+                            notebook.updateBlock(block.id, {
+                                value: value,
+                            });
+                        }}
+                        onDelete={() => {
+                            notebook.deleteBlock(block.id);
+                        }}
+                    />
                 </React.Fragment>
             ))}
         </div>
