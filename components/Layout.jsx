@@ -23,6 +23,9 @@ export const Layout = () => {
                         onDelete={() => {
                             notebook.deleteBlock(block.id);
                         }}
+                        onEdit={() => {
+                            notebook.setEditingBlock(block.id);
+                        }}
                     />
                 </React.Fragment>
             ))}

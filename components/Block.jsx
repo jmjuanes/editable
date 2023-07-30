@@ -7,6 +7,13 @@ export const Block = props => {
     const value = React.useRef(props.value || "");
     const preview = React.useRef(null);
     const [state, setState] = React.useState({});
+    // Handle block click --> set as editing
+    const handleClick = event => {
+        if (!props.editing) {
+            event.preventDefault();
+            props.onEdit();
+        }
+    };
     // Handle run of this code block
     const handleRun = value => {
         setState(prevState => ({
@@ -49,15 +56,17 @@ export const Block = props => {
             )}
             {props.type === BLOCK_TYPES.CODE && (
                 <React.Fragment>
-                    <Editor
-                        key={`editor:${props.id}:${props.editing}`}
-                        value={value.current}
-                        language={LANGUAGES.JAVASCRIPT}
-                        readOnly={!props.editing}
-                        onChange={newValue => {
-                            value.current = newValue;
-                        }}
-                    />
+                    <div onClick={handleClick}>
+                        <Editor
+                            key={`editor:${props.id}:${props.editing}`}
+                            value={value.current}
+                            language={LANGUAGES.JAVASCRIPT}
+                            readOnly={!props.editing}
+                            onChange={newValue => {
+                                value.current = newValue;
+                            }}
+                        />
+                    </div>
                     {!state.running && state.result && (
                         <Result
                             key={`result:${props.id}:${state.runIndex}`}
@@ -78,4 +87,5 @@ Block.defaultProps = {
     editing: false,
     onUpdate: null,
     onDelete: null,
+    onEdit: null,
 };
