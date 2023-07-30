@@ -22,7 +22,7 @@ export const useNotebook = () => {
         setEditingBlock: id => {
             notebook.setState({editingBlock: id});
         },
-        updateTitle: newTitle => {
+        setTitle: newTitle => {
             notebook.setState({title: newTitle});
         },
         updateBlock: (id, newData) => {
@@ -46,6 +46,17 @@ export const useNotebook = () => {
             const blocks = notebook.state.blocks;
             notebook.setState({
                 blocks: blocks.filter(block => block.id !== id),
+                updatedAt: Date.now(),
+            });
+        },
+        insertBlockAfter: (id, type) => {
+            const blocks = [...notebook.state.blocks];
+            const newBlock = createNewBlock(type);
+            const index = blocks.findIndex(b => b.id === id);
+            // Insert this new block after the current block
+            (index === blocks.length - 1) ? blocks.push(newBlock) : blocks.slice(index + 1, 0, newBlock);
+            return notebook.setState({
+                blocks: blocks,
                 updatedAt: Date.now(),
             });
         },

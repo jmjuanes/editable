@@ -1,0 +1,13 @@
+.kori-editor {
+    background-color: white !important;
+    padding: 0px !important;
+}
+.kori-editor .codecake-editor {
+    background-color: #fafafa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+.kori-editor .codecake-lines {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}

@@ -1,12 +1,12 @@
 {
-    "name": "tonic",
+    "name": "kori",
     "version": "0.0.1",
     "description": "Web based notebooks",
     "private": true,
-    "homepage": "https://www.josemi.xyz/tonic",
-    "repository": "https://github.com/jmjuanes/tonic",
+    "homepage": "https://www.josemi.xyz/kori",
+    "repository": "https://github.com/jmjuanes/kori",
     "author": "Josemi Juanes <hello@josemi.xyz>",
-    "bugs": "https://github.com/jmjuanes/tonic/issues",
+    "bugs": "https://github.com/jmjuanes/kori/issues",
     "scripts": {
         "build": "yarn clean && yarn build:app",
         "build:app": "cross-env NODE_ENV=production webpack build",
