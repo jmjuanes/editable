@@ -6,10 +6,11 @@ import {BLOCK_TYPES} from "../constants.js";
 const NotebookContext = React.createContext({});
 
 // Create a new block element
-const createNewBlock = type => ({
+const createNewBlock = (type, initialValue = "") => ({
     id: uid(20),
     type: type || BLOCK_TYPES.CODE,
-    value: "",
+    value: initialValue || "",
+    locked: false,
 });
 
 // Use notebook hook
@@ -32,10 +33,10 @@ export const useNotebook = () => {
             });
             // Check if we have updated the last block for creating a new
             // empty block automatically
-            const index = blocks.findIndex(block => block.id === id);
-            if (index === blocks.length - 1) {
-                updatedBlocks.push(createNewBlock());
-            }
+            // const index = blocks.findIndex(block => block.id === id);
+            // if (index === blocks.length - 1) {
+            //     updatedBlocks.push(createNewBlock());
+            // }
             // Save state
             notebook.setState({
                 blocks: updatedBlocks,
@@ -54,24 +55,29 @@ export const useNotebook = () => {
             const newBlock = createNewBlock(type);
             const index = blocks.findIndex(b => b.id === id);
             // Insert this new block after the current block
-            (index === blocks.length - 1) ? blocks.push(newBlock) : blocks.slice(index + 1, 0, newBlock);
+            (index === blocks.length - 1) ? blocks.push(newBlock) : blocks.splice(index + 1, 0, newBlock);
             return notebook.setState({
                 blocks: blocks,
                 updatedAt: Date.now(),
             });
+        },
+        inserBlockBefore: (id, type) => {
+            // TODO
         },
     };
 };
 
 // Notebook provider component
 export const NotebookProvider = props => {
-    const [state, setState] = React.useState({
-        title: "Untitled",
+    const [state, setState] = React.useState(() => ({
+        title: "untitled",
         blocks: [
-            createNewBlock(),
+            createNewBlock(BLOCK_TYPES.TEXT),
+            createNewBlock(BLOCK_TYPES.CODE, `return "Hello world!";`),
         ],
+        updatedAt: Date.now(),
         editingBlock: "",
-    });
+    }));
     const contextValue = {
         listeners: props.listeners,
         state: state,
