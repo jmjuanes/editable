@@ -18,3 +18,10 @@ export const LANGUAGES = {
     MARKDOWN: "markdown",
     JAVASCRIPT: "javascript"
 };
+
+export const CONSOLE_LEVELS = {
+    LOG: "log",
+    INFO: "info",
+    WARNING: "warn",
+    ERROR: "error",
+};

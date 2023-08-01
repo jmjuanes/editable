@@ -20,7 +20,7 @@ export const Block = props => {
     const handleClick = event => {
         if (!props.editing) {
             event.preventDefault();
-            props.onEdit();
+            props.onEditStart();
         }
     };
     // Handle run of this code block
@@ -31,11 +31,12 @@ export const Block = props => {
         // Execute code block
         const result = await runner.execute(value.current);
         // Uppdate current value and save result response
-        // TODO: end editing this code block
-        props.onUpdate(value.current);
+        props.onEditEnd();
         setState(() => ({
             running: false,
             result: result,
+            executedTime: Date.now(),
+            executedValue: value.current,
         }));
     };
 
@@ -50,11 +51,17 @@ export const Block = props => {
                             onChange={newValue => {
                                 value.current = newValue;
                             }}
+                            onSubmit={() => props.onEditEnd()}
                         />
                     )}
                     {!props.editing && (
-                        <div className="w-full pl-12">
-                            Result
+                        <div className="w-full pl-12" onClick={handleClick}>
+                            {!value.current && (
+                                <span className="text-gray-500">Type something...</span>
+                            )}
+                            {!!value.current && (
+                                <span>{value.current}</span>
+                            )}
                         </div>
                     )}
                 </React.Fragment>
@@ -77,7 +84,11 @@ export const Block = props => {
                     </div>
                     {!state.running && state.result && (
                         <div className="w-full pl-12 mt-3">
-                            <Result {...state.result} />
+                            <Result
+                                key={state.executedTime}
+                                current={!props.editing && value.current === state.executedValue}
+                                {...state.result}
+                            />
                         </div>
                     )}
                 </React.Fragment>
@@ -93,5 +104,6 @@ Block.defaultProps = {
     editing: false,
     onUpdate: null,
     onDelete: null,
-    onEdit: null,
+    onEditStart: null,
+    onEditEnd: null,
 };
