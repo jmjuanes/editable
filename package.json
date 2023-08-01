@@ -15,7 +15,7 @@
         "test": "jest"
     },
     "dependencies": {
-        "@josemi-icons/react": "^0.1.0",
+        "@josemi-icons/react": "^0.2.0",
         "browser-fs-access": "^0.33.1",
         "classnames": "^2.3.2",
         "codecake": "^0.1.0",
