@@ -1,2 +1,4 @@
-# tonic
-Web based notebooks. Ideal for prototyping, exploration and presentations.
+# Kori
+
+> Web based notebooks. Ideal for prototyping, exploration and presentations.
+
