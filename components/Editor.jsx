@@ -2,6 +2,17 @@ import React from "react";
 import {PlayIcon} from "@josemi-icons/react";
 import * as CodeCake from "codecake";
 
+const SubmitButton = ({onClick, text}) => (
+    <div className="flex items-center gap-1 px-2 py-1 rounded text-white bg-green-500 hover:bg-green-600 cursor-pointer" onClick={onClick}>
+        <div className="text-white flex items-center">
+            <PlayIcon />
+        </div>
+        <div className="text-sm flex text-white">
+            <strong>{text}</strong>
+        </div>
+    </div>
+);
+
 export const Editor = props => {
     const editor = React.useRef(null);
     React.useEffect(() => {
@@ -29,14 +40,10 @@ export const Editor = props => {
             {!props.readOnly && (props.showSubmitButton || props.showSubmitHint) && (
                 <div className="flex flex-nowrap gap-4 items-center mt-2 pl-12">
                     {props.showSubmitButton && (
-                        <div className="flex items-center gap-1 px-2 py-1 rounded-md text-white bg-green-500 hover:bg-green-600" onClick={props.onSubmit}>
-                            <div className="text-white flex items-center">
-                                <PlayIcon />
-                            </div>
-                            <div className="text-sm flex text-white">
-                                <strong>{props.submitText}</strong>
-                            </div>
-                        </div>
+                        <SubmitButton
+                            text={props.submitText}
+                            onClick={props.onSubmit}
+                        />
                     )}
                     {props.showSubmitHint && (
                         <div className="text-gray-400 text-sm">
