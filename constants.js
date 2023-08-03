@@ -25,3 +25,17 @@ export const CONSOLE_LEVELS = {
     WARNING: "warn",
     ERROR: "error",
 };
+
+// Values types
+export const VALUES_TYPES = {
+    OBJECT: "object",
+    ARRAY: "array",
+    FUNCTION: "function",
+    SET: "set",
+    MAP: "map",
+    STRING: "string",
+    NUMBER: "number",
+    BOOLEAN: "boolean",
+    NULL: "null",
+    UNDEFINED: "undefined",
+};
