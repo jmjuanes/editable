@@ -11,3 +11,45 @@
     padding-bottom: 1rem;
     padding-top: 1rem;
 }
+
+/* Values types */
+.kori-value {
+    font-family: "Source Code Pro", monospace;
+    font-size: 14px;
+}
+.kori-value.string {
+    color: #00a17d;
+}
+.kori-value.string::after,
+.kori-value.string::before {
+    content: '"';
+}
+.kori-value.null,
+.kori-value.undefined,
+.kori-value.boolean {
+    color: #20118a;
+}
+.kori-value.number {
+    color: #e57697;
+}
+.kori-value.object em,
+.kori-value.function em {
+    color: #2196f3;
+    cursor: pointer;
+    margin-right: 8px;
+    user-select: none;
+}
+.kori-value.object em:hover,
+.kori-value.function em:hover {
+    text-decoration: underline;
+}
+.kori-value.object .object-key {
+    color: #7e7e7e;
+}
+.kori-value.object .object-entry {
+    display: flex;
+    gap: 6px;
+}
+.kori-value.object .object-body {
+    margin-left: 16px;
+}

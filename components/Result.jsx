@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import {renderIcon, XCircleIcon} from "@josemi-icons/react";
 import {RESULT_TYPES, CONSOLE_LEVELS} from "../constants.js";
+import {Value} from "./Value.jsx";
 
 // Map icons by log level
 const IconsByConsoleLevel = {
@@ -9,12 +10,6 @@ const IconsByConsoleLevel = {
     [CONSOLE_LEVELS.INFO]: "info-circle",
     [CONSOLE_LEVELS.WARNING]: "exclamation-triangle",
     [CONSOLE_LEVELS.ERROR]: "exclamation-circle",
-};
-
-const ResultValue = props => {
-    return (
-        <div>{props.value}</div>
-    );
 };
 
 const ResultLog = props => {
@@ -78,7 +73,7 @@ export const Result = props => {
             {(props.type === RESULT_TYPES.VALUE || props.type === RESULT_TYPES.HTML) && (
                 <div ref={preview} className="border border-gray-300 rounded-md p-3 bg-white">
                     {props.type === RESULT_TYPES.VALUE && (
-                        <ResultValue value={props.value} />
+                        <Value value={props.value} />
                     )}
                 </div>
             )}
