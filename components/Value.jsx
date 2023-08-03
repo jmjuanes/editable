@@ -52,7 +52,7 @@ export const ObjectValue = props => {
     // Render only a preview of the object
     if (props.preview) {
         return (
-            <span className="type-object closed">
+            <span className="kori-value object">
                 <em>{displayName}</em>
             </span>
         );
@@ -62,7 +62,7 @@ export const ObjectValue = props => {
         // If object is not expanded, we want to display only some keys of the object
         const visibleEntries = entries.slice(0, props.maxClosedKeys);
         return (
-            <div className="type-object closed" onClick={handleToggle}>
+            <div className="kori-value object" onClick={handleToggle}>
                 <em>{displayName}</em>
                 <span className="">{type === VALUES_TYPES.ARRAY ? "[ " : "{ "}</span>
                 {visibleEntries.map((entry, index) => (
@@ -75,7 +75,7 @@ export const ObjectValue = props => {
                         )}
                         {(type === VALUES_TYPES.OBJECT || type === VALUES_TYPES.SET) && (
                             <span className="">
-                                <span className="key">{entry[0]}</span>
+                                <span className="object-key">{entry[0]}</span>
                                 <span className="">{": "}</span>
                             </span>
                         )}
@@ -88,7 +88,7 @@ export const ObjectValue = props => {
                     </span>
                 ))}
                 {visibleEntries.length < entries.length && (
-                    <span className="more">…</span>
+                    <span className="object-more">…</span>
                 )}
                 <span className="">{type === VALUES_TYPES.ARRAY ? " ]" : " }"}</span>
             </div>
@@ -97,14 +97,14 @@ export const ObjectValue = props => {
 
     // Render full object
     return (
-        <div className="type-object closed" onClick={handleToggle}>
-            <div className="header">
+        <div className="kori-value object" onClick={handleToggle}>
+            <div className="object-header">
                 <em>{displayName}</em>
                 <span className="">{type === VALUES_TYPES.ARRAY ? "[ " : "{ "}</span>
             </div>
-            <div className="body">
+            <div className="object-body">
                 {entries.map((entry, index) => (
-                    <div className="item" key={"entry-" + index}>
+                    <div className="object-entry" key={"entry-" + index}>
                         {type === VALUES_TYPES.MAP && (
                             <div className="">
                                 <Value value={entry[0]} />
@@ -113,7 +113,7 @@ export const ObjectValue = props => {
                         )}
                         {type !== VALUES_TYPES.MAP && (
                             <div className="">
-                                <span className="key">{entry[0]}</span>
+                                <span className="object-key">{entry[0]}</span>
                                 <span className="">{": "}</span>
                             </div>
                         )}
@@ -123,7 +123,7 @@ export const ObjectValue = props => {
                     </div>
                 ))}
             </div>
-            <div className="footer">
+            <div className="object-footer">
                 <span className="">{type === VALUES_TYPES.ARRAY ? " ]" : " }"}</span>
             </div>
         </div>
@@ -136,41 +136,65 @@ ObjectValue.defaultProps = {
     maxClosedKeys: 5,
 };
 
-// Value type renderer
+export const NullValue = () => (
+    <span className="kori-value null">null</span>
+);
+
+export const UndefinedValue = () => (
+    <span className="kori-value undefined">undefined</span>
+);
+
+export const StringValue = props => (
+    <span className="kori-value string">{props.value}</span>
+);
+
+export const NumberValue = props => (
+    <span className="kori-value number">{props.value}</span>
+);
+
+export const BooleanValue = props => (
+    <span className="kori-value boolean">{props.value ? "true" : "false"}</span>
+);
+
+export const FunctionValue = props => (
+    <span className="kori-value function">
+        <em>{"ƒunction"} {getFunctionSignature(props.value)}</em>
+    </span>
+);
+
+// Tiny function to get the component for the given value
+export const getValueComponentType = value => {
+    const type = typeof value;
+    if (type === VALUES_TYPES.OBJECT && value === null) {
+        return NullValue;
+    }
+    else if (type === VALUES_TYPES.UNDEFINED) {
+        return UndefinedValue;
+    }
+    else if (type === VALUES_TYPES.STRING) {
+        return StringValue;
+    }
+    else if (type === VALUES_TYPES.NUMBER) {
+        return NumberValue;
+    }
+    else if (type === VALUES_TYPES.BOOLEAN) {
+        return BooleanValue;
+    }
+    else if (type === VALUES_TYPES.FUNCTION) {
+        return FunctionValue;
+    }
+    // Other case, everyting is an object
+    return ObjectValue;
+};
+
 export const Value = props => {
-    if (props.value === null) {
-        return (<span className="type-null">null</span>)
-    }
-    else if (typeof props.value === "undefined") {
-        return (<span className="type-undefined">undefined</span>);
-    }
-    else if (typeof props.value === "string") {
-        return (<span className="type-string">{props.value}</span>);
-    }
-    else if (typeof props.value === "number") {
-        return (<span className="type-number">{props.value}</span>);
-    }
-    else if (typeof props.value === "boolean") {
-        return (<span className="type-boolean">{props.value ? "true" : "false"}</span>);
-    }
-    else if (typeof props.value === "function") {
-        return (
-            <span className="type-function">
-                <em>{"ƒunction"} {getFunctionSignature(props.value)}</em>
-            </span>
-        );
-    }
-    // Other case, everyting is an object!  
-    return (
-        <ObjectValue
-            value={props.value}
-            preview={props.preview}
-        />
-    );
+    return React.createElement(getValueComponentType(props.value), {
+        value: props.value,
+        preview: !!props.preview,
+    });
 };
 
 Value.defaultProps = {
     value: null,
     preview: false,
 };
-
