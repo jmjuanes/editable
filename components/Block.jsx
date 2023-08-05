@@ -2,7 +2,7 @@ import React from "react";
 import {BLOCK_TYPES, LANGUAGES} from "../constants.js";
 import {Editor} from "./Editor.jsx";
 import {Result} from "./Result.jsx";
-import * as runner from "../runner.js";
+import {execute} from "../runner.js";
 
 export const Block = props => {
     const value = React.useRef(props.value || "");
@@ -29,7 +29,7 @@ export const Block = props => {
             running: true,
         }));
         // Execute code block
-        const result = await runner.execute(value.current);
+        const result = await execute(value.current);
         // Uppdate current value and save result response
         props.onEditEnd();
         setState(() => ({
@@ -86,8 +86,11 @@ export const Block = props => {
                         <div className="w-full pl-12 mt-3">
                             <Result
                                 key={state.executedTime}
-                                current={!props.editing && value.current === state.executedValue}
-                                {...state.result}
+                                value={state.result?.value}
+                                isCurrentValue={!props.editing && value.current === state.executedValue}
+                                error={!!state.result?.error}
+                                errorType={state.result?.errorType}
+                                errorMessage={state.result?.errorMessage}
                             />
                         </div>
                     )}

@@ -1,31 +1,23 @@
-import {RESULT_TYPES, CONSOLE_LEVELS} from "./constants.js";
+import React from "react";
+import {CONSOLE_LEVELS} from "./constants.js";
 
 const AsyncFunction = Object.getPrototypeOf(async function (){}).constructor;
 
 // Global context for executing code blocks
 let context = {};
 
-// Wrap command for using 'await'
-const wrapCommand = command => {
-    return `return (async () => {${command}})();`;
+// Create function code
+const createFunctionCode = code => {
+    return `return (async () => {${code}})();`;
 };
 
 // Create a new kori instance object
 const createKoriInstance = () => {
-    const koriInstance = {
-        _parent: document.createElement("div"),
-        _renderedHtml: false,
+    return Object.freeze({
         delay: time => {
             return new Promise(resolve => setTimeout(resolve, time));
         },
-        renderHTML: html => {
-            if (typeof html === "string") {
-                koriInstance._parent.innerHTML = html;
-                koriInstance._renderedHtml = true;
-            }
-        },
-    };
-    return koriInstance;
+    });
 };
 
 // Create a new console instance
@@ -51,25 +43,21 @@ const createConsoleInstance = () => {
 };
 
 // Execute the provide command
-export const execute = async command => {
+export const execute = async code => {
     const kori = createKoriInstance();
     const consoleInstance = createConsoleInstance();
     const result = {
-        type: RESULT_TYPES.VALUE,
         logs: consoleInstance._logs,
+        error: false,
     };
     try {
-        const fn = new AsyncFunction("kori", "console", wrapCommand(command));
-        result.value = await fn.call(context, kori, consoleInstance);
-        // Check if we have rendered HTML content
-        if (kori._renderedHtml) {
-            result.type = RESULT_TYPES.HTML;
-            result.html = kori._parent;
-        }
+        const fnCode = createFunctionCode(code);
+        const fn = new AsyncFunction("kori", "console", "React", fnCode);
+        result.value = await fn.call(context, kori, consoleInstance, React);
     }
     catch(error) {
         // Save error message in result and set as error type
-        result.type = RESULT_TYPES.ERROR;
+        result.error = true;
         result.errorType = error.name;
         result.errorMessage = error.message;
     }

@@ -8,12 +8,6 @@ export const BLOCK_TYPES = {
     CODE: "block_code",
 };
 
-export const RESULT_TYPES = {
-    ERROR: "result:error",
-    VALUE: "result:value",
-    HTML: "result:html",
-};
-
 export const LANGUAGES = {
     MARKDOWN: "markdown",
     JAVASCRIPT: "javascript"
