@@ -1,0 +1,15 @@
+{
+    "name": "@koridev/datatable",
+    "version": "0.0.",
+    "description": "Datatable component for Kori",
+    "private": true,
+    "homepage": "https://www.josemi.xyz/kori",
+    "repository": "https://github.com/jmjuanes/kori",
+    "author": "Josemi Juanes <hello@josemi.xyz>",
+    "bugs": "https://github.com/jmjuanes/kori/issues",
+    "dependencies": {
+        "classnames": "^2.3.2",
+        "lowcss": "^0.12.0",
+        "react": "^18.2.0"
+    }
+}
