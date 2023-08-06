@@ -173,7 +173,7 @@ export const DataTableRender = props => {
                     {(props.columns || []).map((column, index) => {
                         const key = `header:cell:${index}`;
                         const cellClass = classNames({
-                            "p-3": true,
+                            "p-3 font-bold": true,
                             "border-l-1 first:border-l-0 border-gray-300": props.border,
                         });
                         const handleCellClick = event => {
@@ -264,11 +264,11 @@ DataTableRender.defaultProps = {
 };
 
 // DataTable component
-export const DataTable = props => {
+export const DataTable = React.forwardRef((props, ref) => {
     const [state, setState] = React.useState(() => {
         const pageSize = (props.pagination === false) ? props.data.length : props.pageSize;
         return {
-            updateKey: Date.now(),
+            updateKey: 0,
             page: 0,
             pages: calculatePages(props.data.length, pageSize),
             pageSize: pageSize,
@@ -277,12 +277,51 @@ export const DataTable = props => {
             sortedRows: range(0, props.data.length)
         };
     });
+    // Initialize public api for datatable
+    if (ref && typeof ref?.current !== "undefined") {
+        ref.current = {
+            forceUpdate: () => {
+                setState(prevState => ({
+                    ...prevState,
+                    updateKey: prevState.updateKey + 1,
+                }));
+            },
+            getColumn: index => props.columns[index],
+            getRow: index => props.rows[index],
+            countRows: () => props.data.length,
+            // Manage pages
+            nextPage: () => setState(prevState => ({
+                ...prevState,
+                page: Math.min(prevState.page + 1, prevState.pages - 1),
+            })),
+            prevPage: () => setState(prevState => ({
+                ...prevState,
+                page: Math.max(0, prevState.page - 1),
+            })),
+            // getCurrentPage: () => state.page,
+            // getTotalPages: () => state.pages,
+            // Filter rows
+            filter: fn => {
+                const filteredRows = range(0, props.data.length).filter(index => {
+                    return !!fn(props.data[index], index);
+                });
+                return setState(prevState => ({
+                    ...prevState,
+                    updateKey: prevState.updateKey + 1,
+                    filteredRows: filteredRows,
+                    sortedRows: getSortedRows(props.data, filteredRows, props.columns, prevState.sortedColumns),
+                    pages: calculatePages(filteredRows.length, prevState.currentPageSize),
+                    page: 0,
+                }));
+            },
+        };
+    }
     // Handle page change
     const handlePageChange = page => {
         // TODO: emit onPageChange event
         setState(prevState => ({
             ...prevState,
-            updateKey: Date.now(),
+            updateKey: prevState.updateKey + 1,
             page: page,
         }));
     };
@@ -292,7 +331,7 @@ export const DataTable = props => {
         return setState(prevState => {
             return {
                 ...prevState,
-                updateKey: Date.now(),
+                updateKey: prevState.updateKey + 1,
                 page: 0,
                 pages: calculatePages(prevState.filteredRows.length, size),
                 pageSize: size,
@@ -322,7 +361,7 @@ export const DataTable = props => {
             const sortedColumns = getSortedColumns(state.sortedColumns, columnIndex, event.shiftKey);
             setState(prevState => ({
                 ...prevState,
-                updateKey: Date.now(),
+                updateKey: prevState.updateKey + 1,
                 sortedColumns: sortedColumns,
                 sortedRows: getSortedRows(props.data, state.filteredRows, props.columns, sortedColumns),
             }))
@@ -436,7 +475,7 @@ export const DataTable = props => {
             )}
         </div>
     );
-};
+});
 
 // Default props for datatable
 DataTable.defaultProps = { 
