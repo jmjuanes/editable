@@ -60,7 +60,7 @@ const getSortedRows = (data, rows, columns, sortedColumns) => {
             }
             // Default sorting
             else {
-                const key = columns[index].key;
+                const key = columns[index].field;
                 const numeric = !isNaN(+data[a][key] - +data[b][key]);
                 const value1 = (numeric === true) ? +data[a][key] : data[a][key].toLowerCase();
                 const value2 = (numeric === true) ? +data[b][key] : data[b][key].toLowerCase();
@@ -82,8 +82,8 @@ const getCellContent = (row, rowIndex, column, columnIndex) => {
         return column.render(row, rowIndex, column, columnIndex);
     }
     // No custom content, find the content in the row data
-    if (column.key && typeof row[column.key] !== "undefined") {
-        return row[column.key];
+    if (column.field && typeof row[column.field] !== "undefined") {
+        return row[column.field];
     }
     // Default: return default value in column config
     return column.defaultValue || "";
@@ -107,7 +107,7 @@ export const DataTablePagination = props => {
         }
     };
     return (
-        <div className="flex items-center justify-between mt-2">
+        <div className="flex items-center justify-between mt-2" data-testid="dt-pagination">
             {/* Left side content */}
             <div className="text-gray-600 text-sm">
                 Showing <b>{props.rowStart + 1}</b> to <b>{props.rowEnd}</b> of <b>{props.rowSize}</b> rows.
@@ -164,8 +164,8 @@ export const DataTableRender = props => {
     });
     // Return the table content
     return (
-        <table className={tableClass}>
-            <thead className="">
+        <table className={tableClass} data-testid="dt-table">
+            <thead className="" data-testid="dt-table-header">
                 <tr className="border-b-2 border-gray-300">
                     {props.selectable && (
                         <td className="p-3 w-12"></td>
@@ -198,7 +198,7 @@ export const DataTableRender = props => {
                     })}
                 </tr>
             </thead>
-            <tbody className="">
+            <tbody className="" data-testid="dt-table-body">
                 {props.data.map((row, rowIndex) => {
                     const isLast = rowIndex === props.data.length - 1;
                     const rowKey = `body:row:${rowIndex}`;
@@ -378,7 +378,7 @@ export const DataTable = React.forwardRef((props, ref) => {
     // Check for no columns or data to display
     if (props.columns.length === 0 || props.data.length === 0) {
         return (
-            <div className="w-full text-center">
+            <div className="w-full text-center" data-testid="dt-empty">
                 <span>{props.emptyText}</span>
             </div>
         );
@@ -445,7 +445,7 @@ export const DataTable = React.forwardRef((props, ref) => {
         }
     }
     return (
-        <div className="w-full maxw-full">
+        <div className="w-full maxw-full" data-testid="dt">
             <div className="w-full overflow-x-auto" style={{height: height, ...props.style}}>
                 <DataTableRender
                     key={state.updateKey}
