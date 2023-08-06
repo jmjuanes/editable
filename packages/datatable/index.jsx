@@ -1,18 +1,10 @@
 import React from "react";
 import classNames from "classnames";
+import {ChevronLeftIcon, ChevronRightIcon} from "@josemi-icons/react";
 
 // Generate an array range 
 const range = (start, length) => {
     return Array(length).fill().map((_, index) => start + index);
-};
-
-//Find a class-name in a node list
-const findClassInNodeList = (list, className, callback) => {
-    for (let i = 0; i < list.length; i++) {
-        if (list[i].classList.contains(className) === true) {
-            return callback(list[i], i);
-        }
-    }
 };
 
 // Calculate the number of pages
@@ -83,14 +75,31 @@ const getSortedRows = (data, rows, columns, sortedColumns) => {
     });
 };
 
+// Get cell content
+const getCellContent = (row, rowIndex, column, columnIndex) => {
+    // Check for custom cell content
+    if (typeof column.render === "function") {
+        return column.render(row, rowIndex, column, columnIndex);
+    }
+    // No custom content, find the content in the row data
+    if (column.key && typeof row[column.key] !== "undefined") {
+        return row[column.key];
+    }
+    // Default: return default value in column config
+    return column.defaultValue || "";
+};
+
 export const DataTablePagination = props => {
+    const pageSize = props.pageSize;
     const handlePageChange = page => {
         const newPage = Math.max(0, Math.min(page, props.pages - 1));
         if (props.page !== newPage && typeof props.onPageChange === "function") {
-            props.onPageChange(newPpage);
+            props.onPageChange(newPage);
         }
     };
-    const handlePaginationChange = event => {
+    const nextPage = () => handlePageChange(props.page + 1);
+    const prevPage = () => handlePageChange(props.page - 1);
+    const handlePageSizeChange = event => {
         const entries = parseInt(event.target.value);
         if (!isNaN(entries) && props.pageSize !== entries) { 
             //console.log("New page size: " + entries);
@@ -98,27 +107,35 @@ export const DataTablePagination = props => {
         }
     };
     return (
-        <div className="datatable-pagination">
+        <div className="flex items-center justify-between mt-2">
             {/* Left side content */}
-            <div className="">
+            <div className="text-gray-600 text-sm">
                 Showing <b>{props.rowStart + 1}</b> to <b>{props.rowEnd}</b> of <b>{props.rowSize}</b> rows.
             </div>
             {/* Right side content */}
-            <div className="">
-                <div className="">
-                    <div className="">Rows per page: </div>
-                    <select defaultValue={props.pageSize} className="" onChange={handlePageSizeChange}>
+            <div className="flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-2">
+                    <div className="text-gray-600 text-sm">
+                        <span>Rows per page:</span>
+                    </div>
+                    <select className="py-1 pl-1 pr-8 text-sm bg-white" defaultValue={pageSize} onChange={handlePageSizeChange}>
                         {props.pageSizeOptions.map((value, index) => (
                             <option key={index} value={value}>{value.toString()}</option>
                         ))}
                     </select>
                 </div>
-                <div className="">
-                    <button>Prev</button>
-                    <div className="">
-                        Page {props.page + 1} of {props.pages}
+                <div className="flex items-center gap-2">
+                    <div className="p-2 text-sm flex items-center" onClick={prevPage}>
+                        <ChevronLeftIcon />
+                        <strong>Prev</strong>
                     </div>
-                    <button>Next</button>
+                    <div className="text-gray-600">
+                        Page <b>{props.page + 1}</b> of <b>{props.pages}</b>
+                    </div>
+                    <div className="p-2 text-sm flex items-center" onClick={nextPage}>
+                        <strong>Next</strong>
+                        <ChevronRightIcon />
+                    </div>
                 </div>
 
             </div>
@@ -141,16 +158,24 @@ DataTablePagination.defaultProps = {
 
 // Export datatable render component
 export const DataTableRender = props => {
+    const tableClass = classNames({
+        "w-full rounded-md": true,
+        "border border-gray-300": props.border,
+    });
     // Return the table content
     return (
-        <table className="">
+        <table className={tableClass}>
             <thead className="">
-                <tr className="">
+                <tr className="border-b-2 border-gray-300">
                     {props.selectable && (
-                        <td className=""></td>
+                        <td className="p-3 w-12"></td>
                     )}
                     {(props.columns || []).map((column, index) => {
                         const key = `header:cell:${index}`;
+                        const cellClass = classNames({
+                            "p-3": true,
+                            "border-l-1 first:border-l-0 border-gray-300": props.border,
+                        });
                         const handleCellClick = event => {
                             return props.onHeaderCellClick(event, column.index);
                         };
@@ -166,7 +191,7 @@ export const DataTableRender = props => {
                         //     //}
                         // }
                         return (
-                            <td key={key} className="" onClick={handleCellClick} style={column.style}>
+                            <td key={key} className={cellClass} onClick={handleCellClick} style={column.style}>
                                 <span>{column.content}</span>
                             </td>
                         );
@@ -175,8 +200,13 @@ export const DataTableRender = props => {
             </thead>
             <tbody className="">
                 {props.data.map((row, rowIndex) => {
+                    const isLast = rowIndex === props.data.length - 1;
                     const rowKey = `body:row:${rowIndex}`;
-                    // const rowSelected = !!row.selected;
+                    const rowClass = classNames({
+                        "odd:bg-white even:bg-gray-100": props.striped,
+                        "border-b-1 border-gray-300": !isLast && props.border,
+                    });
+                    const rowSelected = !!row.selected;
                     const handleRowSelect = event => {
                         event.stopPropagation();
                         event.preventDefault();
@@ -184,19 +214,30 @@ export const DataTableRender = props => {
                     };
                     // Return this row
                     return (
-                        <tr key={rowKey} className="" style={row.style}>
+                        <tr key={rowKey} className={rowClass} style={row.style}>
                             {props.selectable && (
-                                <td className="" onClick={handleRowSelect}>
-                                    Select
+                                <td className="w-12" onClick={handleRowSelect}>
+                                    <div className="flex items-center justify-center">
+                                        <input
+                                            key={rowKey + rowSelected}
+                                            type="checkbox"
+                                            className=""
+                                            defaultChecked={rowSelected}
+                                        />
+                                    </div>
                                 </td>
                             )}
                             {(row.cells || []).map((cell, cellIndex) => {
                                 const cellKey = `body:row${rowIndex}:cell:${cellIndex}`;
+                                const cellClass = classNames({
+                                    "p-3": true,
+                                    "border-l-1 first:border-l-0 border-gray-300": props.border,
+                                });
                                 const handleCellClick = event => {
                                     return props.onBodyCellClick(event, row.index, cell.index);
                                 };
                                 return (
-                                    <td key={cellIndex} className="" style={cell.style} onClick={handleCellClick}>
+                                    <td key={cellKey} className={cellClass} style={cell.style} onClick={handleCellClick}>
                                         {cell.content}
                                     </td>
                                 );
@@ -227,6 +268,7 @@ export const DataTable = props => {
     const [state, setState] = React.useState(() => {
         const pageSize = (props.pagination === false) ? props.data.length : props.pageSize;
         return {
+            updateKey: Date.now(),
             page: 0,
             pages: calculatePages(props.data.length, pageSize),
             pageSize: pageSize,
@@ -236,9 +278,13 @@ export const DataTable = props => {
         };
     });
     // Handle page change
-    const handlePageChange = newPage => {
+    const handlePageChange = page => {
         // TODO: emit onPageChange event
-        setState(prevState => ({...prevState, page: page}));
+        setState(prevState => ({
+            ...prevState,
+            updateKey: Date.now(),
+            page: page,
+        }));
     };
     // Handle the page size change
     const handlePageSizeChange = size => {
@@ -246,6 +292,7 @@ export const DataTable = props => {
         return setState(prevState => {
             return {
                 ...prevState,
+                updateKey: Date.now(),
                 page: 0,
                 pages: calculatePages(prevState.filteredRows.length, size),
                 pageSize: size,
@@ -275,6 +322,7 @@ export const DataTable = props => {
             const sortedColumns = getSortedColumns(state.sortedColumns, columnIndex, event.shiftKey);
             setState(prevState => ({
                 ...prevState,
+                updateKey: Date.now(),
                 sortedColumns: sortedColumns,
                 sortedRows: getSortedRows(props.data, state.filteredRows, props.columns, sortedColumns),
             }))
@@ -285,9 +333,22 @@ export const DataTable = props => {
         }
     };
     // Handle the header row select event
-    const handleHeaderRowSelect = event => {
-        return null;
-    };
+    // const handleHeaderRowSelect = event => {
+    //     return null;
+    // };
+    // Check for no columns or data to display
+    if (props.columns.length === 0 || props.data.length === 0) {
+        return (
+            <div className="w-full text-center">
+                <span>{props.emptyText}</span>
+            </div>
+        );
+    }
+    // Calculate the rows start and end values
+    const rowSize = state.sortedRows.length;
+    const rowStart = Math.max(0, state.page * state.pageSize);
+    const rowEnd = Math.min(rowStart + state.pageSize, rowSize);
+    const height = props.pagination ? null : props.height;
     // Get table columns
     const columns = props.columns.map((column, index) => {
         if (typeof column.visible === "boolean" && !column.visible) {
@@ -315,13 +376,14 @@ export const DataTable = props => {
     const data = [];
     if (state.sortedRows.length > 0) {
         for (let i = rowStart; i < rowEnd; i++) {
-            const row = props.data[i];
+            const rowIndex = state.sortedRows[i];
+            const row = props.data[rowIndex];
             const rowProps = {
-                index: state.sortedRows[i],
+                index: rowIndex,
                 cells: [],
                 style: null,
                 className: null,
-                selected: typeof props.rowSelected === "function" ? props.rowSelected(row, i) : false,
+                selected: typeof props.rowSelected === "function" ? props.rowSelected(row, rowIndex) : false,
             };
             // Build the row cells content
             props.columns.forEach((column, index) => {
@@ -329,23 +391,13 @@ export const DataTable = props => {
                 if (typeof column.visible === "boolean" && column.visible === false) {
                     return null;
                 }
-                // Initialize the cell props
-                const cellProps = {
+                // Save cell configuration
+                rowProps.cells.push({
                     index: index,
                     style: {}, // helpers.callProp(column.bodyClassName, [row, rowIndex, column, index]),
                     className: "", // helpers.callProp(column.bodyStyle, [row, rowIndex, column, index]),
-                    content: (typeof column.defaultValue === "string") ? column.defaultValue : ""
-                };
-                // Check for custom cell content
-                if (typeof column.render === "function") {
-                    cellProps.content = column.render(row, rowProps.index, column, index);
-                }
-                // No custom content, find the content in the row data
-                else if (column.key && row[column.key]) {
-                    cellProps.content = row[column.key];
-                }
-                // Save the cell information
-                rowProps.cells.push(cellProps);
+                    content: getCellContent(row, rowIndex, column, index),
+                });
             });
             // Assign row style
             // rowProps.className = helpers.callProp(this.props.bodyRowClassName, [row, rowProps.index, rowProps.selected]);
@@ -353,23 +405,11 @@ export const DataTable = props => {
             data.push(rowProps);
         }
     }
-    // Check for no columns or data to display
-    if (props.columns.length === 0 || props.data.length === 0) {
-        return (
-            <div className="">
-                <span>{props.emptyText}</span>
-            </div>
-        );
-    }
-    // Calculate the rows start and end values
-    const rowSize = state.sortedRows.length;
-    const rowStart = Math.max(0, state.page * state.pageSize);
-    const rowEnd = Math.min(rowStart + state.pageSize, rowSize);
-    const height = props.pagination ? null : props.height;
     return (
-        <div className="">
-            <div className="" style={{height: height, ...props.style}}>
+        <div className="w-full maxw-full">
+            <div className="w-full overflow-x-auto" style={{height: height, ...props.style}}>
                 <DataTableRender
+                    key={state.updateKey}
                     data={data}
                     columns={columns.filter(c => !!c)}
                     border={!!props.border}
@@ -380,20 +420,20 @@ export const DataTable = props => {
                     onBodyCellClick={handleBodyCellClick}
                     onBodyRowSelect={handleBodyRowSelect}
                 />
-                {props.showPagination && props.pagination && (
-                    <DataTablePagination
-                        page={state.page}
-                        pages={state.pages}
-                        pageSize={state.pageSize}
-                        pageSizeOptions={props.pageSizeOptions}
-                        rowStart={rowStart}
-                        rowEnd={rowEnd}
-                        rowSize={rowSize}
-                        onPageChange={handlePageChange}
-                        onPageSizeChange={handlePageSizeChange}
-                    />
-                )}
             </div>
+            {props.showPagination && props.pagination && (
+                <DataTablePagination
+                    page={state.page}
+                    pages={state.pages}
+                    pageSize={state.pageSize}
+                    pageSizeOptions={props.pageSizeOptions}
+                    rowStart={rowStart}
+                    rowEnd={rowEnd}
+                    rowSize={rowSize}
+                    onPageChange={handlePageChange}
+                    onPageSizeChange={handlePageSizeChange}
+                />
+            )}
         </div>
     );
 };
@@ -437,4 +477,3 @@ DataTable.defaultProps = {
     onPageChange: null, // Current page changed
     onPageSizeChange: null, // Page size changed
 };
-
