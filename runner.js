@@ -1,4 +1,5 @@
 import React from "react";
+import {DataTable} from "@koridev/datatable";
 import {CONSOLE_LEVELS} from "./constants.js";
 
 const AsyncFunction = Object.getPrototypeOf(async function (){}).constructor;
@@ -16,6 +17,9 @@ const createKoriInstance = () => {
     return Object.freeze({
         delay: time => {
             return new Promise(resolve => setTimeout(resolve, time));
+        },
+        createTable: props => {
+            return React.createElement(DataTable, props);
         },
     });
 };
