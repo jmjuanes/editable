@@ -28,6 +28,11 @@ module.exports = {
             writeToDisk: true,
         },
     },
+    resolve: {
+        alias: {
+            "@koridev/datatable": path.join(__dirname, "packages", "datatable", "index.jsx"),
+        },
+    },
     module: {
         rules: [
             {
