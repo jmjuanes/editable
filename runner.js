@@ -1,14 +1,35 @@
 import React from "react";
 import {DataTable} from "@koridev/datatable";
-import {CONSOLE_LEVELS} from "./constants.js";
+import {CDN_URL, CONSOLE_LEVELS} from "./constants.js";
 
 const AsyncFunction = Object.getPrototypeOf(async function (){}).constructor;
 
-// Global context for executing code blocks
-let context = {};
+// This variable will store packages imported in code cells
+// key: package name (for example "react" or "react@18.2.0" when importing specific versions)
+// value: package content, returned from CDN
+const packagesCache = {};
+
+// Internal function for importing packages
+const __import = async name => {
+    if (typeof packagesCache[name] === "undefined") {
+        packagesCache[name] = await import(/*webpackIgnore: true*/`${CDN_URL}${name}`);
+    }
+    // Return package from cache
+    return packagesCache[name];
+};
 
 // Create function code
-const createFunctionCode = code => {
+const createFunctionCode = rawCode => {
+    // // Replace import statemenets from code
+    const code = rawCode.trim()
+        // Case 1: import default export of package
+        .replace(/^import\s+(\w+)?\s+from\s+"([\w@\.-/]+)?";/gm, `const $1 = (await __import("$2"))?.default;`)
+        // Case 2: import all exports to a single namespace from package (using import * as)
+        .replace(/^import\s+\*\s+as\s+(\w+)?\s+from\s+"([\w@\.-/]+)?";/gm, `const $1 = await __import("$2");`)
+        // Case 3: import only specific exports from package
+        .replace(/^import\s+(\{[\w, ]+\})?\s+from\s+"([\w\@\.\/]+)?";/gm, `const $1 = await __import("$2");`);
+
+    // Return processed code
     return `return (async () => {${code}})();`;
 };
 
@@ -47,7 +68,7 @@ const createConsoleInstance = () => {
 };
 
 // Execute the provide command
-export const execute = async code => {
+export const execute = async (code, context) => {
     const kori = createKoriInstance();
     const consoleInstance = createConsoleInstance();
     const result = {
@@ -56,8 +77,8 @@ export const execute = async code => {
     };
     try {
         const fnCode = createFunctionCode(code);
-        const fn = new AsyncFunction("kori", "console", "React", fnCode);
-        result.value = await fn.call(context, kori, consoleInstance, React);
+        const fn = new AsyncFunction("kori", "console", "React", "__import", fnCode);
+        result.value = await fn.call(context, kori, consoleInstance, React, __import);
     }
     catch(error) {
         // Save error message in result and set as error type
@@ -67,9 +88,4 @@ export const execute = async code => {
     }
     // Return result object
     return result;
-};
-
-// Reset context
-export const resetContext = () => {
-    context = {};
 };

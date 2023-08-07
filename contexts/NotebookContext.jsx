@@ -19,6 +19,7 @@ export const useNotebook = () => {
 
     // Export public notebook api
     return {
+        context: notebook.context,
         state: notebook.state,
         setEditingBlock: id => {
             notebook.setState({editingBlock: id});
@@ -69,6 +70,7 @@ export const useNotebook = () => {
 
 // Notebook provider component
 export const NotebookProvider = props => {
+    const context = React.useRef({});
     const [state, setState] = React.useState(() => ({
         title: "untitled",
         blocks: [
@@ -80,6 +82,7 @@ export const NotebookProvider = props => {
     }));
     const contextValue = {
         listeners: props.listeners,
+        context: context.current,
         state: state,
         setState: newState => {
             setState(prevState => ({...prevState, ...newState}));

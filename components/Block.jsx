@@ -1,10 +1,13 @@
 import React from "react";
+import {LoaderIcon} from "@josemi-icons/react";
 import {BLOCK_TYPES, LANGUAGES} from "../constants.js";
 import {Editor} from "./Editor.jsx";
 import {Result} from "./Result.jsx";
 import {execute} from "../runner.js";
+import {useNotebook} from "../contexts/NotebookContext.jsx";
 
 export const Block = props => {
+    const notebook = useNotebook();
     const value = React.useRef(props.value || "");
     const [state, setState] = React.useState({});
     // Effect on editing prop. When changed, chedk if current value is different
@@ -29,7 +32,7 @@ export const Block = props => {
             running: true,
         }));
         // Execute code block
-        const result = await execute(value.current);
+        const result = await execute(value.current, notebook.context);
         // Uppdate current value and save result response
         props.onEditEnd();
         setState(() => ({
@@ -82,6 +85,13 @@ export const Block = props => {
                             onSubmit={handleRun}
                         />
                     </div>
+                    {state.running && (
+                        <div className="flex flex-col items-center justify-center w-full p-8 select-none">
+                            <div className="flex text-xl text-gray-400 animation-spin">
+                                <LoaderIcon />
+                            </div>
+                        </div>
+                    )}
                     {!state.running && state.result && (
                         <div className="w-full pl-12 mt-3">
                             <Result

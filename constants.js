@@ -1,3 +1,5 @@
+export const CDN_URL = "https://esm.sh/";
+
 export const KEYS = {
     ENTER: "Enter",
     BACKSPACE: "Backspace",
