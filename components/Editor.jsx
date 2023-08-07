@@ -60,7 +60,7 @@ Editor.defaultProps = {
     value: "",
     language: "",
     readOnly: false,
-    submitHint: "Press 'Shift' + 'Enter' to execute this code block.",
+    submitHint: "Press 'Shift' + 'Enter' to execute this code cell.",
     submitText: "Execute",
     showSubmitButton: false,
     showSubmitHint: true,

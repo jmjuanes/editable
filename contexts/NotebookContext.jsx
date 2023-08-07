@@ -1,14 +1,14 @@
 import React from "react";
 import {uid} from "uid/secure";
-import {BLOCK_TYPES} from "../constants.js";
+import {CELL_TYPES} from "../constants.js";
 
 // Notebook context object
 const NotebookContext = React.createContext({});
 
-// Create a new block element
-const createNewBlock = (type, initialValue = "") => ({
+// Create a new cell element
+const createCell = (type, initialValue = "") => ({
     id: uid(20),
-    type: type || BLOCK_TYPES.CODE,
+    type: type || CELL_TYPES.CODE,
     value: initialValue || "",
     locked: false,
 });
@@ -17,20 +17,19 @@ const createNewBlock = (type, initialValue = "") => ({
 export const useNotebook = () => {
     const notebook = React.useContext(NotebookContext);
 
-    // Export public notebook api
     return {
         context: notebook.context,
         state: notebook.state,
-        setEditingBlock: id => {
-            notebook.setState({editingBlock: id});
+        setEditingCell: id => {
+            notebook.setState({editingCell: id});
         },
         setTitle: newTitle => {
             notebook.setState({title: newTitle});
         },
-        updateBlock: (id, newData) => {
-            const blocks = notebook.state.blocks;
-            const updatedBlocks = blocks.map(block => {
-                return block.id === id ? ({...block, ...newData}) : block;
+        updateCell: (id, newData) => {
+            const cells = notebook.state.cells;
+            const updatedCells = cells.map(cell => {
+                return cell.id === id ? ({...cell, ...newData}) : cell;
             });
             // Check if we have updated the last block for creating a new
             // empty block automatically
@@ -40,29 +39,29 @@ export const useNotebook = () => {
             // }
             // Save state
             notebook.setState({
-                blocks: updatedBlocks,
+                cells: updatedCells,
                 updatedAt: Date.now(),
             });
         },
-        deleteBlock: id => {
-            const blocks = notebook.state.blocks;
+        deleteCell: id => {
+            const cells = notebook.state.cells;
             notebook.setState({
-                blocks: blocks.filter(block => block.id !== id),
+                cells: cells.filter(cell => cell.id !== id),
                 updatedAt: Date.now(),
             });
         },
-        insertBlockAfter: (id, type) => {
-            const blocks = [...notebook.state.blocks];
-            const newBlock = createNewBlock(type);
-            const index = blocks.findIndex(b => b.id === id);
-            // Insert this new block after the current block
-            (index === blocks.length - 1) ? blocks.push(newBlock) : blocks.splice(index + 1, 0, newBlock);
+        insertCellAfter: (id, type) => {
+            const cells = [...notebook.state.cells];
+            const newCell = createCell(type);
+            const index = cells.findIndex(cell => cell.id === id);
+            // Insert this new cell after the current block
+            (index === cells.length - 1) ? cells.push(newCell) : cells.splice(index + 1, 0, newCell);
             return notebook.setState({
-                blocks: blocks,
+                cells: cells,
                 updatedAt: Date.now(),
             });
         },
-        inserBlockBefore: (id, type) => {
+        inserCellBefore: (id, type) => {
             // TODO
         },
     };
@@ -73,12 +72,12 @@ export const NotebookProvider = props => {
     const context = React.useRef({});
     const [state, setState] = React.useState(() => ({
         title: "untitled",
-        blocks: [
-            createNewBlock(BLOCK_TYPES.TEXT),
-            createNewBlock(BLOCK_TYPES.CODE, `return "Hello world!";`),
+        cells: [
+            createCell(CELL_TYPES.TEXT),
+            createCell(CELL_TYPES.CODE, `return "Hello world!";`),
         ],
         updatedAt: Date.now(),
-        editingBlock: "",
+        editingCell: "",
     }));
     const contextValue = {
         listeners: props.listeners,

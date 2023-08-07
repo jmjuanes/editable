@@ -5,7 +5,7 @@ export const KEYS = {
     BACKSPACE: "Backspace",
 };
 
-export const BLOCK_TYPES = {
+export const CELL_TYPES = {
     TEXT: "block_text",
     CODE: "block_code",
 };

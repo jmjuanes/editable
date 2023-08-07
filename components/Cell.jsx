@@ -1,12 +1,13 @@
 import React from "react";
 import {LoaderIcon} from "@josemi-icons/react";
-import {BLOCK_TYPES, LANGUAGES} from "../constants.js";
+import {CELL_TYPES, LANGUAGES} from "../constants.js";
 import {Editor} from "./Editor.jsx";
 import {Result} from "./Result.jsx";
+import {CellHeader} from "./CellHeader.jsx";
 import {execute} from "../runner.js";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
 
-export const Block = props => {
+export const Cell = props => {
     const notebook = useNotebook();
     const value = React.useRef(props.value || "");
     const [state, setState] = React.useState({});
@@ -19,19 +20,18 @@ export const Block = props => {
         },
         [props.editing],
     );
-    // Handle block click --> set as editing
+    // Handle cell click --> set as editing
     const handleClick = event => {
         if (!props.editing) {
             event.preventDefault();
             props.onEditStart();
         }
     };
-    // Handle run of this code block
+    // Handle run of this code cell
     const handleRun = async () => {
         setState(() => ({
             running: true,
         }));
-        // Execute code block
         const result = await execute(value.current, notebook.context);
         // Uppdate current value and save result response
         props.onEditEnd();
@@ -45,12 +45,19 @@ export const Block = props => {
 
     return (
         <div className="mb-4">
-            {props.type === BLOCK_TYPES.TEXT && (
+            {props.showHeader && (
+                <CellHeader
+                    showDeleteButton={props.showDeleteButton}
+                    onDelete={props.onDelete}
+                />
+            )}
+            {props.type === CELL_TYPES.TEXT && (
                 <React.Fragment>
                     {props.editing && (
                         <Editor
                             value={value.current}
                             language={LANGUAGES.MARKDOWN}
+                            submitHint="Press 'Shift' + 'Enter' to save."
                             onChange={newValue => {
                                 value.current = newValue;
                             }}
@@ -69,7 +76,7 @@ export const Block = props => {
                     )}
                 </React.Fragment>
             )}
-            {props.type === BLOCK_TYPES.CODE && (
+            {props.type === CELL_TYPES.CODE && (
                 <React.Fragment>
                     <div onClick={handleClick}>
                         <Editor
@@ -110,11 +117,13 @@ export const Block = props => {
     );
 };
 
-Block.defaultProps = {
+Cell.defaultProps = {
     id: "",
-    type: BLOCK_TYPES.CODE,
+    type: CELL_TYPES.CODE,
     value: "",
     editing: false,
+    showHeader: true,
+    showDeleteButton: true,
     onUpdate: null,
     onDelete: null,
     onEditStart: null,
