@@ -14,20 +14,21 @@ const InsertCellButton = props => (
 );
 
 export const InsertCell = props => (
-    <div className="flex items-center justify-center gap-2 o-10 hover:o-100 select-none p-2 border-2 border-gray-300 border-dashed rounded-md">
-        <div className="text-xs text-gray-400">
-            <span>Insert Cell:</span>
+    <div className="flex items-center justify-center gap-2 o-10 hover:o-100 select-none">
+        <div className="w-full h-px border-b border-dashed border-gray-300" />
+        <div className="flex flex-nowrap gap-2 flex-grow w-full justify-center items-center">
+            <InsertCellButton
+                text="Insert Code"
+                icon={(<CodeIcon />)}
+                onClick={() => props.onInsert(CELL_TYPES.CODE)}
+            />
+            <InsertCellButton
+                text="Insert Text"
+                icon={(<TextLeftIcon />)}
+                onClick={() => props.onInsert(CELL_TYPES.TEXT)}
+            />
         </div>
-        <InsertCellButton
-            text="Code"
-            icon={(<CodeIcon />)}
-            onClick={() => props.onInsert(CELL_TYPES.CODE)}
-        />
-        <InsertCellButton
-            text="Text"
-            icon={(<TextLeftIcon />)}
-            onClick={() => props.onInsert(CELL_TYPES.TEXT)}
-        />
+        <div className="w-full h-px border-b border-dashed border-gray-300" />
     </div>
 );
 
