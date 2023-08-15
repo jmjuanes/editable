@@ -2,12 +2,20 @@ import React from "react";
 import {DataTable} from "@koridev/datatable";
 import {CDN_URL, CONSOLE_LEVELS} from "./constants.js";
 
+// Note: babel is added as an external dependency
+// See this issue: https://github.com/babel/babel/issues/14301
+// import * as Babel from "@babel/standalone";
+
 const AsyncFunction = Object.getPrototypeOf(async function (){}).constructor;
 
 // This variable will store packages imported in code cells
 // key: package name (for example "react" or "react@18.2.0" when importing specific versions)
 // value: package content, returned from CDN
-const packagesCache = {};
+const packagesCache = {
+    "react": {
+        default: React,
+    },
+};
 
 // Internal function for importing packages
 const __import = async name => {
@@ -20,7 +28,8 @@ const __import = async name => {
 
 // Create function code
 const createFunctionCode = rawCode => {
-    // // Replace import statemenets from code
+    // Replace import statemenets from code
+    // We need to do this before transpiling code with babel
     const code = rawCode.trim()
         // Case 1: import default export of package
         .replace(/^import\s+(\w+)?\s+from\s+"([\w@\.-/]+)?";/gm, `const $1 = (await __import("$2"))?.default;`)
@@ -28,9 +37,16 @@ const createFunctionCode = rawCode => {
         .replace(/^import\s+\*\s+as\s+(\w+)?\s+from\s+"([\w@\.-/]+)?";/gm, `const $1 = await __import("$2");`)
         // Case 3: import only specific exports from package
         .replace(/^import\s+(\{[\w, ]+\})?\s+from\s+"([\w\@\.\/]+)?";/gm, `const $1 = await __import("$2");`);
-
-    // Return processed code
-    return `return (async () => {${code}})();`;
+    // Transpile code with babel
+    const transformed = Babel.transform(code, {
+        presets: ["env", "react"],
+        parserOpts: {
+            allowAwaitOutsideFunction: true,
+            allowReturnOutsideFunction: true,
+            allowImportExportEverywhere: true,
+        },
+    });
+    return `return (async () => {${transformed.code}})();`;
 };
 
 // Create a new kori instance object

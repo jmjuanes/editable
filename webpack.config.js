@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const pkg = require("./package.json");
@@ -27,6 +28,9 @@ module.exports = {
         devMiddleware: {
             writeToDisk: true,
         },
+    },
+    externals: {
+        Babel: "Babel",
     },
     resolve: {
         alias: {
@@ -78,6 +82,11 @@ module.exports = {
             inject: true,
             template: path.join(__dirname, "index.html"),
             minify: true,
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                path.join(__dirname, "node_modules", "@babel/standalone", "babel.min.js"),
+            ],
         }),
     ],
 };

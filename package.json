@@ -10,11 +10,12 @@
     "scripts": {
         "build": "yarn clean && yarn build:app",
         "build:app": "cross-env NODE_ENV=production webpack build",
-        "dev": "webpack serve",
+        "dev": "yarn run clean && webpack serve",
         "clean": "rm -rf ./www",
         "test": "jest"
     },
     "dependencies": {
+        "@babel/standalone": "^7.18.0",
         "@josemi-icons/react": "^0.2.0",
         "browser-fs-access": "^0.33.1",
         "classnames": "^2.3.2",
