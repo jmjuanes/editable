@@ -5,6 +5,22 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const pkg = require("./package.json");
 
+// HTML pages to generate
+const pages = Object.values({
+    index: {
+        filename: "index.html",
+        title: "Kori Notebooks",
+    },
+    dashboard: {
+        filename: "dashboard.html",
+        title: "Dashboard - Kori Notebooks",
+    },
+    notebook: {
+        filename: "n.html",
+        title: "Notebook - Kori Notebooks",
+    },
+});
+
 module.exports = {
     mode: process.env.NODE_ENV || "development", // "production",
     target: "web",
@@ -24,6 +40,9 @@ module.exports = {
         hot: false,
         static: {
             directory: path.join(__dirname, "www"),
+            staticOptions: {
+                extensions: ["html"],
+            },
         },
         devMiddleware: {
             writeToDisk: true,
@@ -78,10 +97,14 @@ module.exports = {
             "process.env.URL_ISSUES": JSON.stringify(pkg.bugs),
             "process.env.URL_HOMEPAGE": JSON.stringify(pkg.homepage),
         }),
-        new HtmlWebpackPlugin({
-            inject: true,
-            template: path.join(__dirname, "index.html"),
-            minify: true,
+        ...pages.map(page => {
+            return new HtmlWebpackPlugin({
+                inject: true,
+                template: path.join(__dirname, "index.html"),
+                filename: page.filename,
+                title: page.title,
+                minify: true,
+            });
         }),
         new CopyWebpackPlugin({
             patterns: [
