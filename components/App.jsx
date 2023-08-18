@@ -1,70 +1,26 @@
 import React from "react";
-import {Cell} from "./Cell.jsx";
-import {InsertCell} from "./InsertCell.jsx";
-import {Title} from "./Title.jsx";
-import {NotebookProvider, useNotebook} from "../contexts/NotebookContext.jsx";
-import {stopEventPropagation} from "../utils.js";
+import Rouct from "rouct";
+import {Layout} from "./Layout.jsx";
+import {DashboardPage} from "./Dashboard.jsx";
+import {NotebookPage} from "./Notebook.jsx";
 
-// Inner app wrapper
-const InnerApp = () => {
-    const notebook = useNotebook();
-    const showInsertCell = true;
-
-    return (
-        <div className="w-full" onClick={() => notebook.setEditingCell("")}>
-            <div className="w-full maxw-5xl mx-auto">
-                <Title
-                    value={notebook.state.title}
-                    onChange={newTitle => {
-                        notebook.setTitle(newTitle);
-                    }}
-                />
-                {notebook.state.cells.map(cell => (
-                    <React.Fragment key={cell.id}>
-                        <div className="" onClick={stopEventPropagation}>
-                            <Cell
-                                key={"cell:" + cell.id}
-                                id={cell.id}
-                                type={cell.type}
-                                value={cell.value}
-                                editing={cell.id === notebook.state.editingCell}
-                                showDeleteButton={notebook.state.cells.length > 1}
-                                onUpdate={value => {
-                                    notebook.updateCell(cell.id, {
-                                        value: value,
-                                    });
-                                }}
-                                onDelete={() => {
-                                    notebook.deleteCell(cell.id);
-                                }}
-                                onEditStart={() => {
-                                    notebook.setEditingCell(cell.id);
-                                }}
-                                onEditEnd={() => {
-                                    notebook.setEditingCell("");
-                                }}
-                            />
-                        </div>
-                        {showInsertCell && (
-                            <div className="pl-12 mb-2">
-                                <InsertCell
-                                    onInsert={type => {
-                                        return notebook.insertCellAfter(cell.id, type);
-                                    }}
-                                />
-                            </div>
-                        )}
-                    </React.Fragment>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-export const App = () => {
-    return (
-        <NotebookProvider>
-            <InnerApp />
-        </NotebookProvider>
-    );
-};
+export const App = () => (
+    <Rouct.Router pathPrefix="" routing={Rouct.BrowserRouting}>
+        <Layout>
+            <Rouct.Switch>
+                <Rouct.Route exact path="/" render={() => (
+                    <div>Hello world</div>
+                )} />
+                <Rouct.Route exact path="/dashboard" render={() => (
+                    <DashboardPage />
+                )} />
+                <Rouct.Route exact path="/n" render={request => (
+                    <NotebookPage
+                        key={"notebook:" + request.query.id}
+                        id={request.query.id}
+                    />
+                )} />
+            </Rouct.Switch>
+        </Layout>
+    </Rouct.Router>
+);
