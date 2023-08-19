@@ -5,7 +5,7 @@ import {Title} from "./Title.jsx";
 import {NotebookProvider, useNotebook} from "../contexts/NotebookContext.jsx";
 import {stopEventPropagation} from "../utils.js";
 
-const Notebook = () => {
+const InnerNotebook = () => {
     const notebook = useNotebook();
     const showInsertCell = true;
 
@@ -58,10 +58,10 @@ const Notebook = () => {
     );
 };
 
-export const NotebookPage = props => {
+export const Notebook = props => {
     return (
         <NotebookProvider>
-            <Notebook />
+            <InnerNotebook />
         </NotebookProvider>
     );
 };
