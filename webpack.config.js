@@ -1,9 +1,19 @@
+const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const pkg = require("./package.json");
+
+// HTML pages to generate
+const pagesPath = path.join(__dirname, "pages");
+const pages = fs.readdirSync(pagesPath, "utf8").map(page => {
+    return {
+        filename: path.basename(page, ".mdx") + ".html",
+        title: "Kori Notebooks",
+    };
+});
 
 module.exports = {
     mode: process.env.NODE_ENV || "development", // "production",
@@ -24,6 +34,9 @@ module.exports = {
         hot: false,
         static: {
             directory: path.join(__dirname, "www"),
+            staticOptions: {
+                extensions: ["html"],
+            },
         },
         devMiddleware: {
             writeToDisk: true,
@@ -58,6 +71,10 @@ module.exports = {
                 },
             },
             {
+                test: /\.mdx?$/,
+                loader: "@mdx-js/loader",
+            },
+            {
                 test: /\.css$/,
                 use: [MiniCssExtractPlugin.loader, "css-loader"],
             },
@@ -78,10 +95,14 @@ module.exports = {
             "process.env.URL_ISSUES": JSON.stringify(pkg.bugs),
             "process.env.URL_HOMEPAGE": JSON.stringify(pkg.homepage),
         }),
-        new HtmlWebpackPlugin({
-            inject: true,
-            template: path.join(__dirname, "index.html"),
-            minify: true,
+        ...pages.map(page => {
+            return new HtmlWebpackPlugin({
+                inject: true,
+                template: path.join(__dirname, "index.html"),
+                filename: page.filename,
+                title: page.title,
+                minify: true,
+            });
         }),
         new CopyWebpackPlugin({
             patterns: [
