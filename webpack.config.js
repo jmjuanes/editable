@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -6,19 +7,12 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const pkg = require("./package.json");
 
 // HTML pages to generate
-const pages = Object.values({
-    index: {
-        filename: "index.html",
+const pagesPath = path.join(__dirname, "pages");
+const pages = fs.readdirSync(pagesPath, "utf8").map(page => {
+    return {
+        filename: path.basename(page, ".mdx") + ".html",
         title: "Kori Notebooks",
-    },
-    dashboard: {
-        filename: "dashboard.html",
-        title: "Dashboard - Kori Notebooks",
-    },
-    notebook: {
-        filename: "n.html",
-        title: "Notebook - Kori Notebooks",
-    },
+    };
 });
 
 module.exports = {
@@ -75,6 +69,10 @@ module.exports = {
                         "@babel/plugin-transform-runtime",
                     ],
                 },
+            },
+            {
+                test: /\.mdx?$/,
+                loader: "@mdx-js/loader",
             },
             {
                 test: /\.css$/,
