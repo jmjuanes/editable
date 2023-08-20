@@ -1,22 +1,13 @@
 import React from "react";
-import {uid} from "uid/secure";
-import {CELL_TYPES} from "../constants.js";
+import {useClient} from "./ClientContext.jsx";
+import {createNotebookCell} from "../notebook.js";
 
 // Notebook context object
 const NotebookContext = React.createContext({});
 
-// Create a new cell element
-const createCell = (type, initialValue = "") => ({
-    id: uid(20),
-    type: type || CELL_TYPES.CODE,
-    value: initialValue || "",
-    locked: false,
-});
-
 // Use notebook hook
 export const useNotebook = () => {
     const notebook = React.useContext(NotebookContext);
-
     return {
         context: notebook.context,
         state: notebook.state,
@@ -52,7 +43,7 @@ export const useNotebook = () => {
         },
         insertCellAfter: (id, type) => {
             const cells = [...notebook.state.cells];
-            const newCell = createCell(type);
+            const newCell = createNotebookCell(type);
             const index = cells.findIndex(cell => cell.id === id);
             // Insert this new cell after the current block
             (index === cells.length - 1) ? cells.push(newCell) : cells.splice(index + 1, 0, newCell);
@@ -69,28 +60,60 @@ export const useNotebook = () => {
 
 // Notebook provider component
 export const NotebookProvider = props => {
+    const client = useClient();
     const context = React.useRef({});
-    const [state, setState] = React.useState(() => ({
-        title: "untitled",
-        cells: [
-            createCell(CELL_TYPES.TEXT),
-            createCell(CELL_TYPES.CODE, `return "Hello world!";`),
-        ],
-        updatedAt: Date.now(),
-        editingCell: "",
-    }));
-    const contextValue = {
-        listeners: props.listeners,
-        context: context.current,
-        state: state,
-        setState: newState => {
-            setState(prevState => ({...prevState, ...newState}));
-        },
-    };
+    const lastUpdated = React.useRef(null);
+    const [state, setState] = React.useState(null);
+    const [error, setError] = React.useState(null);
 
+    // Hook to import notebook data
+    React.useEffect(() => {
+        // Check for importing notebook from client
+        if (props.id) {
+            client.getNotebook(props.id).then(data => {
+                lastUpdated.current = data.updatedAt;
+                setState(data);
+            });
+        }
+        // Other case --> not found error
+        else {
+            setError("not_found");
+        }
+    }, []);
+    // Hook to save notebook data using the client
+    React.useEffect(() => {
+        if (state && props.id && state.updatedAt !== lastUpdated.current) {
+            lastUpdated.current = state.updatedAt;
+            client.updateNotebook(props.id, {
+                title: state.title,
+                cells: state.cells,
+                updatedAt: state.updatedAt,
+            });
+        }
+    }, [state]);
+    // Check if we have notebook data
+    if (state) {
+        const contextValue = {
+            context: context.current,
+            state: state,
+            setState: newState => {
+                setState(prevState => ({...prevState, ...newState}));
+            },
+        };
+        return (
+            <NotebookContext.Provider value={contextValue}>
+                {props.children}
+            </NotebookContext.Provider>
+        );
+    }
+    // Check for error importing notebook data
+    else if (error) {
+        return (
+            <div align="center">Error importing notebook</div>
+        );
+    }
+    // Default: display a loading spinner
     return (
-        <NotebookContext.Provider value={contextValue}>
-            {props.children}
-        </NotebookContext.Provider>
+        <div align="center">Loading...</div>
     );
 };
