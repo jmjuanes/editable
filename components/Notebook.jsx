@@ -2,10 +2,10 @@ import React from "react";
 import {Cell} from "./Cell.jsx";
 import {InsertCell} from "./InsertCell.jsx";
 import {Title} from "./Title.jsx";
-import {NotebookProvider, useNotebook} from "../contexts/NotebookContext.jsx";
+import {useNotebook} from "../contexts/NotebookContext.jsx";
 import {stopEventPropagation} from "../utils.js";
 
-const InnerNotebook = () => {
+export const Notebook = () => {
     const notebook = useNotebook();
     const showInsertCell = true;
 
@@ -55,13 +55,5 @@ const InnerNotebook = () => {
                 </React.Fragment>
             ))}
         </div>
-    );
-};
-
-export const Notebook = props => {
-    return (
-        <NotebookProvider>
-            <InnerNotebook />
-        </NotebookProvider>
     );
 };
