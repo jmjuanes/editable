@@ -1,3 +1,4 @@
+export const VERSION = "1";
 export const CDN_URL = "https://esm.sh/";
 
 export const KEYS = {
