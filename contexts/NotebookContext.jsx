@@ -1,6 +1,6 @@
 import React from "react";
 import {useClient} from "./ClientContext.jsx";
-import {createNotebookCell} from "../notebook.js";
+import {createNotebookCell, createNotebookContext} from "../notebook.js";
 
 // Notebook context object
 const NotebookContext = React.createContext({});
@@ -61,11 +61,14 @@ export const useNotebook = () => {
 // Notebook provider component
 export const NotebookProvider = props => {
     const client = useClient();
-    const context = React.useRef({});
+    const context = React.useRef(null);
     const lastUpdated = React.useRef(null);
     const [state, setState] = React.useState(null);
     const [error, setError] = React.useState(null);
-
+    // Initialize notebook context
+    if (!context.current) {
+        context.current = createNotebookContext();
+    }
     // Hook to import notebook data
     React.useEffect(() => {
         // Check for importing notebook from client
