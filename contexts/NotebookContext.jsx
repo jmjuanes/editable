@@ -15,7 +15,10 @@ export const useNotebook = () => {
             notebook.setState({editingCell: id});
         },
         setTitle: newTitle => {
-            notebook.setState({title: newTitle});
+            notebook.setState({
+                title: newTitle,
+                updatedAt: Date.now(),
+            });
         },
         updateCell: (id, newData) => {
             const cells = notebook.state.cells;
