@@ -1,5 +1,98 @@
+import React from "react";
+import Rouct from "rouct";
+import {ImageSlashIcon, LockIcon, ClockIcon, FilePlusIcon, GitBranchIcon, DotsVerticalIcon} from "@josemi-icons/react";
+import {useClient} from "../contexts/ClientContext.jsx";
 
-<div className="text-3xl font-bold border-b border-gray-300 mb-4 mt-8">
+export const NotebookCard = props => {
+    const onClick = () => {
+        return Rouct.redirect(`/n?id=${props.id}`);
+    };
+    return (
+        <div key={props.id} className="p-4 rounded-xl border border-gray-200">
+            <div onClick={onClick}>
+                <div className="rounded-lg bg-gray-100 text-gray-400 text-xl text-white p-6 flex justify-center">
+                    <ImageSlashIcon />
+                </div>
+            </div>
+            <div className="flex items-center justify-between flex-nowrap mt-2">
+                <div className="flex items-center gap-1">
+                    <div className="flex font-bold">
+                        <span>{props.title || "untitled"}</span>
+                    </div>
+                    {props.isFork && (
+                        <div className="flex items-center text-sm text-gray-400">
+                            <GitBranchIcon />
+                        </div>
+                    )}
+                </div>
+                <div className="flex text-gray-500 hover:text-gray-800 cursor-pointer">
+                    <DotsVerticalIcon />
+                </div>
+            </div>
+            <div className="flex flex-nowrap gap-3">
+                {props.private && (
+                    <div className="flex items-center gap-1 text-yellow-800 o-60">
+                        <div className="text-xs flex items-center">
+                            <LockIcon />
+                        </div>
+                        <div className="text-xs flex items-center">
+                            <span>Private</span>
+                        </div>
+                    </div>
+                )}
+                <div className="flex items-center gap-1 text-gray-500">
+                    <div className="text-xs flex items-center">
+                        <ClockIcon />
+                    </div>
+                    <div className="text-xs flex items-center">
+                        <span>{(new Date(props.updatedAt)).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export const NewNotebookCard = props => (
+    <div className="flex items-center justify-center border border-dashed border-gray-200 rounded-xl" onClick={props.onClick}>
+        <div className="text-gray-400 flex flex-col items-center">
+            <div className="text-2xl flex">
+                <FilePlusIcon />
+            </div>
+            <div className="mt-2 text-sm">
+                <strong>Create New</strong>
+            </div>
+        </div>
+    </div>
+);
+
+export const NotebooksList = props => {
+    const client = useClient();
+    const [notebooks, setNotebooks] = React.useState(null);
+    React.useEffect(() => {
+        client.listNotebooks().then(items => {
+            return setNotebooks(items);
+        });
+    }, []);
+    if (!notebooks) {
+        return (
+            <div align="center">Loading...</div>
+        );
+    }
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <NewNotebookCard onClick={props.onCreateNotebook} />
+            {(notebooks || []).map(notebook => (
+                <NotebookCard key={notebook.id} {...notebook} />
+            ))}
+        </div>
+    );
+};
+
+<div className="text-3xl font-bold border-b border-gray-300 mb-6 mt-8">
     <div className="mb-1">My Notebooks</div>
 </div>
+<NotebooksList
+    onCreateNotebook={props.onCreateNotebook}
+/>
 

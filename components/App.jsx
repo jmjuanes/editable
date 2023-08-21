@@ -26,7 +26,9 @@ const InnerApp = () => {
                         />
                     )} />
                     <Rouct.Route exact path="/profile" render={() => (
-                        <ProfilePage />
+                        <ProfilePage
+                            onCreateNotebook={handleCreateNotebook}
+                        />
                     )} />
                     <Rouct.Route exact path="/n" render={request => (
                         <NotebookPage
