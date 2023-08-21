@@ -4,7 +4,7 @@ import {CELL_TYPES, LANGUAGES} from "../constants.js";
 import {Editor} from "./Editor.jsx";
 import {Result} from "./Result.jsx";
 import {CellHeader} from "./CellHeader.jsx";
-import {execute} from "../runner.js";
+import {executeNotebookCell} from "../notebook.js";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
 
 export const Cell = props => {
@@ -28,19 +28,22 @@ export const Cell = props => {
         }
     };
     // Handle run of this code cell
-    const handleRun = async () => {
+    const handleRun = () => {
         setState(() => ({
             running: true,
         }));
-        const result = await execute(value.current, notebook.context);
-        // Uppdate current value and save result response
-        props.onEditEnd();
-        setState(() => ({
-            running: false,
-            result: result,
-            executedTime: Date.now(),
-            executedValue: value.current,
-        }));
+        console.log(notebook.context);
+        executeNotebookCell(value.current, notebook.context)
+            .then(result => {
+                // Uppdate the current value and save result response
+                props.onEditEnd();
+                setState(() => ({
+                    running: false,
+                    result: result,
+                    executedTime: Date.now(),
+                    executedValue: value.current,
+                }));
+            });
     };
 
     return (

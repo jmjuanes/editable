@@ -1,5 +1,6 @@
 import {Notebook} from "../components/Notebook.jsx";
+import {NotebookProvider} from "../contexts/NotebookContext.jsx";
 
-# Notebook {props.id}
-
-<Notebook />
+<NotebookProvider id={props.id}>
+    <Notebook />
+</NotebookProvider>
