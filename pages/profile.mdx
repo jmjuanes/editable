@@ -1,57 +1,64 @@
 import React from "react";
-import Rouct from "rouct";
-import {ImageSlashIcon, LockIcon, ClockIcon, FilePlusIcon, GitBranchIcon, DotsVerticalIcon} from "@josemi-icons/react";
+import {ImageSlashIcon, LockIcon, ClockIcon, GitBranchIcon, DotsVerticalIcon} from "@josemi-icons/react";
+import {FilePlusIcon} from "@josemi-icons/react";
 import {useClient} from "../contexts/ClientContext.jsx";
+import {Dropdown, DropdownItem, DropdownSeparator} from "../components/Dropdown.jsx";
 
-export const NotebookCard = props => {
-    const onClick = () => {
-        return Rouct.redirect(`/n?id=${props.id}`);
-    };
-    return (
-        <div key={props.id} className="p-4 rounded-xl border border-gray-200">
-            <div onClick={onClick}>
-                <div className="rounded-lg bg-gray-100 text-gray-400 text-xl text-white p-6 flex justify-center">
-                    <ImageSlashIcon />
-                </div>
+export const NotebookCard = props => (
+    <div key={props.id} className="p-4 rounded-xl border border-gray-200">
+        <div onClick={props.onOpen}>
+            <div className="rounded-lg bg-gray-100 text-gray-400 text-xl text-white p-6 flex justify-center">
+                <ImageSlashIcon />
             </div>
-            <div className="flex items-center justify-between flex-nowrap mt-2">
-                <div className="flex items-center gap-1" onClick={onClick}>
-                    <div className="flex font-bold">
-                        <span>{props.title || "untitled"}</span>
-                    </div>
-                    {props.isFork && (
-                        <div className="flex items-center text-sm text-gray-400">
-                            <GitBranchIcon />
-                        </div>
-                    )}
+        </div>
+        <div className="flex items-center justify-between flex-nowrap mt-2">
+            <div className="flex items-center gap-1" onClick={props.onOpen}>
+                <div className="flex font-bold">
+                    <span>{props.title || "untitled"}</span>
                 </div>
-                <div className="flex text-gray-500 hover:text-gray-800 cursor-pointer">
-                    <DotsVerticalIcon />
-                </div>
-            </div>
-            <div className="flex flex-nowrap gap-3">
-                {props.private && (
-                    <div className="flex items-center gap-1 text-yellow-800 o-60">
-                        <div className="text-xs flex items-center">
-                            <LockIcon />
-                        </div>
-                        <div className="text-xs flex items-center">
-                            <span>Private</span>
-                        </div>
+                {props.isFork && (
+                    <div className="flex items-center text-sm text-gray-400">
+                        <GitBranchIcon />
                     </div>
                 )}
-                <div className="flex items-center gap-1 text-gray-500">
+            </div>
+            <div className="flex relative group" tabIndex="0">
+                <div className="flex group-focus-within:bg-gray-200 rounded-md p-1 cursor-pointer">
+                    <DotsVerticalIcon />
+                </div>
+                <Dropdown className="hidden group-focus-within:block absolute top-full right-0 mt-1 z-5">
+                    <DropdownSeparator />
+                    <DropdownItem
+                        className="text-red-600"
+                        icon="trash"
+                        text="Delete Notebook"
+                        onClick={props.onDelete}
+                    />
+                </Dropdown>
+            </div>
+        </div>
+        <div className="flex flex-nowrap gap-3">
+            {props.private && (
+                <div className="flex items-center gap-1 text-yellow-800 o-60">
                     <div className="text-xs flex items-center">
-                        <ClockIcon />
+                        <LockIcon />
                     </div>
                     <div className="text-xs flex items-center">
-                        <span>{(new Date(props.updatedAt)).toLocaleDateString()}</span>
+                        <span>Private</span>
                     </div>
+                </div>
+            )}
+            <div className="flex items-center gap-1 text-gray-500">
+                <div className="text-xs flex items-center">
+                    <ClockIcon />
+                </div>
+                <div className="text-xs flex items-center">
+                    <span>{(new Date(props.updatedAt)).toLocaleDateString()}</span>
                 </div>
             </div>
         </div>
-    );
-};
+    </div>
+);
 
 export const NewNotebookCard = props => (
     <div className="flex items-center justify-center border border-dashed border-gray-200 rounded-xl" onClick={props.onClick}>
@@ -74,25 +81,41 @@ export const NotebooksList = props => {
             return setNotebooks(items);
         });
     }, []);
-    if (!notebooks) {
-        return (
-            <div align="center">Loading...</div>
-        );
-    }
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            <NewNotebookCard onClick={props.onCreateNotebook} />
-            {(notebooks || []).map(notebook => (
-                <NotebookCard key={notebook.id} {...notebook} />
-            ))}
-        </div>
+        <React.Fragment>
+            <div className="text-3xl font-bold border-b border-gray-300 mb-6 mt-8">
+                <div className="mb-1">My Notebooks</div>
+            </div>
+            {!notebooks && (
+                <div className=""></div>
+            )}
+            {(notebooks && notebooks?.length === 0) && (
+                <div className="">No notebooks available</div>
+            )}
+            {(notebooks && notebooks?.length > 0) && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <NewNotebookCard
+                        onClick={props.onCreateNotebook}
+                    />
+                    {notebooks.map(notebook => (
+                        <NotebookCard
+                            key={notebook.id}
+                            title={notebook.title}
+                            updatedAt={notebook.updatedAt}
+                            isFork={false}
+                            private={true}
+                            onOpen={() => props.onOpenNotebook(notebook.id)}
+                            onDelete={() => props.onDeleteNotebook(notebook.id)}
+                        />
+                    ))}
+                </div>
+            )}
+        </React.Fragment>
     );
 };
 
-<div className="text-3xl font-bold border-b border-gray-300 mb-6 mt-8">
-    <div className="mb-1">My Notebooks</div>
-</div>
 <NotebooksList
     onCreateNotebook={props.onCreateNotebook}
+    onOpenNotebook={props.onOpenNotebook}
+    onDeleteNotebook={props.onDeleteNotebook}
 />
-
