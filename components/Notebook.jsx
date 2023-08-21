@@ -1,19 +1,19 @@
 import React from "react";
 import {Cell} from "./Cell.jsx";
 import {InsertCell} from "./InsertCell.jsx";
-import {Title} from "./Title.jsx";
+import {NotebookHeader} from "./NotebookHeader.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
 import {stopEventPropagation} from "../utils.js";
 
 export const Notebook = () => {
     const notebook = useNotebook();
     const showInsertCell = true;
-
     return (
         <div className="w-full" onClick={() => notebook.setEditingCell("")}>
-            <Title
-                value={notebook.state.title}
-                onChange={newTitle => {
+            <NotebookHeader
+                title={notebook.state.title}
+                updatedAt={notebook.state.updatedAt}
+                onTitleChange={newTitle => {
                     notebook.setTitle(newTitle);
                 }}
             />
