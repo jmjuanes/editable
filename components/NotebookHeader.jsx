@@ -1,6 +1,6 @@
 import React from "react";
 import {GitBranchIcon, DotsVerticalIcon, EditIcon} from "@josemi-icons/react";
-import {Dropdown, DropdownItem} from "./Dropdown.jsx";
+import {Dropdown, DropdownItem, DropdownSeparator} from "./Dropdown.jsx";
 
 const NotebookTitle = props => {
     const value = React.useRef(props.value);
@@ -60,8 +60,18 @@ export const NotebookHeader = props => (
                 </div>
                 <Dropdown className="absolute top-full right-0 mt-1 hidden group-focus-within:block">
                     <DropdownItem
+                        disabled={props.exportDisabled}
                         icon="download"
                         text="Export Notebook"
+                        onClick={props.onExportNotebook}
+                    />
+                    <DropdownSeparator />
+                    <DropdownItem
+                        className="text-red-600"
+                        disabled={props.deleteDisabled}
+                        icon="trash"
+                        text="Delete..."
+                        onClick={props.onDeleteNotebook}
                     />
                 </Dropdown>
             </div>
@@ -84,7 +94,11 @@ export const NotebookHeader = props => (
 NotebookHeader.defaultProps = {
     title: "",
     updatedAt: null,
+    exportDisabled: false,
+    deleteDisabled: false,
     showForkBanner: false,
     onTitleChange: null,
     onForkNotebook: null,
+    onExportNotebook: null,
+    onDeleteNotebook: null,
 };

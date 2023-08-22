@@ -1,6 +1,8 @@
 import React from "react";
 import {uid} from "uid/secure";
+import {fileSave} from "browser-fs-access";
 import {VERSION, CDN_URL, CELL_TYPES, CONSOLE_LEVELS} from "./constants.js";
+import {ENDL, MIME_TYPES, FILE_EXTENSIONS} from "./constants.js";
 
 // Note: babel is added as an external dependency
 // See this issue: https://github.com/babel/babel/issues/14301
@@ -37,8 +39,8 @@ export const createNotebook = () => {
     return {
         version: VERSION,
         title: "untitled",
-        description: "",
         isFork: false,
+        locked: false,
         cells: [
             // createNotebookCell(CELL_TYPES.TEXT, ""),
             createNotebookCell(CELL_TYPES.CODE, `return "Hello world!";`),
@@ -48,14 +50,47 @@ export const createNotebook = () => {
     };
 };
 
-// Export notebook as Markdown file
+// Export notebook as markdown
 export const exportNotebook = notebook => {
-    return null;
+    return new Promise(resolve => {
+        const data = [
+            "---",
+            `title: "${notebook.title}"`,
+            `createdAt: ${notebook.createdAt}`,
+            `updatedAt: ${notebook.updatedAt}`,
+            "---",
+            "",
+            ...notebook.cells.map(cell => {
+                if (cell.type === CELL_TYPES.CODE) {
+                    const codeBlock = [
+                        "```{javascript editable=true}",
+                        cell.value,
+                        "```",
+                        "",
+                    ];
+                    return codeBlock.join(ENDL);
+                }
+                // Other case, just return cell value
+                return cell.value;
+            }),
+        ];
+        return resolve(data.join(ENDL));
+    });
 };
 
-// Import notebook from markdown file
-export const importNotebook = data => {
-    return null;
+// Export notebook as Markdown file
+export const saveNotebookAsMarkdownFile = notebook => {
+    const filename = (notebook.title || "untitled").toLowerCase().trim().replace(/\s/g, "_");
+    return exportNotebook(notebook).then(data => {
+        const blob = new Blob([data], {type: MIME_TYPES.FOLIO});
+        return fileSave(blob, {
+            description: "Kode Export",
+            fileName: `${filename}${FILE_EXTENSIONS.MARKDOWN}`,
+            extensions: [
+                FILE_EXTENSIONS.MARKDOWN,
+            ],
+        });
+    });
 };
 
 // Create function code
@@ -111,11 +146,7 @@ export const executeNotebookCell = async (code, context) => {
     };
     // Execute provided code
     try {
-        console.log(context);
-        console.log(consoleInstance);
-
         const fnCode = createFunctionCode(code);
-        console.log(fnCode);
         const fn = new AsyncFunction("console", "React", "__import", fnCode);
         result.value = await fn.call(context, consoleInstance, React, __import);
     }
