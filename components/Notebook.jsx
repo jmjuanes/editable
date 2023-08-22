@@ -1,23 +1,39 @@
 import React from "react";
+import Rouct from "rouct";
 import {Cell} from "./Cell.jsx";
 import {InsertCell} from "./InsertCell.jsx";
 import {NotebookHeader} from "./NotebookHeader.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
+import {saveNotebookAsMarkdownFile} from "../notebook.js";
 import {stopEventPropagation} from "../utils.js";
+import {useClient} from "../contexts/ClientContext.jsx";
 
 export const Notebook = () => {
+    const client = useClient();
     const notebook = useNotebook();
+    const [editingCell, setEditingCell] = React.useState("");
     const showInsertCell = true;
     return (
-        <div className="w-full" onClick={() => notebook.setEditingCell("")}>
+        <div className="w-full" onClick={() => setEditingCell("")}>
             <NotebookHeader
-                title={notebook.state.title}
-                updatedAt={notebook.state.updatedAt}
+                title={notebook.data.title}
+                updatedAt={notebook.data.updatedAt}
+                deleteDisabled={!notebook.id}
+                exportDisabled={false}
                 onTitleChange={newTitle => {
                     notebook.setTitle(newTitle);
                 }}
+                onExportNotebook={() => {
+                    saveNotebookAsMarkdownFile(notebook.data)
+                        .catch(error => console.error(error));
+                }}
+                onDeleteNotebook={() => {
+                    client.deleteNotebook(notebook.id).then(() => {
+                        return Rouct.redirect("/profile");
+                    });
+                }}
             />
-            {notebook.state.cells.map(cell => (
+            {notebook.data.cells.map(cell => (
                 <React.Fragment key={cell.id}>
                     <div className="" onClick={stopEventPropagation}>
                         <Cell
@@ -25,8 +41,8 @@ export const Notebook = () => {
                             id={cell.id}
                             type={cell.type}
                             value={cell.value}
-                            editing={cell.id === notebook.state.editingCell}
-                            showDeleteButton={notebook.state.cells.length > 1}
+                            editing={cell.id === editingCell}
+                            showDeleteButton={notebook.data.cells.length > 1}
                             onUpdate={value => {
                                 notebook.updateCell(cell.id, {
                                     value: value,
@@ -36,10 +52,10 @@ export const Notebook = () => {
                                 notebook.deleteCell(cell.id);
                             }}
                             onEditStart={() => {
-                                notebook.setEditingCell(cell.id);
+                                setEditingCell(cell.id);
                             }}
                             onEditEnd={() => {
-                                notebook.setEditingCell("");
+                                setEditingCell("");
                             }}
                         />
                     </div>

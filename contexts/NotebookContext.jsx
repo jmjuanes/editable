@@ -9,11 +9,9 @@ const NotebookContext = React.createContext({});
 export const useNotebook = () => {
     const notebook = React.useContext(NotebookContext);
     return {
+        id: notebook.id,
         context: notebook.context,
-        state: notebook.state,
-        setEditingCell: id => {
-            notebook.setState({editingCell: id});
-        },
+        data: notebook.state,
         setTitle: newTitle => {
             notebook.setState({
                 title: newTitle,
@@ -100,6 +98,7 @@ export const NotebookProvider = props => {
     // Check if we have notebook data
     if (state) {
         const contextValue = {
+            id: props.id || null,
             context: context.current,
             state: state,
             setState: newState => {
