@@ -27,11 +27,10 @@ export const NotebookCard = props => (
                     <DotsVerticalIcon />
                 </div>
                 <Dropdown className="hidden group-focus-within:block absolute top-full right-0 mt-1 z-5">
-                    <DropdownSeparator />
                     <DropdownItem
                         className="text-red-600"
                         icon="trash"
-                        text="Delete Notebook"
+                        text="Delete..."
                         onClick={props.onDelete}
                     />
                 </Dropdown>
