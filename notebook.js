@@ -1,20 +1,14 @@
 import React from "react";
 import {uid} from "uid/secure";
+import {fileSave} from "browser-fs-access";
 import {VERSION, CDN_URL, CELL_TYPES, CONSOLE_LEVELS} from "./constants.js";
+import {ENDL, MIME_TYPES, FILE_EXTENSIONS} from "./constants.js";
 
 // Note: babel is added as an external dependency
 // See this issue: https://github.com/babel/babel/issues/14301
 // import * as Babel from "@babel/standalone";
 
 const AsyncFunction = Object.getPrototypeOf(async function (){}).constructor;
-
-// Importing sections
-const IMPORT_SECTIONS = {
-    NONE: "",
-    FRONTMATTER: "frontmatter",
-    TEXT_CELL: "text_cell",
-    CODE_CELL: "code_cell",
-};
 
 // Create a new notebook context
 export const createNotebookContext = () => {
@@ -56,13 +50,12 @@ export const createNotebook = () => {
     };
 };
 
-// Export notebook as Markdown file
+// Export notebook as markdown
 export const exportNotebook = notebook => {
-    const endl = "\n";
     return new Promise(resolve => {
-        const output = [
+        const data = [
             "---",
-            `title: '${notebook.title}'`,
+            `title: "${notebook.title}"`,
             `createdAt: ${notebook.createdAt}`,
             `updatedAt: ${notebook.updatedAt}`,
             "---",
@@ -75,52 +68,29 @@ export const exportNotebook = notebook => {
                         "```",
                         "",
                     ];
-                    return codeBlock.join(endl);
+                    return codeBlock.join(ENDL);
                 }
                 // Other case, just return cell value
                 return cell.value;
             }),
         ];
-        return resolve(output.join(endl));
+        return resolve(data.join(ENDL));
     });
 };
 
-// Import notebook from markdown file
-export const importNotebook = data => {
-    // const endl = "\n";
-    // return new Promise(resolve => {
-    //     const notebook = {
-    //         ...createNotebook(),
-    //         cells: [],
-    //         locked: true,
-    //     };
-    //     let lastCell = null;
-    //     let reading = IMPORT_SECTIONS.NONE;
-    //     data.split(endl).forEach(line => {
-    //         if (line === "---" && !reading) {
-    //             reading = IMPORT_SECTIONS.FRONTMATTER;
-    //         }
-    //         else if (line === "---" && reading === IMPORT_SECTIONS.FRONTMATTER) {
-    //             reading = IMPORT_SECTIONS.NONE;
-    //         }
-    //         // Check if we are reading the frontmatter value
-    //         else if (reading === IMPORT_SECTIONS.FRONTMATTER) {
-    //             const [name, value] = line.split(": ");
-    //             notebook[name] = JSON.parse(value);
-    //         }
-    //         // Check if we are reading a code block
-    //         else if (line === "```{javascript editable=true}") {
-    //             if (reading === IMPORT_SECTIONS.TEXT_CELL && lastCell && lastCell.length > 0) {
-    //                 notebook.cells.push(createNotebookCell(CELL_TYPES.TEXT, lastCell.join(endl)));
-    //             }
-    //             lastCell = [];
-    //             reading = IMPORT_SECTIONS.CODE_CELL;
-    //         }
-    //         else if (line === "```" && reading === IMPORT_SECTIONS.CODE_CELL)
-    //     });
-
-    //     return resolve(notebook);
-    // });
+// Export notebook as Markdown file
+export const saveNotebookAsMarkdownFile = notebook => {
+    const filename = (notebook.title || "untitled").toLowerCase().trim().replace(/\s/g, "_");
+    return exportNotebook(notebook).then(data => {
+        const blob = new Blob([data], {type: MIME_TYPES.FOLIO});
+        return fileSave(blob, {
+            description: "Kode Export",
+            fileName: `${filename}${FILE_EXTENSIONS.MARKDOWN}`,
+            extensions: [
+                FILE_EXTENSIONS.MARKDOWN,
+            ],
+        });
+    });
 };
 
 // Create function code
