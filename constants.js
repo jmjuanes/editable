@@ -1,5 +1,7 @@
 export const VERSION = "1";
+
 export const CDN_URL = "https://esm.sh/";
+export const ENDL = "\n";
 
 export const KEYS = {
     ENTER: "Enter",
@@ -35,4 +37,12 @@ export const VALUES_TYPES = {
     BOOLEAN: "boolean",
     NULL: "null",
     UNDEFINED: "undefined",
+};
+
+export const MIME_TYPES = {
+    MARKDOWN: "text/markdown",
+};
+
+export const FILE_EXTENSIONS = {
+    MARKDOWN: ".md",
 };
