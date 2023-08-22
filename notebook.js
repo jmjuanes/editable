@@ -146,11 +146,7 @@ export const executeNotebookCell = async (code, context) => {
     };
     // Execute provided code
     try {
-        console.log(context);
-        console.log(consoleInstance);
-
         const fnCode = createFunctionCode(code);
-        console.log(fnCode);
         const fn = new AsyncFunction("console", "React", "__import", fnCode);
         result.value = await fn.call(context, consoleInstance, React, __import);
     }
