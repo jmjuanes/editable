@@ -60,7 +60,7 @@ export const Layout = props => (
                 <Link to="/" className="flex items-center gap-2 text-gray-800 no-underline">
                     <div className="rounded-lg bg-gray-900 w-8 h-8" />
                     <div className="font-bold flex items-center text-xl">
-                        <span>Kori</span>
+                        <span>Notelab</span>
                     </div>
                     {/*
                     <div className="flex items-center font-bold text-2xs bg-gray-200 px-2 py-1 rounded-lg">

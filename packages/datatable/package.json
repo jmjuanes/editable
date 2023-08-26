@@ -1,12 +1,12 @@
 {
-    "name": "@koridev/datatable",
+    "name": "@notelab/datatable",
     "version": "0.0.0",
-    "description": "Datatable component for Kori",
+    "description": "Datatable component for NoteLab",
     "private": true,
-    "homepage": "https://www.josemi.xyz/kori",
-    "repository": "https://github.com/jmjuanes/kori",
+    "homepage": "https://www.josemi.xyz/notelab",
+    "repository": "https://github.com/jmjuanes/notelab",
     "author": "Josemi Juanes <hello@josemi.xyz>",
-    "bugs": "https://github.com/jmjuanes/kori/issues",
+    "bugs": "https://github.com/jmjuanes/notelab/issues",
     "dependencies": {
         "@josemi-icons/react": "^0.2.0",
         "classnames": "^2.3.2",

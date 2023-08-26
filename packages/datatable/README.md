@@ -1,4 +1,4 @@
-# @koridev/datatable
+# @notelab/datatable
 
 
 ## Installation
@@ -7,10 +7,10 @@ Install this package using YARN or NPM:
 
 ```bash
 ## Installation using yarn:
-$ yarn add @koridev/datatable
+$ yarn add @notelab/datatable
 
 ## Installation using npm:
-$ npm install --save @koridev/datatable
+$ npm install --save @notelab/datatable
 ```
 
 ## Usage

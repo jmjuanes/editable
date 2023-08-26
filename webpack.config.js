@@ -11,7 +11,7 @@ const pagesPath = path.join(__dirname, "pages");
 const pages = fs.readdirSync(pagesPath, "utf8").map(page => {
     return {
         filename: path.basename(page, ".mdx") + ".html",
-        title: "Kori Notebooks",
+        title: "NoteLab",
     };
 });
 
@@ -47,7 +47,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            "@koridev/datatable": path.join(__dirname, "packages", "datatable", "index.jsx"),
+            // "@koridev/datatable": path.join(__dirname, "packages", "datatable", "index.jsx"),
         },
     },
     module: {
