@@ -6,19 +6,12 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const pkg = require("./package.json");
 
-// HTML pages to generate
-const pagesPath = path.join(__dirname, "pages");
-const pages = fs.readdirSync(pagesPath, "utf8").map(page => {
-    return {
-        filename: path.basename(page, ".mdx") + ".html",
-        title: "NoteLab",
-    };
-});
-
 module.exports = {
     mode: process.env.NODE_ENV || "development", // "production",
     target: "web",
-    entry: path.join(__dirname, "index.jsx"),
+    entry: {
+        app: path.join(__dirname, "index.jsx"),
+    },
     output: {
         path: path.join(__dirname, "www"),
         publicPath: "./",
@@ -70,10 +63,10 @@ module.exports = {
                     ],
                 },
             },
-            {
-                test: /\.mdx?$/,
-                loader: "@mdx-js/loader",
-            },
+            // {
+            //     test: /\.mdx?$/,
+            //     loader: "@mdx-js/loader",
+            // },
             {
                 test: /\.css$/,
                 use: [MiniCssExtractPlugin.loader, "css-loader"],
@@ -95,14 +88,11 @@ module.exports = {
             "process.env.URL_ISSUES": JSON.stringify(pkg.bugs),
             "process.env.URL_HOMEPAGE": JSON.stringify(pkg.homepage),
         }),
-        ...pages.map(page => {
-            return new HtmlWebpackPlugin({
-                inject: true,
-                template: path.join(__dirname, "index.html"),
-                filename: page.filename,
-                title: page.title,
-                minify: true,
-            });
+        new HtmlWebpackPlugin({
+            inject: true,
+            template: path.join(__dirname, "index.html"),
+            filename: "index.html",
+            minify: true,
         }),
         new CopyWebpackPlugin({
             patterns: [
