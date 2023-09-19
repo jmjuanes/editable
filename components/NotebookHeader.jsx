@@ -53,7 +53,7 @@ export const NotebookHeader = props => (
                 onChange={props.onTitleChange}
             />
             <div className="group flex relative" tabIndex="0">
-                <div className="rounded-md border border-gray-300 p-2 flex group-focus-within:bg-gray-100">
+                <div className="rounded-md border border-gray-300 p-2 flex hover:bg-gray-100 group-focus-within:bg-gray-200 cursor-pointer">
                     <div className="flex items-center text-xl">
                         <DotsVerticalIcon />
                     </div>
@@ -64,14 +64,6 @@ export const NotebookHeader = props => (
                         icon="download"
                         text="Export Notebook"
                         onClick={props.onExportNotebook}
-                    />
-                    <DropdownSeparator />
-                    <DropdownItem
-                        className="text-red-600"
-                        disabled={props.deleteDisabled}
-                        icon="trash"
-                        text="Delete..."
-                        onClick={props.onDeleteNotebook}
                     />
                 </Dropdown>
             </div>
@@ -95,10 +87,8 @@ NotebookHeader.defaultProps = {
     title: "",
     updatedAt: null,
     exportDisabled: false,
-    deleteDisabled: false,
     showForkBanner: false,
     onTitleChange: null,
     onForkNotebook: null,
     onExportNotebook: null,
-    onDeleteNotebook: null,
 };
