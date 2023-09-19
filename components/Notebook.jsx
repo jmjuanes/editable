@@ -1,15 +1,12 @@
 import React from "react";
-import Rouct from "rouct";
 import {Cell} from "./Cell.jsx";
 import {InsertCell} from "./InsertCell.jsx";
 import {NotebookHeader} from "./NotebookHeader.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
 import {saveNotebookAsMarkdownFile} from "../notebook.js";
 import {stopEventPropagation} from "../utils.js";
-import {useClient} from "../contexts/ClientContext.jsx";
 
 export const Notebook = () => {
-    const client = useClient();
     const notebook = useNotebook();
     const [editingCell, setEditingCell] = React.useState("");
     const showInsertCell = true;
@@ -26,11 +23,6 @@ export const Notebook = () => {
                 onExportNotebook={() => {
                     saveNotebookAsMarkdownFile(notebook.data)
                         .catch(error => console.error(error));
-                }}
-                onDeleteNotebook={() => {
-                    client.deleteNotebook(notebook.id).then(() => {
-                        return Rouct.redirect("/profile");
-                    });
                 }}
             />
             {notebook.data.cells.map(cell => (

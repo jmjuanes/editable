@@ -1,12 +1,12 @@
 {
-    "name": "notelab",
+    "name": "editable",
     "version": "0.0.1",
     "description": "Web based notebooks",
     "private": true,
-    "homepage": "https://www.josemi.xyz/notelab",
-    "repository": "https://github.com/jmjuanes/notelab",
+    "homepage": "https://www.josemi.xyz/editable",
+    "repository": "https://github.com/jmjuanes/editable",
     "author": "Josemi Juanes <hello@josemi.xyz>",
-    "bugs": "https://github.com/jmjuanes/notelab/issues",
+    "bugs": "https://github.com/jmjuanes/editable/issues",
     "scripts": {
         "build": "yarn clean && yarn build:app",
         "build:app": "cross-env NODE_ENV=production webpack build",
@@ -16,15 +16,13 @@
     },
     "dependencies": {
         "@babel/standalone": "^7.18.0",
-        "@josemi-icons/react": "^0.3.2",
+        "@josemi-icons/react": "^0.4.0",
         "browser-fs-access": "^0.33.1",
         "classnames": "^2.3.2",
         "codecake": "^0.1.0",
-        "idb-keyval": "^6.2.1",
         "lowcss": "^0.13.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "rouct": "^0.6.0",
         "uid": "^2.0.2"
     },
     "devDependencies": {

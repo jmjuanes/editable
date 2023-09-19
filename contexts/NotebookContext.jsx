@@ -1,6 +1,7 @@
 import React from "react";
-import {useClient} from "./ClientContext.jsx";
+import {createNotebook} from "../notebook.js";
 import {createNotebookCell, createNotebookContext} from "../notebook.js";
+import {useLocalStorage} from "../hooks/useStorage.js";
 
 // Notebook context object
 const NotebookContext = React.createContext({});
@@ -61,40 +62,20 @@ export const useNotebook = () => {
 
 // Notebook provider component
 export const NotebookProvider = props => {
-    const client = useClient();
+    const [state, setState] = useLocalStorage("editable-data", null);
     const context = React.useRef(null);
     const lastUpdated = React.useRef(null);
-    const [state, setState] = React.useState(null);
-    const [error, setError] = React.useState(null);
     // Initialize notebook context
     if (!context.current) {
         context.current = createNotebookContext();
     }
     // Hook to import notebook data
     React.useEffect(() => {
-        // Check for importing notebook from client
-        if (props.id) {
-            client.getNotebook(props.id).then(data => {
-                lastUpdated.current = data.updatedAt;
-                setState(data);
-            });
-        }
-        // Other case --> not found error
-        else {
-            setError("not_found");
+        // Initialize a new empty notebook
+        if (!state || !state.updatedAt) {
+            setState(createNotebook());
         }
     }, []);
-    // Hook to save notebook data using the client
-    React.useEffect(() => {
-        if (state && props.id && state.updatedAt !== lastUpdated.current) {
-            lastUpdated.current = state.updatedAt;
-            client.updateNotebook(props.id, {
-                title: state.title,
-                cells: state.cells,
-                updatedAt: state.updatedAt,
-            });
-        }
-    }, [state]);
     // Check if we have notebook data
     if (state) {
         const contextValue = {
@@ -109,12 +90,6 @@ export const NotebookProvider = props => {
             <NotebookContext.Provider value={contextValue}>
                 {props.children}
             </NotebookContext.Provider>
-        );
-    }
-    // Check for error importing notebook data
-    else if (error) {
-        return (
-            <div align="center">Error importing notebook</div>
         );
     }
     // Default: display a loading spinner
