@@ -9,17 +9,11 @@ import "./style.css";
 import "lowcss/dist/low.css";
 import "codecake/codecake.css";
 
-const App = () => {
-    return (
-        <Notebook />
-    );
-};
-
 createRoot(document.getElementById("root"))
     .render((
         <NotebookProvider>
             <Layout>
-                <App />
+                <Notebook />
             </Layout>
         </NotebookProvider>
     ));
