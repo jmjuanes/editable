@@ -14,7 +14,7 @@ export const DropdownGroup = props => (
 
 export const DropdownItem = props => {
     const classList = classNames(props.className, {
-        "flex items-center gap-2 rounded-md p-2 select-none": true,
+        "flex items-center gap-2 rounded-md py-1 px-2 select-none": true,
         "hover:bg-gray-200 cursor-pointer": !props.disabled,
         "o-80 cursor-not-allowed": props.disabled,
     });
@@ -29,7 +29,7 @@ export const DropdownItem = props => {
     return (
         <div className={classList} tabIndex="0" onClick={handleClick}>
             {props.icon && (
-                <div className="flex items-center text-lg">
+                <div className="flex items-center text-md">
                     {renderIcon(props.icon)}
                 </div>
             )}
@@ -50,7 +50,7 @@ DropdownItem.defaultProps = {
 
 export const Dropdown = props => (
     <div className={props.className}>
-        <div className="bg-white border border-gray-200 shadow-sm w-48 p-2 rounded-lg flex flex-col gap-0">
+        <div className="bg-white border border-gray-200 shadow-sm w-48 p-1 rounded-lg flex flex-col gap-0">
             {props.children}
         </div>
     </div>
