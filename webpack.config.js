@@ -78,6 +78,7 @@ module.exports = {
         ],
     },
     plugins: [
+        new webpack.ProgressPlugin(),
         new MiniCssExtractPlugin({
             filename: "[contenthash].css",
             chunkFilename: "[id].css",
