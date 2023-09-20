@@ -1,8 +1,12 @@
 import React from "react";
 
+const isSerializable = value => {
+    return typeof value === "object" || typeof value === "boolean";
+};
+
 // Get data from storage
 const get = (store, key, defaultValue) => {
-    if (typeof defaultValue === "object") {
+    if (isSerializable(defaultValue)) {
         return JSON.parse(store.getItem(key)) || defaultValue;
     }
     // Just return the value
@@ -11,7 +15,7 @@ const get = (store, key, defaultValue) => {
 
 // Set data in the store
 const set = (store, key, value) => {
-    store.setItem(key, typeof value === "object" ? JSON.stringify(value) : value);
+    store.setItem(key, isSerializable(value) ? JSON.stringify(value) : value);
 };
 
 // General hook
