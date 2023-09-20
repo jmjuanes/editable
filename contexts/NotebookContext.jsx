@@ -1,7 +1,7 @@
 import React from "react";
 import {createNotebook} from "../notebook.js";
 import {createNotebookCell, createNotebookContext} from "../notebook.js";
-import {useLocalStorage} from "../hooks/useStorage.js";
+import {useLocalStorage, useSessionStorage} from "../hooks/useStorage.js";
 
 // Notebook context object
 const NotebookContext = React.createContext({});
@@ -62,7 +62,7 @@ export const useNotebook = () => {
 
 // Notebook provider component
 export const NotebookProvider = props => {
-    const [state, setState] = useLocalStorage("editable-data", null);
+    const [state, setState] = useSessionStorage("editable-data", null);
     const context = React.useRef(null);
     const lastUpdated = React.useRef(null);
     // Initialize notebook context
