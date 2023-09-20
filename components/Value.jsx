@@ -52,7 +52,7 @@ export const ObjectValue = props => {
     // Render only a preview of the object
     if (props.preview) {
         return (
-            <span className="kori-value object">
+            <span className="editable-value object">
                 <em>{displayName}</em>
             </span>
         );
@@ -62,7 +62,7 @@ export const ObjectValue = props => {
         // If object is not expanded, we want to display only some keys of the object
         const visibleEntries = entries.slice(0, props.maxClosedKeys);
         return (
-            <div className="kori-value object" onClick={handleToggle}>
+            <div className="editable-value object" onClick={handleToggle}>
                 <em>{displayName}</em>
                 <span className="">{type === VALUES_TYPES.ARRAY ? "[ " : "{ "}</span>
                 {visibleEntries.map((entry, index) => (
@@ -97,7 +97,7 @@ export const ObjectValue = props => {
 
     // Render full object
     return (
-        <div className="kori-value object" onClick={handleToggle}>
+        <div className="editable-value object" onClick={handleToggle}>
             <div className="object-header">
                 <em>{displayName}</em>
                 <span className="">{type === VALUES_TYPES.ARRAY ? "[ " : "{ "}</span>
@@ -137,27 +137,27 @@ ObjectValue.defaultProps = {
 };
 
 export const NullValue = () => (
-    <span className="kori-value null">null</span>
+    <span className="editable-value null">null</span>
 );
 
 export const UndefinedValue = () => (
-    <span className="kori-value undefined">undefined</span>
+    <span className="editable-value undefined">undefined</span>
 );
 
 export const StringValue = props => (
-    <span className="kori-value string">{props.value}</span>
+    <span className="editable-value string">{props.value}</span>
 );
 
 export const NumberValue = props => (
-    <span className="kori-value number">{props.value}</span>
+    <span className="editable-value number">{props.value}</span>
 );
 
 export const BooleanValue = props => (
-    <span className="kori-value boolean">{props.value ? "true" : "false"}</span>
+    <span className="editable-value boolean">{props.value ? "true" : "false"}</span>
 );
 
 export const FunctionValue = props => (
-    <span className="kori-value function">
+    <span className="editable-value function">
         <em>{"ƒunction"} {getFunctionSignature(props.value)}</em>
     </span>
 );
