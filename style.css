@@ -1,55 +1,203 @@
-.kori-editor {
+.editable-editor {
     background-color: white !important;
     padding: 0px !important;
 }
-.kori-editor .codecake-editor {
+.editable-editor .codecake-editor {
     background-color: #fafafa;
     border-radius: 0.5rem;
     padding: 1rem;
 }
-.kori-editor .codecake-lines {
+.editable-editor .codecake-lines {
     padding-bottom: 1rem;
     padding-top: 1rem;
 }
 
 /* Values types */
-.kori-value {
+.editable-value {
     font-family: "Source Code Pro", monospace;
     font-size: 14px;
 }
-.kori-value.string {
+.editable-value.string {
     color: #00a17d;
 }
-.kori-value.string::after,
-.kori-value.string::before {
+.editable-value.string::after,
+.editable-value.string::before {
     content: '"';
 }
-.kori-value.null,
-.kori-value.undefined,
-.kori-value.boolean {
+.editable-value.null,
+.editable-value.undefined,
+.editable-value.boolean {
     color: #20118a;
 }
-.kori-value.number {
+.editable-value.number {
     color: #e57697;
 }
-.kori-value.object em,
-.kori-value.function em {
+.editable-value.object em,
+.editable-value.function em {
     color: #2196f3;
     cursor: pointer;
     margin-right: 8px;
     user-select: none;
 }
-.kori-value.object em:hover,
-.kori-value.function em:hover {
+.editable-value.object em:hover,
+.editable-value.function em:hover {
     text-decoration: underline;
 }
-.kori-value.object .object-key {
+.editable-value.object .object-key {
     color: #7e7e7e;
 }
-.kori-value.object .object-entry {
+.editable-value.object .object-entry {
     display: flex;
     gap: 6px;
 }
-.kori-value.object .object-body {
+.editable-value.object .object-body {
     margin-left: 16px;
+}
+
+/* Editable markdown */
+.editable-markdown>*:first-child {
+    margin-top: 0 !important;
+}
+.editable-markdown>*:last-child {
+    margin-bottom: 0 !important;
+}
+.editable-markdown b,
+.editable-markdown strong {
+    font-weight: 600;
+}
+.editable-markdown h1,
+.editable-markdown h2,
+.editable-markdown h3,
+.editable-markdown h4,
+.editable-markdown h5,
+.editable-markdown h6 {
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+}
+.editable-markdown h1 {
+    border-bottom: 1px solid #d0d7de;
+    font-size: 2em;
+    padding-bottom: 0.5em;
+}
+.editable-markdown h2 {
+    border-bottom: 1px solid #d0d7de;
+    font-size: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+.editable-markdown h3 {
+    font-size: 1.25rem;
+}
+.editable-markdown h4 {
+    font-size: 1rem;
+}
+.editable-markdown h5 {
+    font-size: 0.875rem;
+}
+.editable-markdown h6 {
+    color: #57606a;
+    font-size: 0.85rem;
+}
+.editable-markdown p,
+.editable-markdown blockquote,
+.editable-markdown ul,
+.editable-markdown ol,
+.editable-markdown table,
+.editable-markdown pre {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+.editable-markdown code,
+.editable-markdown pre {
+    font-family: monospace;
+}
+.editable-markdown code {
+    background-color: rgba(175,184,193,0.2);
+    border-radius: 0.4rem;
+    font-size: 0.875rem;
+    margin: 0;
+    padding: 0.2rem 0.4rem;
+    white-space: break-spaces;
+}
+.editable-markdown pre {
+    background-color: #f6f8fa;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    overflow: auto;
+    padding: 1rem;
+    word-wrap: normal;
+}
+.editable-markdown pre>code {
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+    word-break: normal;
+}
+.editable-markdown img {
+    background-color: #ffffff;
+    border-style: none;
+    box-sizing: content-box;
+    max-width: 100%;
+}
+.editable-markdown hr {
+    background: transparent;
+    background-color: #d0d7de;
+    border: 0;
+    box-sizing: content-box;
+    height: 0.1rem;
+    margin-top: 1.5rem 0;
+    overflow: hidden;
+    padding: 0;
+}
+.editable-markdown a {
+    background-color: transparent;
+    color: #0969da;
+    text-decoration: none;
+}
+.editable-markdown a:hover {
+    text-decoration: underline;
+}
+.editable-markdown table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    max-width: 100%;
+    overflow: auto;
+    width: max-content;
+}
+.editable-markdown td,
+.editable-markdown th {
+    padding: 0;
+}
+.editable-markdown table th {
+    font-weight: 600;
+}
+.editable-markdown table th,
+.editable-markdown table td {
+    border: 1px solid #d0d7de;
+    padding: 0.5rem 1rem;
+}
+.editable-markdown table tr {
+    background-color: #ffffff;
+    border-top: 1px solid #d0d7de;
+}
+.editable-markdown table tr:nth-child(2n) {
+    background-color: #f6f8fa;
+}
+.editable-markdown p {
+    line-height: 1.5;
+}
+.editable-markdown blockquote {
+    border-left: 0.25rem solid #d0d7de;
+    color: #57606a;
+    margin: 0;
+    padding-left: 1rem;
+}
+.editable-markdown ul,
+.editable-markdown ol {
+    padding-left: 2rem;
 }

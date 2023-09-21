@@ -34,7 +34,7 @@ const CreateNotebookButton = () => (
 export const Layout = props => (
     <div className="">
         {/* Header */}
-        <div className="w-full">
+        <div className="w-full border-b-1 border-gray-300">
             <div className="w-full maxw-6xl h-20 px-6 mx-auto flex items-center justify-between">
                 <a href="./" className="flex items-center gap-2 text-gray-800 no-underline select-none">
                     <div className="flex items-center text-4xl">

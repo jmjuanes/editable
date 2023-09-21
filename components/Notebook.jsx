@@ -52,7 +52,7 @@ export const Notebook = () => {
                         />
                     </div>
                     {showInsertCell && (
-                        <div className="pl-12 mb-2">
+                        <div className="mb-2">
                             <InsertCell
                                 onInsert={type => {
                                     return notebook.insertCellAfter(cell.id, type);

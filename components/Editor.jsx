@@ -18,7 +18,7 @@ export const Editor = props => {
     React.useEffect(() => {
         const cake = CodeCake.create(editor.current, {
             code: props.value || "",
-            className: "codecake-light kori-editor",
+            className: "codecake-light editable-editor",
             language: props.language,
             lineNumbers: true,
             readOnly: props.readOnly,

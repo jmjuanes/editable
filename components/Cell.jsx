@@ -3,6 +3,7 @@ import {LoaderIcon} from "@josemi-icons/react";
 import {CELL_TYPES, LANGUAGES} from "../constants.js";
 import {Editor} from "./Editor.jsx";
 import {Result} from "./Result.jsx";
+import {Markdown} from "./Markdown.jsx";
 import {CellHeader} from "./CellHeader.jsx";
 import {executeNotebookCell} from "../notebook.js";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
@@ -32,7 +33,6 @@ export const Cell = props => {
         setState(() => ({
             running: true,
         }));
-        console.log(notebook.context);
         executeNotebookCell(value.current, notebook.context)
             .then(result => {
                 // Uppdate the current value and save result response
@@ -57,23 +57,25 @@ export const Cell = props => {
             {props.type === CELL_TYPES.TEXT && (
                 <React.Fragment>
                     {props.editing && (
-                        <Editor
-                            value={value.current}
-                            language={LANGUAGES.MARKDOWN}
-                            submitHint="Press 'Shift' + 'Enter' to save."
-                            onChange={newValue => {
-                                value.current = newValue;
-                            }}
-                            onSubmit={() => props.onEditEnd()}
-                        />
+                        <div style={{marginLeft:"-3rem"}}>
+                            <Editor
+                                value={value.current}
+                                language={LANGUAGES.MARKDOWN}
+                                submitHint="Press 'Shift' + 'Enter' to save."
+                                onChange={newValue => {
+                                    value.current = newValue;
+                                }}
+                                onSubmit={() => props.onEditEnd()}
+                            />
+                        </div>
                     )}
                     {!props.editing && (
-                        <div className="w-full pl-12" onClick={handleClick}>
+                        <div className="w-full" onClick={handleClick}>
                             {!value.current && (
                                 <span className="text-gray-500">Type something...</span>
                             )}
                             {!!value.current && (
-                                <span>{value.current}</span>
+                                <Markdown value={value.current} />
                             )}
                         </div>
                     )}
@@ -81,7 +83,7 @@ export const Cell = props => {
             )}
             {props.type === CELL_TYPES.CODE && (
                 <React.Fragment>
-                    <div onClick={handleClick}>
+                    <div style={{marginLeft:"-3rem"}} onClick={handleClick}>
                         <Editor
                             key={`editor:${props.id}:${props.editing}`}
                             value={value.current}
@@ -103,7 +105,7 @@ export const Cell = props => {
                         </div>
                     )}
                     {!state.running && state.result && (
-                        <div className="w-full pl-12 mt-3">
+                        <div className="w-full mt-3">
                             <Result
                                 key={state.executedTime}
                                 value={state.result?.value}
