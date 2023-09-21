@@ -79,7 +79,7 @@
 .editable-markdown h1 {
     border-bottom: 1px solid #d0d7de;
     font-size: 2em;
-    padding-bottom: 0.5em;
+    padding-bottom: 0.5rem;
 }
 .editable-markdown h2 {
     border-bottom: 1px solid #d0d7de;
@@ -149,7 +149,7 @@
     border: 0;
     box-sizing: content-box;
     height: 0.1rem;
-    margin-top: 1.5rem 0;
+    margin: 1.5rem 0;
     overflow: hidden;
     padding: 0;
 }
