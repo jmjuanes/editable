@@ -109,6 +109,7 @@ export const Cell = props => {
                             <Result
                                 key={state.executedTime}
                                 value={state.result?.value}
+                                logs={state.result?.logs}
                                 isCurrentValue={!props.editing && value.current === state.executedValue}
                                 error={!!state.result?.error}
                                 errorType={state.result?.errorType}

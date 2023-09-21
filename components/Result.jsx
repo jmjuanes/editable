@@ -42,7 +42,6 @@ export const Result = props => {
         "flex flex-col gap-2": true,
         "o-50": !props.isCurrentValue,
     });
-
     // Effect for mounting rendered HTML content into container
     React.useEffect(() => {
         if (!props.error && isHtmlValue) {
@@ -62,7 +61,6 @@ export const Result = props => {
             }
         }
     }, []);
-
     return (
         <div className={classList}>
             {props.error && (
