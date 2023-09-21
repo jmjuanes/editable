@@ -27,10 +27,9 @@ export const createNotebookContext = () => {
 // Create a new cell element
 export const createNotebookCell = (type, initialValue = "") => {
     return {
-        id: uid(20),
+        id: uid(6),
         type: type || CELL_TYPES.CODE,
         value: initialValue || "",
-        locked: false,
     };
 };
 
@@ -39,8 +38,6 @@ export const createNotebook = () => {
     return {
         version: VERSION,
         title: "untitled",
-        isFork: false,
-        locked: false,
         cells: [
             // createNotebookCell(CELL_TYPES.TEXT, ""),
             createNotebookCell(CELL_TYPES.CODE, `return "Hello world!";`),
@@ -56,14 +53,14 @@ export const exportNotebook = notebook => {
         const data = [
             "---",
             `title: "${notebook.title}"`,
-            `createdAt: ${notebook.createdAt}`,
-            `updatedAt: ${notebook.updatedAt}`,
+            `created_at: ${notebook.createdAt}`,
+            `updated_at: ${notebook.updatedAt}`,
             "---",
             "",
             ...notebook.cells.map(cell => {
                 if (cell.type === CELL_TYPES.CODE) {
                     const codeBlock = [
-                        "```{javascript editable=true}",
+                        "```{javascript, id='" + cell.id + "'}",
                         cell.value,
                         "```",
                         "",
@@ -84,7 +81,7 @@ export const saveNotebookAsMarkdownFile = notebook => {
     return exportNotebook(notebook).then(data => {
         const blob = new Blob([data], {type: MIME_TYPES.FOLIO});
         return fileSave(blob, {
-            description: "Kode Export",
+            description: "Export",
             fileName: `${filename}${FILE_EXTENSIONS.MARKDOWN}`,
             extensions: [
                 FILE_EXTENSIONS.MARKDOWN,

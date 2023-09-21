@@ -9,9 +9,8 @@ import {stopEventPropagation} from "../utils.js";
 export const Notebook = () => {
     const notebook = useNotebook();
     const [editingCell, setEditingCell] = React.useState("");
-    const showInsertCell = true;
     return (
-        <div className="w-full" onClick={() => setEditingCell("")}>
+        <div className="flex flex-col gap-2 w-full" onClick={() => setEditingCell("")}>
             <NotebookHeader
                 title={notebook.data.title}
                 updatedAt={notebook.data.updatedAt}
@@ -20,13 +19,19 @@ export const Notebook = () => {
                 onTitleChange={newTitle => {
                     notebook.setTitle(newTitle);
                 }}
-                onExportNotebook={() => {
+                onExport={() => {
                     saveNotebookAsMarkdownFile(notebook.data)
                         .catch(error => console.error(error));
                 }}
             />
+            <InsertCell
+                onInsert={type => {
+                    const firstCell = notebook.data.cells[0];
+                    notebook.insertCellBefore(firstCell.id, type);
+                }}
+            />
             {notebook.data.cells.map(cell => (
-                <React.Fragment key={cell.id}>
+                <div key={cell.id}>
                     <div className="" onClick={stopEventPropagation}>
                         <Cell
                             key={"cell:" + cell.id}
@@ -51,16 +56,12 @@ export const Notebook = () => {
                             }}
                         />
                     </div>
-                    {showInsertCell && (
-                        <div className="mb-2">
-                            <InsertCell
-                                onInsert={type => {
-                                    return notebook.insertCellAfter(cell.id, type);
-                                }}
-                            />
-                        </div>
-                    )}
-                </React.Fragment>
+                    <InsertCell
+                        onInsert={type => {
+                            return notebook.insertCellAfter(cell.id, type);
+                        }}
+                    />
+                </div>
             ))}
         </div>
     );

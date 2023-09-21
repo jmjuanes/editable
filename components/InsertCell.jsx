@@ -14,7 +14,7 @@ const InsertCellButton = props => (
 );
 
 export const InsertCell = props => (
-    <div className="flex items-center justify-center gap-2 o-10 hover:o-100 select-none">
+    <div className="flex items-center justify-center gap-2 o-60 hover:o-100 select-none">
         <div className="w-full h-px border-b border-dashed border-gray-300" />
         <div className="flex flex-nowrap gap-2 flex-grow w-full justify-center items-center">
             <InsertCellButton

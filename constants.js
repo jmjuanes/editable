@@ -9,8 +9,8 @@ export const KEYS = {
 };
 
 export const CELL_TYPES = {
-    TEXT: "block_text",
-    CODE: "block_code",
+    TEXT: "text",
+    CODE: "code",
 };
 
 export const LANGUAGES = {

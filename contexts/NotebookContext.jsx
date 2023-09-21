@@ -1,7 +1,7 @@
 import React from "react";
 import {createNotebook} from "../notebook.js";
 import {createNotebookCell, createNotebookContext} from "../notebook.js";
-import {useLocalStorage, useSessionStorage} from "../hooks/useStorage.js";
+import {useSessionStorage} from "../hooks/useStorage.js";
 
 // Notebook context object
 const NotebookContext = React.createContext({});
@@ -54,8 +54,16 @@ export const useNotebook = () => {
                 updatedAt: Date.now(),
             });
         },
-        inserCellBefore: (id, type) => {
-            // TODO
+        insertCellBefore: (id, type) => {
+            const cells = [...notebook.state.cells];
+            const newCell = createNotebookCell(type);
+            const index = cells.findIndex(cell => cell.id === id);
+            // Insert this new cell before the current cell block
+            (index === 0) ? cells.unshift(newCell) : cells.splice(index - 1, 0, newCell);
+            return notebook.setState({
+                cells: cells,
+                updatedAt: Date.now(),
+            });
         },
     };
 };
@@ -64,7 +72,6 @@ export const useNotebook = () => {
 export const NotebookProvider = props => {
     const [state, setState] = useSessionStorage("editable-data", null);
     const context = React.useRef(null);
-    const lastUpdated = React.useRef(null);
     // Initialize notebook context
     if (!context.current) {
         context.current = createNotebookContext();

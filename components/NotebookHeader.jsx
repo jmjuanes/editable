@@ -62,8 +62,8 @@ export const NotebookHeader = props => (
                     <DropdownItem
                         disabled={props.exportDisabled}
                         icon="download"
-                        text="Export Notebook"
-                        onClick={props.onExportNotebook}
+                        text="Export as markdown"
+                        onClick={props.onExport}
                     />
                 </Dropdown>
             </div>
@@ -89,6 +89,5 @@ NotebookHeader.defaultProps = {
     exportDisabled: false,
     showForkBanner: false,
     onTitleChange: null,
-    onForkNotebook: null,
-    onExportNotebook: null,
+    onExport: null,
 };
