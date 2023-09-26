@@ -32,6 +32,8 @@ export const Editor = props => {
                 props.onSubmit();
             }
         });
+        // Autofocus on the editor element
+        editor.current.querySelector(".codecake-editor").focus();
     }, []);
 
     return (
