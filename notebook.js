@@ -1,7 +1,7 @@
 import React from "react";
 import {uid} from "uid/secure";
 import {fileSave} from "browser-fs-access";
-import {VERSION, CDN_URL, CELL_TYPES, CONSOLE_LEVELS} from "./constants.js";
+import {VERSION, CDN_URL, CELL_TYPES, CONTEXT_KEYS, CONSOLE_LEVELS} from "./constants.js";
 import {ENDL, MIME_TYPES, FILE_EXTENSIONS} from "./constants.js";
 
 // Note: babel is added as an external dependency
@@ -14,11 +14,16 @@ const AsyncFunction = Object.getPrototypeOf(async function (){}).constructor;
 export const createNotebookContext = () => {
     return {
         // This variable will store packages imported in code cells
-        // key: package name (for example "react" or "react@18.2.0" when importing specific versions)
-        // value: package content, returned from CDN
-        __packagesCache: {
-            "react": {
-                default: React,
+        [CONTEXT_KEYS.MODULES]: {
+            // Internal packages (exported from cells)
+            internal: {},
+            // External packages
+            // key: package name (for example "react" or "react@18.2.0" when importing specific versions)
+            // value: package content, returned from CDN
+            external: {
+                "react": {
+                    default: React,
+                },
             },
         },
     };
@@ -92,15 +97,27 @@ export const saveNotebookAsMarkdownFile = notebook => {
 
 // Create function code
 const createFunctionCode = rawCode => {
-    // Replace import statemenets from code
+    // Replace import and export statemenets from code
     // We need to do this before transpiling code with babel
     const code = rawCode.trim()
+        // Replace imports
         // Case 1: import default export of package
-        .replace(/^import\s+(\w+)?\s+from\s+"([\w@\.-/]+)?";/gm, `const $1 = (await __import("$2"))?.default;`)
+        .replace(/^import\s+(\w+)?\s+from\s+"([\w@:\.-/]+)?";/gm, `const $1 = (await __import("$2"))?.default;`)
         // Case 2: import all exports to a single namespace from package (using import * as)
-        .replace(/^import\s+\*\s+as\s+(\w+)?\s+from\s+"([\w@\.-/]+)?";/gm, `const $1 = await __import("$2");`)
+        .replace(/^import\s+\*\s+as\s+(\w+)?\s+from\s+"([\w@:\.-/]+)?";/gm, `const $1 = await __import("$2");`)
         // Case 3: import only specific exports from package
-        .replace(/^import\s+(\{[\w, ]+\})?\s+from\s+"([\w\@\.\/]+)?";/gm, `const $1 = await __import("$2");`);
+        .replace(/^import\s+(\{[\w, ]+\})?\s+from\s+"([\w@:\.\/]+)?";/gm, `const $1 = await __import("$2");`)
+        // Replace exports
+        // Case 1: export default
+        .replace(/^export\s+default\s+(.+)/gm, `__export.default = $1`)
+        // Case 2: named export
+        .replace(/^export\s+(function|class)\s+([\w]+)/gm, `__export["$2"] = $1`)
+        .replace(/^export\s+(?:const)\s+([\w]+)/gm, `__export["$1"]`)
+        // Case 3: export declared variables
+        .replace(/^export\s+([\w]+)/gm, `__export["$1"] = $1`)
+        .replace(/^export\s+\{([\w,\s]+?)\}/gm, (match, items) => {
+            return items.split(",").map(s => `__export["${s.trim()}"] = ${s.trim()};`).join(" ");
+        });
     // Transpile code with babel
     const transformed = Babel.transform(code, {
         presets: [
@@ -118,7 +135,8 @@ const createFunctionCode = rawCode => {
 };
 
 // Execute the provide command
-export const executeNotebookCell = async (code, context) => {
+export const executeNotebookCell = async (cell, code, context) => {
+    const modules = context[CONTEXT_KEYS.MODULES];
     const result = {
         logs: [],
         error: false,
@@ -135,17 +153,30 @@ export const executeNotebookCell = async (code, context) => {
     };
     // Internal function for importing packages
     const __import = async name => {
-        if (typeof context["__packagesCache"][name] === "undefined") {
-            context["__packagesCache"][name] = await import(/*webpackIgnore: true*/`${CDN_URL}${name}`);
+        // Check for importing modules from other cells
+        if (name.startsWith("cell:")) {
+            const id = name.replace("cell:", "");
+            if (!modules.internal[id]) {
+                throw new Error(`Cell '${id}' does not export any module.`);
+            }
+            return modules.internal[id];
+        }
+        // Import modules from CDN
+        if (typeof modules.external[name] === "undefined") {
+            modules.external[name] = await import(/*webpackIgnore: true*/`${CDN_URL}${name}`);
         }
         // Return package from cache
-        return context["__packagesCache"][name];
+        return modules.external[name];
     };
-    // Execute provided code
+    // This variable will store exported modules from the current cell
+    const __export = {};
     try {
         const fnCode = createFunctionCode(code);
-        const fn = new AsyncFunction("console", "React", "__import", fnCode);
-        result.value = await fn.call(context, consoleInstance, React, __import);
+        const fn = new AsyncFunction("console", "__import", "__export", fnCode);
+        result.value = await fn.call(context, consoleInstance, __import, __export);
+        // Save exported modules in internal modules cache
+        // Note that if cell does not export any module, it will be initialized/reset to 'null' 
+        modules.internal[cell] = Object.keys(__export).length > 0 ? __export : null;
     }
     catch(error) {
         // Save error message in result and set as error type

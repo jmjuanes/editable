@@ -33,7 +33,7 @@ export const Cell = props => {
         setState(() => ({
             running: true,
         }));
-        executeNotebookCell(value.current, notebook.context)
+        executeNotebookCell(props.id, value.current, notebook.context)
             .then(result => {
                 // Uppdate the current value and save result response
                 props.onEditEnd();
@@ -50,6 +50,7 @@ export const Cell = props => {
         <div className="mb-4">
             {props.showHeader && (
                 <CellHeader
+                    id={props.type === CELL_TYPES.CODE ? props.id : null}
                     showDeleteButton={props.showDeleteButton}
                     onDelete={props.onDelete}
                 />
