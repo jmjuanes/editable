@@ -1,10 +1,15 @@
 import React from "react";
-import {BarsIcon, FilePlusIcon, renderIcon} from "@josemi-icons/react";
+import {BarsIcon, FilePlusIcon, JournalIcon, renderIcon} from "@josemi-icons/react";
 
 const Logo = () => (
-    <span className="font-crimson tracking-tight leading-none select-none">
-        <span>Editabl<u>e</u></span>
-    </span>
+    <div className="inline-flex items-center gap-1">
+        <div className="flex items-center">
+            <JournalIcon />
+        </div>
+        <span className="font-crimson tracking-tight leading-none select-none">
+            <span>Editabl<u>e</u></span>
+        </span>
+    </div>
 );
 
 const NavbarLink = props => (

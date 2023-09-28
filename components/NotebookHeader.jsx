@@ -58,11 +58,11 @@ export const NotebookHeader = props => (
                         <DotsVerticalIcon />
                     </div>
                 </div>
-                <Dropdown className="absolute top-full right-0 mt-1 hidden group-focus-within:block">
+                <Dropdown className="absolute top-full right-0 mt-1 hidden group-focus-within:block z-5">
                     <DropdownItem
                         disabled={props.exportDisabled}
                         icon="download"
-                        text="Export as markdown"
+                        text="Export markdown"
                         onClick={props.onExport}
                     />
                 </Dropdown>
