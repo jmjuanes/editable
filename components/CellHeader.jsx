@@ -1,5 +1,5 @@
 import React from "react";
-import {CopyIcon, TrashIcon} from "@josemi-icons/react";
+import {CopyIcon, renderIcon} from "@josemi-icons/react";
 import {delay, copyTextToClipboard} from "../utils.js";
 
 const CellId = props => {
@@ -39,7 +39,7 @@ CellId.defaultProps = {
 
 const Button = props => (
     <div className="flex items-center text-gray-400 hover:text-gray-600 cursor-pointer" onClick={props.onClick}>
-        {props.icon}
+        {renderIcon(props.icon)}
     </div>
 );
 
@@ -55,11 +55,23 @@ export const CellHeader = props => (
             )}
         </div>
         <div className="flex items-center gap-2">
+            {props.showExecuteButton && (
+                <Button
+                    icon="play"
+                    onClick={props.onExecute}
+                />
+            )}
+            {props.showDuplicateButton && (
+                <Button
+                    icon="copy"
+                    onClick={props.onDuplicate}
+                />
+            )}
             {props.showDeleteButton && (
                 <React.Fragment>
                     <Separator />
                     <Button
-                        icon={(<TrashIcon />)}
+                        icon="trash"
                         onClick={props.onDelete}
                     />
                 </React.Fragment>
@@ -71,6 +83,9 @@ export const CellHeader = props => (
 CellHeader.defaultProps = {
     id: null,
     showDeleteButton: false,
+    showDuplicateButton: false,
+    showExecuteButton: false,
     onDelete: null,
-    onInsert: null,
+    onDuplicate: null,
+    onExecute: null,
 };

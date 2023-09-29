@@ -48,6 +48,9 @@ export const Notebook = () => {
                             onDelete={() => {
                                 notebook.deleteCell(cell.id);
                             }}
+                            onDuplicate={() => {
+                                notebook.duplicateCell(cell.id);
+                            }}
                             onEditStart={() => {
                                 setEditingCell(cell.id);
                             }}

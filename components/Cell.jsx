@@ -52,7 +52,11 @@ export const Cell = props => {
                 <CellHeader
                     id={props.type === CELL_TYPES.CODE ? props.id : null}
                     showDeleteButton={props.showDeleteButton}
+                    showDuplicateButton={props.showDuplicateButton}
+                    showExecuteButton={props.type === CELL_TYPES.CODE}
                     onDelete={props.onDelete}
+                    onDuplicate={props.onDuplicate}
+                    onExecute={handleRun}
                 />
             )}
             {props.type === CELL_TYPES.TEXT && (
@@ -131,8 +135,10 @@ Cell.defaultProps = {
     editing: false,
     showHeader: true,
     showDeleteButton: true,
+    showDuplicateButton: true,
     onUpdate: null,
     onDelete: null,
+    onDuplicate: null,
     onEditStart: null,
     onEditEnd: null,
 };

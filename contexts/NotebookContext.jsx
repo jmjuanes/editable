@@ -9,6 +9,17 @@ const NotebookContext = React.createContext({});
 // Use notebook hook
 export const useNotebook = () => {
     const notebook = React.useContext(NotebookContext);
+    const insertCell = (id, type, initialValue) => {
+        const cells = [...notebook.state.cells];
+        const newCell = createNotebookCell(type, initialValue);
+        const index = cells.findIndex(cell => cell.id === id);
+        // Insert this new cell after the current block
+        (index === cells.length - 1) ? cells.push(newCell) : cells.splice(index + 1, 0, newCell);
+        return notebook.setState({
+            cells: cells,
+            updatedAt: Date.now(),
+        });
+    };
     return {
         id: notebook.id,
         context: notebook.context,
@@ -43,16 +54,12 @@ export const useNotebook = () => {
                 updatedAt: Date.now(),
             });
         },
+        duplicateCell: id => {
+            const cell = notebook.state.cells.find(c => c.id === id);
+            return insertCell(id, cell.type, cell.value);
+        },
         insertCellAfter: (id, type) => {
-            const cells = [...notebook.state.cells];
-            const newCell = createNotebookCell(type);
-            const index = cells.findIndex(cell => cell.id === id);
-            // Insert this new cell after the current block
-            (index === cells.length - 1) ? cells.push(newCell) : cells.splice(index + 1, 0, newCell);
-            return notebook.setState({
-                cells: cells,
-                updatedAt: Date.now(),
-            });
+            return insertCell(id, type, "");
         },
         insertCellBefore: (id, type) => {
             const cells = [...notebook.state.cells];
