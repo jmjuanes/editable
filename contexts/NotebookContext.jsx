@@ -30,6 +30,12 @@ export const useNotebook = () => {
                 updatedAt: Date.now(),
             });
         },
+        update: newData => {
+            return notebook.setState({
+                ...newData,
+                updatedAt: Date.now(),
+            });
+        },
         updateCell: (id, newData) => {
             const cells = notebook.state.cells;
             const updatedCells = cells.map(cell => {

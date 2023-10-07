@@ -49,6 +49,8 @@ export const createNotebook = () => {
         ],
         createdAt: Date.now(),
         updatedAt: Date.now(),
+        author: "",
+        tags: [],
     };
 };
 
@@ -57,16 +59,17 @@ export const exportNotebook = notebook => {
     return new Promise(resolve => {
         const data = [
             "---",
-            `title: "${notebook.title}"`,
-            `created_at: ${notebook.createdAt}`,
-            `updated_at: ${notebook.updatedAt}`,
+            `title: ${JSON.stringify(notebook.title || "Untitled")}`,
+            `created_at: ${JSON.stringify(notebook.createdAt)}`,
+            `author: ${JSON.stringify(notebook.author || "")}`,
+            `tags: ${JSON.stringify(notebook.tags)}`,
             "---",
             "",
             ...notebook.cells.map(cell => {
                 if (cell.type === CELL_TYPES.CODE) {
                     const codeBlock = [
-                        "```{javascript, id='" + cell.id + "'}",
-                        cell.value,
+                        "```{javascript, id=" + JSON.stringify(cell.id) + "}",
+                        cell.value.trim(),
                         "```",
                         "",
                     ];

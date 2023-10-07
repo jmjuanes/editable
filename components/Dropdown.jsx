@@ -3,7 +3,7 @@ import classNames from "classnames";
 import {renderIcon} from "@josemi-icons/react";
 
 export const DropdownSeparator = () => (
-    <div className="bg-gray-200 h-px w-full my-2" />
+    <div className="bg-gray-200 h-px w-full my-1" />
 );
 
 export const DropdownGroup = props => (
