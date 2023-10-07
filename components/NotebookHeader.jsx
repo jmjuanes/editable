@@ -1,5 +1,5 @@
 import React from "react";
-import {GitBranchIcon, DotsVerticalIcon, EditIcon} from "@josemi-icons/react";
+import {GitBranchIcon, DotsVerticalIcon, renderIcon, LockIcon} from "@josemi-icons/react";
 import {Dropdown, DropdownItem, DropdownSeparator} from "./Dropdown.jsx";
 
 const NotebookTitle = props => {
@@ -39,6 +39,24 @@ const NotebookForkBanner = props => (
     </div>
 );
 
+const MetadataItem = props => (
+    <div className="flex items-center gap-1 select-none">
+        {props.icon && (
+            <div className="flex text-gray-400 text-lg">
+                {renderIcon(props.icon)}
+            </div>
+        )}
+        {props.label && (
+            <div className="flex items-center text-gray-700 text-xs">
+                {props.label}
+            </div>
+        )}
+        <div className="text-gray-500 text-sm font-medium">
+            {props.children}
+        </div>
+    </div>
+);
+
 // Export notebook header
 export const NotebookHeader = props => (
     <div className="mb-6">
@@ -60,6 +78,13 @@ export const NotebookHeader = props => (
                 </div>
                 <Dropdown className="absolute top-full right-0 mt-1 hidden group-focus-within:block z-5">
                     <DropdownItem
+                        disabled={false}
+                        icon="edit"
+                        text="Edit metadata"
+                        onClick={props.onEditMetadata}
+                    />
+                    <DropdownSeparator />
+                    <DropdownItem
                         disabled={props.exportDisabled}
                         icon="download"
                         text="Export markdown"
@@ -69,15 +94,21 @@ export const NotebookHeader = props => (
             </div>
         </div>
         <div className="flex items-center gap-4">
-            {props.updatedAt && (
-                <div className="flex items-center gap-1">
-                    <div className="flex text-gray-400">
-                        <EditIcon />
+            {props.author && (
+                <MetadataItem icon="edit" label="By">
+                    <span className="font-medium">{props.author}</span>
+                </MetadataItem>
+            )}
+            {props.tags.length > 0 && (
+                <MetadataItem icon="backspace" label="Tags:">
+                    <div className="flex flex-wrap gap-1 ml-1">
+                        {props.tags.map((tag, index) => (
+                            <div key={index} className="flex items-center px-2 py-1 bg-gray-200 rounded-xl">
+                                <span className="text-2xs leading-none text-gray-500 font-medium">{tag}</span>
+                            </div>
+                        ))}
                     </div>
-                    <div className="text-gray-400 text-xs">
-                        <span>Edited on {(new Date(props.updatedAt)).toLocaleDateString()}</span>
-                    </div>
-                </div>
+                </MetadataItem>
             )}
         </div>
     </div>
@@ -85,9 +116,11 @@ export const NotebookHeader = props => (
 
 NotebookHeader.defaultProps = {
     title: "",
-    updatedAt: null,
+    author: "",
+    tags: [],
     exportDisabled: false,
     showForkBanner: false,
     onTitleChange: null,
     onExport: null,
+    onEditMetadata: null,
 };
