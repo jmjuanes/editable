@@ -10,7 +10,7 @@ export const Help = () => {
     return (
         <React.Fragment>
             {visible && (
-                <div className="relative border border-gray-300 rounded-lg p-6 mb-8 text-gray-700 bg-gray-100">
+                <div className="relative border border-gray-200 rounded-lg p-6 mb-8 text-gray-900">
                     <div className="absolute top-0 right-0 mt-4 mr-4">
                         <div className="flex items-center group cursor-pointer" onClick={() => setVisible(false)}>
                             <div className="flex items-center text-2xl text-gray-400 group-hover:text-gray-900">
@@ -18,7 +18,7 @@ export const Help = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 leading-none mb-6">
+                    <div className="hidden items-center gap-2 leading-none mb-6">
                         <span className="flex items-center text-xl">👋</span>
                         <span className="font-bold text-2xl">Welcome to Editable!</span>
                     </div>
