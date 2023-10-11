@@ -1,37 +1,34 @@
-import React from "react";
-import {BarsIcon, FilePlusIcon, JournalIcon, renderIcon} from "@josemi-icons/react";
+const React = require("react");
+const {BarsIcon, FilePlusIcon, renderIcon} = require("@josemi-icons/react/cjs");
 
 const Logo = () => (
-    <div className="inline-flex items-center gap-1">
-        <div className="flex items-center">
-            <JournalIcon />
-        </div>
-        <span className="font-crimson tracking-tight leading-none select-none">
-            <span>Editabl<u>e</u></span>
+    <div className="inline-flex items-center gap-1 text-gray-800">
+        <span className="leading-none select-none font-black">
+            <span>editable.</span>
         </span>
     </div>
 );
 
 const NavbarLink = props => (
-    <a href={props.to} className="flex items-center gap-1 text-gray-800 px-3 py-2 rounded-md hover:bg-gray-200">
+    <a href={props.to} target={props.target} className="flex items-center gap-1 text-gray-800 px-3 py-2 rounded-md hover:bg-yellow-100">
         {props.icon && (
             <div className="flex items-center">
                 {renderIcon(props.icon)}
             </div>
         )}
-        <div className="flex text-sm">
+        <div className="flex text-sm font-bold">
             {props.text || props.children}
         </div>
     </a>
 );
 
 const CreateNotebookButton = () => (
-    <a href="./" target="_blank" className="flex items-center gap-1 border border-gray-300 hover:bg-gray-100 rounded-md p-2">
-        <div className="flex items-center text-gray-900 text-xl">
+    <a href="./" target="_blank" className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 rounded-md px-3 py-2">
+        <div className="flex items-center text-white text-xl">
             <FilePlusIcon />
         </div>
-        <div className="flex font-bold text-sm text-gray-900">
-            <strong>New</strong>
+        <div className="flex font-bold text-sm text-white">
+            <strong>Create New</strong>
         </div>
     </a>
 );
@@ -39,13 +36,18 @@ const CreateNotebookButton = () => (
 export const Layout = props => (
     <div className="">
         {/* Header */}
-        <div className="w-full border-b-1 border-gray-300">
-            <div className="w-full maxw-6xl h-20 px-6 mx-auto flex items-center justify-between">
-                <a href="./" className="flex items-center gap-2 text-gray-800 no-underline select-none">
-                    <div className="flex items-center text-4xl">
-                        <Logo />
+        <div className="w-full border-gray-300">
+            <div className="w-full maxw-7xl h-20 px-6 mx-auto flex items-center justify-between">
+                <div className="w-full flex items-center">
+                    <a href="./" className="flex items-center gap-2 text-gray-900 no-underline select-none">
+                        <div className="flex items-center text-2xl">
+                            <Logo />
+                        </div>
+                    </a>
+                    <div className="flex items-center gap-2 ml-8 select-none">
+                        <NavbarLink to="./about" target={props.navbarLinkTarget} text="About" />
                     </div>
-                </a>
+                </div>
                 <div className="group peer sm:w-full" tabIndex="0">
                     <div className="flex sm:hidden text-xl p-2 border border-gray-300 rounded-md cursor-pointer">
                         <BarsIcon />
@@ -72,8 +74,9 @@ export const Layout = props => (
         </div>
         {/* Footer */}
         <div className="w-full maxw-6xl mx-auto px-6 pt-24 pb-20">
+            <div className="h-px bg-gray-200 w-full mb-6" />
             <div className="mb-10">
-                <div className="text-2xl mb-2">
+                <div className="text-xl mb-2">
                     <Logo />
                 </div>
                 <div className="text-sm text-gray-600">
@@ -88,3 +91,7 @@ export const Layout = props => (
         </div>
     </div>
 );
+
+Layout.defaultProps = {
+    navbarLinkTarget: "_blank",
+};
