@@ -37,7 +37,7 @@ export const Layout = props => (
     <div className="">
         {/* Header */}
         <div className="w-full border-gray-300">
-            <div className="w-full maxw-7xl h-20 px-6 mx-auto flex items-center justify-between">
+            <div className="w-full max-w-7xl h-20 px-6 mx-auto flex items-center justify-between">
                 <div className="w-full flex items-center">
                     <a href="./" className="flex items-center gap-2 text-gray-900 no-underline select-none">
                         <div className="flex items-center text-2xl">
@@ -69,11 +69,11 @@ export const Layout = props => (
             </div>
         </div>
         {/* Main content */}
-        <div className="w-full maxw-6xl mx-auto px-6 py-8">
+        <div className="w-full max-w-6xl mx-auto px-6 py-8">
             {props.children}
         </div>
         {/* Footer */}
-        <div className="w-full maxw-6xl mx-auto px-6 pt-24 pb-20">
+        <div className="w-full max-w-6xl mx-auto px-6 pt-24 pb-20">
             <div className="h-px bg-gray-200 w-full mb-6" />
             <div className="mb-10">
                 <div className="text-xl mb-2">
