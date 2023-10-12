@@ -14,6 +14,7 @@
         "postbuild:docs": "cp node_modules/lowcss/dist/low.css www/",
         "dev": "yarn run clean && webpack serve",
         "clean": "rm -rf ./www",
+        "serve": "serve ./www",
         "test": "jest"
     },
     "dependencies": {
@@ -50,6 +51,7 @@
         "jest-environment-jsdom": "^29.6.2",
         "mini-css-extract-plugin": "^2.7.2",
         "react-test-renderer": "^18.2.0",
+        "serve": "^14.2.1",
         "webpack": "^5.72.1",
         "webpack-cli": "^4.9.2",
         "webpack-dev-server": "^4.11.1"
