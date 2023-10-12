@@ -1,5 +1,6 @@
 import React from "react";
 import {CopyIcon, renderIcon} from "@josemi-icons/react";
+import {CELL_TYPES} from "../constants.js";
 import {delay, copyTextToClipboard} from "../utils.js";
 
 const CellId = props => {
@@ -23,7 +24,7 @@ const CellId = props => {
                 </div>
             </div>
             {props.copiedMessage && copied && (
-                <div className="bg-gray-800 text-white text-2xs font-bold rounded-sm px-1 select-none">
+                <div className="text-gray-700 text-2xs font-bold rounded-sm px-1 select-none">
                     <span>{props.copiedMessage}</span>
                 </div>
             )}
@@ -67,6 +68,19 @@ export const CellHeader = props => (
                     onClick={props.onDuplicate}
                 />
             )}
+            {props.showInsertButtons && (
+                <React.Fragment>
+                    <Separator />
+                    <Button
+                        icon="code"
+                        onClick={() => props.onInsert(CELL_TYPES.CODE)}
+                    />
+                    <Button
+                        icon="text-left"
+                        onClick={() => props.onInsert(CELL_TYPES.TEXT)}
+                    />
+                </React.Fragment>
+            )}
             {props.showDeleteButton && (
                 <React.Fragment>
                     <Separator />
@@ -82,10 +96,12 @@ export const CellHeader = props => (
 
 CellHeader.defaultProps = {
     id: null,
+    showInsertButtons: false,
     showDeleteButton: false,
     showDuplicateButton: false,
     showExecuteButton: false,
     onDelete: null,
     onDuplicate: null,
     onExecute: null,
+    onInsert: null,
 };

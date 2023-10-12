@@ -1,6 +1,5 @@
 import React from "react";
 import {Cell} from "./Cell.jsx";
-import {InsertCell} from "./InsertCell.jsx";
 import {NotebookHeader} from "./NotebookHeader.jsx";
 import {NotebookMetadata} from "./NotebookMetadata.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
@@ -28,44 +27,35 @@ export const Notebook = () => {
                 }}
                 onEditMetadata={() => setMetadataVisible(true)}
             />
-            <InsertCell
-                onInsert={type => {
-                    const firstCell = notebook.data.cells[0];
-                    notebook.insertCellBefore(firstCell.id, type);
-                }}
-            />
             {notebook.data.cells.map(cell => (
-                <div key={cell.id}>
-                    <div className="" onClick={stopEventPropagation}>
-                        <Cell
-                            key={"cell:" + cell.id}
-                            id={cell.id}
-                            type={cell.type}
-                            value={cell.value}
-                            editing={cell.id === editingCell}
-                            showDeleteButton={notebook.data.cells.length > 1}
-                            onUpdate={value => {
-                                notebook.updateCell(cell.id, {
-                                    value: value,
-                                });
-                            }}
-                            onDelete={() => {
-                                notebook.deleteCell(cell.id);
-                            }}
-                            onDuplicate={() => {
-                                notebook.duplicateCell(cell.id);
-                            }}
-                            onEditStart={() => {
-                                setEditingCell(cell.id);
-                            }}
-                            onEditEnd={() => {
-                                setEditingCell("");
-                            }}
-                        />
-                    </div>
-                    <InsertCell
-                        onInsert={type => {
-                            return notebook.insertCellAfter(cell.id, type);
+                <div key={cell.id} className="" onClick={stopEventPropagation}>
+                    <Cell
+                        key={"cell:" + cell.id}
+                        id={cell.id}
+                        type={cell.type}
+                        value={cell.value}
+                        editing={cell.id === editingCell}
+                        showInsertButtons={true}
+                        showDeleteButton={notebook.data.cells.length > 1}
+                        onUpdate={value => {
+                            notebook.updateCell(cell.id, {
+                                value: value,
+                            });
+                        }}
+                        onDelete={() => {
+                            notebook.deleteCell(cell.id);
+                        }}
+                        onDuplicate={() => {
+                            notebook.duplicateCell(cell.id);
+                        }}
+                        onInsert={cellType => {
+                            notebook.insertCellAfter(cell.id, cellType);
+                        }}
+                        onEditStart={() => {
+                            setEditingCell(cell.id);
+                        }}
+                        onEditEnd={() => {
+                            setEditingCell("");
                         }}
                     />
                 </div>
