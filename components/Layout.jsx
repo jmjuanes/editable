@@ -64,7 +64,7 @@ export const Layout = props => (
             </div>
         </div>
         {/* Main content */}
-        <div className="w-full max-w-6xl mx-auto px-6 py-8">
+        <div className="w-full max-w-6xl mx-auto px-6 py-2 md:py-8">
             {props.children}
         </div>
         {/* Footer */}
