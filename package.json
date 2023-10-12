@@ -8,7 +8,7 @@
     "author": "Josemi Juanes <hello@josemi.xyz>",
     "bugs": "https://github.com/jmjuanes/editable/issues",
     "scripts": {
-        "build": "yarn clean && yarn build:app",
+        "build": "yarn clean && yarn build:app && yarn build:docs",
         "build:app": "cross-env NODE_ENV=production webpack build",
         "build:docs": "redocus --config redocus.config.js",
         "postbuild:docs": "cp node_modules/lowcss/dist/low.css www/",
