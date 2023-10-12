@@ -445,7 +445,7 @@ export const DataTable = React.forwardRef((props, ref) => {
         }
     }
     return (
-        <div className="w-full maxw-full" data-testid="dt">
+        <div className="w-full max-w-full" data-testid="dt">
             <div className="w-full overflow-x-auto" style={{height: height, ...props.style}}>
                 <DataTableRender
                     key={state.updateKey}

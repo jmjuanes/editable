@@ -1,0 +1,65 @@
+---
+layout: "default"
+title: "About"
+features:
+  - title: "Interactive JavaScript Exploration"
+    description: "With Editable, you can create live documents that combine code execution, markdown text, and the ability to render React components."
+    icon: "javascript"
+  - title: "Session-Based Simplicity"
+    description: "We have simplified the process of managing your notebooks. Each tab in your browser represents a new, isolated document. Your work is saved in the browser's session storage, so you can seamlessly switch between notebooks without worrying about file management."
+    icon: "browser"
+  - title: "Fully React Integration"
+    description: "Editable has native support for React. Write and render React components directly within your notebook. See your UI creations come to life in real-time, making UI prototyping and development a breeze."
+    icon: "atom"
+  - title: "Import Packages from NPM"
+    description: "No need to leave Editable to access external packages. You can import NPM packages right from the registry, expanding your coding capabilities and experimenting with various libraries effortlessly."
+    icon: "box"
+---
+
+<div className="w-full pt-20 md:pt-24 pb-16 md:pb-32">
+    <div className="font-plex font-black text-6xl md:text-7xl tracking-tight leading-tight mb-4">
+        <span>Code. Create. Explore.</span>
+    </div>
+    <div className="w-full max-w-4xl text-xl">
+        <span><b>Editable</b> is your playground for <b>JavaScript</b> and <b>React</b> exploration all in one place, </span>
+        <span>designed to make learning and prototyping fun and engaging. </span>
+    </div>
+</div>
+<div className="w-full pt-20 pb-20">
+    <div className="font-plex font-black text-4xl md:text-6xl tracking-tight leading-tight mb-4">
+        <span>The Editable Experience.</span>
+    </div>
+    <div className="text-lg mb-16">
+        <span><b>Editable</b> is more than just a code editor; it is a playground where you can seamlessly blend code, data visualization, and narrative text. </span>
+        <span>It is inspired by the concept of Python notebooks but tailored to the JavaScript ecosystem.</span>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
+        {props.page.data.features.map(feature => (
+            <div key={feature.title} className="">
+                <div className="flex items-center text-6xl text-gray-600 mb-4">
+                    <Icon icon={feature.icon} />
+                </div>
+                <div className="font-plex font-black text-3xl tracking-tight leading-tight mb-4">
+                    <span>{feature.title}</span>
+                </div>
+                <div className="">{feature.description}</div>
+            </div>
+        ))}
+    </div>
+</div>
+<div className="w-full pt-20 pb-12 md:pb-20">
+    <div className="font-plex font-black text-4xl md:text-6xl text-center tracking-tight leading-tight mb-4">
+        <span>Start coding with Editable</span>
+    </div>
+    <div className="w-full max-w-3xl mx-auto text-center text-lg mb-8">
+        <span>Now that you know how to start coding with Editable, it is time to explore, create, and learn in an interactive and engaging environment.</span>
+    </div>
+    <div className="flex justify-center">
+        <a href="./" className="flex items-center gap-2 text-white bg-gray-900 hover:bg-gray-900 px-4 py-3 rounded-md">
+            <span className="flex items-center text-xl">
+                <Icon icon="file-plus" />
+            </span>
+            <span className="font-bold">Create a New Document</span>
+        </a>
+    </div>
+</div>
