@@ -1,4 +1,5 @@
 const React = require("react");
+const {renderIcon} = require("@josemi-icons/react/cjs");
 const {Layout} = require("./components/Layout.jsx");
 
 const PageWrapper = props => (
@@ -35,7 +36,7 @@ module.exports = {
         description: "Editable: web based notebooks for prototyping, exploration and presentation",
     },
     pageComponents: {
-        // Define your custom components here
+        Icon: props => renderIcon(props.icon),
     },
     pageWrapper: PageWrapper,
 };
