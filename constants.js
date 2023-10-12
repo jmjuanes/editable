@@ -8,10 +8,6 @@ export const KEYS = {
     BACKSPACE: "Backspace",
 };
 
-export const CONTEXT_KEYS = {
-    MODULES: "__modules",
-};
-
 export const CELL_TYPES = {
     TEXT: "text",
     CODE: "code",

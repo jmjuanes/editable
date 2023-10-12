@@ -1,7 +1,7 @@
 import React from "react";
 import {uid} from "uid/secure";
 import {fileSave} from "browser-fs-access";
-import {VERSION, CDN_URL, CELL_TYPES, CONTEXT_KEYS, CONSOLE_LEVELS} from "./constants.js";
+import {VERSION, CDN_URL, CELL_TYPES, CONSOLE_LEVELS} from "./constants.js";
 import {ENDL, MIME_TYPES, FILE_EXTENSIONS} from "./constants.js";
 
 // Note: babel is added as an external dependency
@@ -11,23 +11,17 @@ import {ENDL, MIME_TYPES, FILE_EXTENSIONS} from "./constants.js";
 const AsyncFunction = Object.getPrototypeOf(async function (){}).constructor;
 
 // Create a new notebook context
-export const createNotebookContext = () => {
-    return {
-        // This variable will store packages imported in code cells
-        [CONTEXT_KEYS.MODULES]: {
-            // Internal packages (exported from cells)
-            internal: {},
-            // External packages
-            // key: package name (for example "react" or "react@18.2.0" when importing specific versions)
-            // value: package content, returned from CDN
-            external: {
-                "react": {
-                    default: React,
-                },
-            },
+export const createNotebookContext = () => ({
+    version: VERSION,
+    // This variable will store packages imported in code cells
+    // key: package name (for example "react" or "react@18.2.0" when importing specific versions)
+    // value: package content, returned from CDN
+    modules: {
+        "react": {
+            default: React,
         },
-    };
-};
+    },
+});
 
 // Create a new cell element
 export const createNotebookCell = (type, initialValue = "") => {
@@ -105,11 +99,11 @@ const createFunctionCode = rawCode => {
     const code = rawCode.trim()
         // Replace imports
         // Case 1: import default export of package
-        .replace(/^import\s+(\w+)?\s+from\s+"([\w@:\.-/]+)?";/gm, `const $1 = (await __import("$2"))?.default;`)
+        .replace(/^import\s+(\w+)?\s+from\s+"([\w@:\-\.-/]+)?";/gm, `const $1 = (await __import("$2"))?.default;`)
         // Case 2: import all exports to a single namespace from package (using import * as)
-        .replace(/^import\s+\*\s+as\s+(\w+)?\s+from\s+"([\w@:\.-/]+)?";/gm, `const $1 = await __import("$2");`)
+        .replace(/^import\s+\*\s+as\s+(\w+)?\s+from\s+"([\w@:\-\.-/]+)?";/gm, `const $1 = await __import("$2");`)
         // Case 3: import only specific exports from package
-        .replace(/^import\s+(\{[\w, ]+\})?\s+from\s+"([\w@:\.\/]+)?";/gm, `const $1 = await __import("$2");`)
+        .replace(/^import\s+(\{[\w, ]+\})?\s+from\s+"([\w@:\-\.\/]+)?";/gm, `const $1 = await __import("$2");`)
         // Replace exports
         // Case 1: export default
         .replace(/^export\s+default\s+(.+)/gm, `__export.default = $1`)
@@ -139,7 +133,6 @@ const createFunctionCode = rawCode => {
 
 // Execute the provide command
 export const executeNotebookCell = async (cell, code, context) => {
-    const modules = context[CONTEXT_KEYS.MODULES];
     const result = {
         logs: [],
         error: false,
@@ -159,27 +152,26 @@ export const executeNotebookCell = async (cell, code, context) => {
         // Check for importing modules from other cells
         if (name.startsWith("cell:")) {
             const id = name.replace("cell:", "");
-            if (!modules.internal[id]) {
+            if (!context.modules[id]) {
                 throw new Error(`Cell '${id}' does not export any module.`);
             }
-            return modules.internal[id];
+            return context.modules[id];
         }
         // Import modules from CDN
-        if (typeof modules.external[name] === "undefined") {
-            modules.external[name] = await import(/*webpackIgnore: true*/`${CDN_URL}${name}`);
+        if (typeof context.modules[name] === "undefined") {
+            context.modules[name] = await import(/*webpackIgnore: true*/`${CDN_URL}${name}`);
         }
         // Return package from cache
-        return modules.external[name];
+        return context.modules[name];
     };
-    // This variable will store exported modules from the current cell
-    const __export = {};
     try {
+        const __export = {}; // Store exported modules from cells
         const fnCode = createFunctionCode(code);
         const fn = new AsyncFunction("console", "__import", "__export", fnCode);
         result.value = await fn.call(context, consoleInstance, __import, __export);
         // Save exported modules in internal modules cache
         // Note that if cell does not export any module, it will be initialized/reset to 'null' 
-        modules.internal[cell] = Object.keys(__export).length > 0 ? __export : null;
+        context.modules[cell] = Object.keys(__export).length > 0 ? __export : null;
     }
     catch(error) {
         // Save error message in result and set as error type
