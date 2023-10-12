@@ -37,27 +37,22 @@ export const Layout = props => (
     <div className="">
         {/* Header */}
         <div className="w-full border-gray-300">
-            <div className="w-full max-w-7xl h-20 px-6 mx-auto flex items-center justify-between">
-                <div className="w-full flex items-center">
+            <div className="w-full max-w-7xl h-20 px-6 mx-auto flex items-center">
+                <div className="flex items-center">
                     <a href="./" className="flex items-center gap-2 text-gray-900 no-underline select-none">
                         <div className="flex items-center text-2xl">
                             <Logo />
                         </div>
                     </a>
-                    <div className="flex items-center gap-2 ml-8 select-none">
-                        <NavbarLink to="./about" target={props.navbarLinkTarget} text="About" />
-                    </div>
                 </div>
-                <div className="group peer sm:w-full" tabIndex="0">
+                <div className="group peer sm:w-full ml-auto sm:ml-8" tabIndex="0">
                     <div className="flex sm:hidden text-xl p-2 border border-gray-300 rounded-md cursor-pointer">
                         <BarsIcon />
                     </div>
                     <div className="fixed sm:initial top-0 right-0 p-6 sm:p-0 hidden sm:block sm:w-full group-focus-within:block z-5">
-                        <div className="flex flex-col sm:flex-row gap-3 sm:items-center rounded-md bg-white p-4 sm:p-0 w-72 sm:w-full">
-                            <div className="pr-12 sm:pr-0 sm:flex sm:mx-auto">
-                                {/*
-                                <NavbarLink to="./" text="Explore" />
-                                */}
+                        <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between rounded-md bg-white p-4 sm:p-0 w-72 sm:w-full">
+                            <div className="pr-12 sm:pr-0 sm:flex">
+                                <NavbarLink to="./about" target={props.navbarLinkTarget} text="About" />
                             </div>
                             <div className="flex">
                                 <CreateNotebookButton />
