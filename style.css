@@ -1,6 +1,6 @@
 /* Global variables */
 :root {
-    --editable-editor-bg: #fafafa;
+    --editable-editor-bg: #f5f5f5;
 }
 
 /* Editor styles */
@@ -23,10 +23,15 @@
     background-color: var(--editable-editor-bg);
 }
 
+/* Result */
+.editable-result {
+    background-color: var(--editable-editor-bg);
+}
+
 /* Values types */
 .editable-value {
     font-family: "Source Code Pro", monospace;
-    font-size: 14px;
+    font-size: 13px;
 }
 .editable-value.string {
     color: #00a17d;

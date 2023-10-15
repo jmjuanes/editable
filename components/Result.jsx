@@ -28,7 +28,7 @@ const consoleLevels = {
 
 // Render a pill icons
 const PillIcon = props => (
-    <div className={`${props.className} flex items-start rounded-md py-2 px-1`}>
+    <div className={`${props.className} flex items-start rounded-md p-1 mt-1 mr-2`}>
         <div className="flex text-lg">
             {renderIcon(props.icon)}
         </div>
@@ -40,10 +40,7 @@ const Logs = props => {
     return props.items.map((item, index) => {
         const {className, icon} = consoleLevels[item.level];
         return (
-            <div key={`log-${index}`} className="flex flex-nowrap">
-                <div className="w-12 flex justify-end items-start">
-                    <PillIcon className={className} icon={icon} />
-                </div>
+            <div key={`log-${index}`} className="ml-12">
                 <div className="editable-console px-3 py-2 rounded-md w-full grow">
                     <div className="text-sm">{item.message}</div>
                 </div>
@@ -88,16 +85,12 @@ export const Result = props => {
         <div className={classList}>
             {props.error && (
                 <div className="flex w-full flex-nowrap">
-                    <div className="flex justify-end w-12">
+                    <div className="flex items-start justify-end w-12">
                         <div className="flex px-1 py-2 cursor-pointer" onClick={toggleCompact}>
                             <div className="flex">
                                 {compact ? <ChevronRightIcon /> : <ChevronDownIcon />}
                             </div>
                         </div>
-                        <PillIcon
-                            className="bg-red-200 text-gray-900"
-                            icon="x-circle"
-                        />
                     </div>
                     <div className="gap-4 px-3 py-2 bg-red-100 rounded-md w-full">
                         <pre className="block text-sm text-red-900">
@@ -110,10 +103,12 @@ export const Result = props => {
                 <React.Fragment>
                     <Logs items={props.logs || []} />
                     {/* Wrapper element for displaying result value */}
-                    <div ref={container} className="border border-gray-300 rounded-md p-3 bg-white">
-                        {!isHtmlValue && (
-                            <Value value={props.value} />
-                        )}
+                    <div className="ml-12">
+                        <div ref={container} className="editable-result rounded-md p-3 w-full">
+                            {!isHtmlValue && (
+                                <Value value={props.value} />
+                            )}
+                        </div>
                     </div>
                 </React.Fragment>
             )}
