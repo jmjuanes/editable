@@ -1,15 +1,26 @@
+/* Global variables */
+:root {
+    --editable-editor-bg: #fafafa;
+}
+
+/* Editor styles */
 .editable-editor {
     background-color: white !important;
     padding: 0px !important;
 }
 .editable-editor .codecake-editor {
-    background-color: #fafafa;
+    background-color: var(--editable-editor-bg);
     border-radius: 0.5rem;
     padding: 1rem;
 }
 .editable-editor .codecake-lines {
     padding-bottom: 1rem;
     padding-top: 1rem;
+}
+
+/* Console logs */
+.editable-console {
+    background-color: var(--editable-editor-bg);
 }
 
 /* Values types */
