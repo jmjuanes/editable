@@ -75,12 +75,18 @@ export const Result = props => {
     return (
         <div className={classList}>
             {props.error && (
-                <div className="flex gap-4 p-3 bg-red-100 rounded-md">
-                    <div className="flex items-center text-red-900 text-lg">
-                        <XCircleIcon />
+                <div className="flex w-full flex-nowrap">
+                    <div className="flex justify-end w-12">
+                        <div className="flex items-center bg-red-500 p-1 rounded-md mr-2">
+                            <div className="flex text-white text-lg">
+                                <XCircleIcon />
+                            </div>
+                        </div>
                     </div>
-                    <div className="text-sm text-red-900">
-                        <b>{props.errorType}</b>: {props.errorMessage}
+                    <div className="gap-4 p-3 bg-red-100 rounded-md w-full">
+                        <div className="text-sm text-red-900">
+                            <b>{props.errorType}</b>: {props.errorMessage}
+                        </div>
                     </div>
                 </div>
             )}
