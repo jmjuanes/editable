@@ -6,29 +6,40 @@ import {CONSOLE_LEVELS} from "../constants.js";
 import {Value} from "./Value.jsx";
 import {isDOMElement, isReactElement} from "../utils.js";
 
-// Map icons by log level
-const IconsByConsoleLevel = {
-    [CONSOLE_LEVELS.LOG]: "info-circle",
-    [CONSOLE_LEVELS.INFO]: "info-circle",
-    [CONSOLE_LEVELS.WARNING]: "exclamation-triangle",
-    [CONSOLE_LEVELS.ERROR]: "exclamation-circle",
+// Console levels info
+const consoleLevels = {
+    [CONSOLE_LEVELS.LOG]: {
+        className: "bg-blue-400",
+        icon: "info-circle",
+    },
+    [CONSOLE_LEVELS.INFO]: {
+        className: "bg-teal-400",
+        icon: "info-circle",
+    },
+    [CONSOLE_LEVELS.WARNING]: {
+        className: "bg-yellow-500",
+        icon: "exclamation-triangle",
+    },
+    [CONSOLE_LEVELS.ERROR]: {
+        className: "bg-red-400",
+        icon: "exclamation-circle",
+    },
 };
 
 // Print logs messages
 const Logs = props => {
     return props.items.map((item, index) => {
-        const classList = classNames({
-            "flex gap-3 p-2 rounded-md bg-gray-100": true,
-            "text-blue-600": item.level === CONSOLE_LEVELS.INFO,
-            "text-yellow-700": item.level === CONSOLE_LEVELS.WARNING,
-            "text-red-600": item.level === CONSOLE_LEVELS.ERROR,
-        });
+        const {className, icon} = consoleLevels[item.level];
         return (
-            <div key={`log-${index}`} className={classList}>
-                <div className="flex items-center gap-1">
-                    {renderIcon(IconsByConsoleLevel[item.level])}
+            <div key={`log-${index}`} className="flex items-center flex-nowrap">
+                <div className="w-12 flex justify-end">
+                    <div className={`${className} flex text-white rounded-md p-1 mr-2`}>
+                        <div className="flex">{renderIcon(icon)}</div>
+                    </div>
                 </div>
-                <div className="text-sm">{item.message}</div>
+                <div className="editable-console p-2 rounded-md w-full grow">
+                    <div className="text-sm">{item.message}</div>
+                </div>
             </div>
         );
     });
