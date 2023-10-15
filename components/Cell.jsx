@@ -112,7 +112,7 @@ export const Cell = props => {
                         </div>
                     )}
                     {!state.running && state.result && (
-                        <div className="w-full mt-3">
+                        <div className="mt-3" style={{marginLeft:"-3rem"}}>
                             <Result
                                 key={state.executedTime}
                                 value={state.result?.value}
