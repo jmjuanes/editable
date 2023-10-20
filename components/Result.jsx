@@ -52,16 +52,11 @@ const Logs = props => {
 export const Result = props => {
     const container = React.useRef(null);
     const root = React.useRef(null);
-    const [compact, setCompact] = React.useState(false);
     const isHtmlValue = isDOMElement(props.value) || isReactElement(props.value);
     const classList = classNames({
         "flex flex-col gap-2": true,
         "o-50": !props.isCurrentValue,
     });
-    // Toggle compact view
-    const toggleCompact = () => {
-        return setCompact(prevCompact => !prevCompact);
-    };
     // Effect for mounting rendered HTML content into container
     React.useEffect(() => {
         if (!props.error && isHtmlValue) {
@@ -86,15 +81,10 @@ export const Result = props => {
             {props.error && (
                 <div className="flex w-full flex-nowrap">
                     <div className="flex items-start justify-end w-12">
-                        <div className="flex px-1 py-2 cursor-pointer" onClick={toggleCompact}>
-                            <div className="flex">
-                                {compact ? <ChevronRightIcon /> : <ChevronDownIcon />}
-                            </div>
-                        </div>
                     </div>
                     <div className="gap-4 px-3 py-2 bg-red-100 rounded-md w-full">
                         <pre className="block text-sm text-red-900">
-                            <b>{props.errorType}</b> {compact ? null : props.errorMessage}
+                            <b>{props.errorType}</b> {props.errorMessage}
                         </pre>
                     </div>
                 </div>
