@@ -37,6 +37,9 @@ export const VALUES_TYPES = {
     BOOLEAN: "boolean",
     NULL: "null",
     UNDEFINED: "undefined",
+    REACT: "react",
+    HTML: "html",
+    COORDINATES: "coordinates",
 };
 
 export const MIME_TYPES = {
