@@ -23,7 +23,7 @@
         "@mdx-js/mdx": "^2.3.0",
         "browser-fs-access": "^0.33.1",
         "classnames": "^2.3.2",
-        "codecake": "^0.2.0",
+        "codecake": "^0.3.0",
         "dompurify": "^3.0.5",
         "lowcss": "^0.16.0",
         "marked": "^9.0.3",
