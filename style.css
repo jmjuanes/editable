@@ -49,10 +49,11 @@
     color: #e57697;
 }
 .editable-value.object em,
-.editable-value.function em {
+.editable-value.function em,
+.editable-value.react em,
+.editable-value.html em {
     color: #2196f3;
     cursor: pointer;
-    margin-right: 8px;
     user-select: none;
 }
 .editable-value.object em:hover,
@@ -68,6 +69,28 @@
 }
 .editable-value.object .object-body {
     margin-left: 16px;
+}
+.editable-value.function .function-name,
+.editable-value.object .object-more {
+    font-style: italic;
+    opacity: 0.8;
+}
+.editable-value.react > span,
+.editable-value.html > span {
+    font-style: italic;
+    opacity: 0.6;
+}
+.editable-value.react .react-tag,
+.editable-value.html .html-tag {
+    font-weight: bold;
+}
+.editable-value.react .react-value::before {
+    content: "{";
+    opacity: 0.3;
+}
+.editable-value.react .react-value::after {
+    content: "}";
+    opacity: 0.3;
 }
 
 /* Editable markdown */

@@ -2,10 +2,9 @@ import React from "react";
 import {createRoot} from "react-dom/client";
 import classNames from "classnames";
 import {renderIcon, XCircleIcon} from "@josemi-icons/react";
-import {CONSOLE_LEVELS, RESULT_TYPES} from "../constants.js";
-import {Value, CoordinatesValue} from "./Value.jsx";
-import {isDOMElement, isReactElement, isMapLocation} from "../utils.js";
-import {getDOMElementName, getReactElementName} from "../utils.js";
+import {CONSOLE_LEVELS, VALUES_TYPES} from "../constants.js";
+import {Value} from "./Value.jsx";
+import {isDOMElement, isReactElement, isMapCoordinate} from "../utils.js";
 
 // Console levels info
 const consoleLevels = {
@@ -29,39 +28,39 @@ const consoleLevels = {
 
 // Result types
 const resultTypes = {
-    [RESULT_TYPES.OBJECT]: {
+    [VALUES_TYPES.OBJECT]: {
         className: "bg-orange-700 text-white",
         icon: "braces",
     },
-    [RESULT_TYPES.OBJECT_ARRAY]: {
+    [VALUES_TYPES.ARRAY]: {
         className: "bg-orange-400 text-white",
         icon: "brackets",
     },
-    [RESULT_TYPES.OBJECT_COORDINATES]: {
+    [VALUES_TYPES.COORDINATES]: {
         className: "bg-red-400 text-white",
         icon: "location",
     },
-    [RESULT_TYPES.REACT]: {
+    [VALUES_TYPES.REACT]: {
         className: "bg-blue-300 text-white",
         icon: "atom",
     },
-    [RESULT_TYPES.HTML]: {
+    [VALUES_TYPES.HTML]: {
         className: "bg-blue-600 text-white",
         icon: "code",
     },
-    [RESULT_TYPES.STRING]: {
+    [VALUES_TYPES.STRING]: {
         className: "bg-green-400 text-white",
         icon: "text-left",
     },
-    [RESULT_TYPES.FUNCTION]: {
+    [VALUES_TYPES.FUNCTION]: {
         className: "bg-blue-700 text-white",
         icon: "function-square",
     },
-    [RESULT_TYPES.BOOLEAN]: {
+    [VALUES_TYPES.BOOLEAN]: {
         className: "bg-indigo-600 text-white",
         icon: "toggle-right",
     },
-    [RESULT_TYPES.NUMBER]: {
+    [VALUES_TYPES.NUMBER]: {
         className: "bg-yellow-600 text-white",
         icon: "plus",
     },
@@ -70,20 +69,20 @@ const resultTypes = {
 // Get result type
 const getResultType = value => {
     if (isReactElement(value)) {
-        return RESULT_TYPES.REACT;
+        return VALUES_TYPES.REACT;
     }
     else if (isDOMElement(value)) {
-        return RESULT_TYPES.HTML;
+        return VALUES_TYPES.HTML;
     }
     else if (typeof value === "object") {
         if (!!value && Array.isArray(value)) {
-            return RESULT_TYPES.OBJECT_ARRAY;
+            return VALUES_TYPES.ARRAY;
         }
-        else if (!!value && isMapLocation(value)) {
-            return RESULT_TYPES.OBJECT_COORDINATES;
+        else if (isMapCoordinate(value)) {
+            return VALUES_TYPES.COORDINATES;
         }
         // Other case, is a plain object
-        return RESULT_TYPES.OBJECT;
+        return VALUES_TYPES.OBJECT;
     }
     // Other case, return the type
     return typeof value;
@@ -91,7 +90,7 @@ const getResultType = value => {
 
 // Render a pill icons
 const ResultIcon = props => {
-    const {className, icon} = (resultTypes[props.type] || resultTypes[RESULT_TYPES.OBJECT]);
+    const {className, icon} = (resultTypes[props.type] || resultTypes[VALUES_TYPES.OBJECT]);
     return (
         <div className={`${className} flex items-start rounded-md p-1 mt-3 mr-2`}>
             <div className="flex text-sm">
@@ -135,19 +134,12 @@ const ErrorMessage = props => (
     </div>
 );
 
-// Code tag wrapper
-const Code = props => (
-    <code className="font-mono font-bold text-xs text-gray-700">
-        {props.children}
-    </code>
-);
-
 export const Result = props => {
     const container = React.useRef(null);
     const root = React.useRef(null);
     const type = getResultType(props.value);
-    const isCoordinatesValue = type === RESULT_TYPES.OBJECT_COORDINATES;
-    const isHtmlValue = isDOMElement(props.value) || isReactElement(props.value);
+    const isCoordinatesValue = type === VALUES_TYPES.COORDINATES;
+    const isHtmlValue = type === VALUES_TYPES.REACT || type === VALUES_TYPES.HTML;
     const classList = classNames({
         "flex flex-col gap-2": true,
         "o-50": !props.isCurrentValue,
@@ -185,22 +177,7 @@ export const Result = props => {
                             <ResultIcon type={type} />
                         </div>
                         <div className="editable-result flex grow rounded-md p-3 w-full">
-                            {(isHtmlValue && (
-                                <div className="text-sm font-mono">
-                                    {isReactElement(props.value) && (
-                                        <span>React Component <Code>{getReactElementName(props.value)}</Code></span>
-                                    )}
-                                    {isDOMElement(props.value) && (
-                                        <span>HTML Element <Code>{getDOMElementName(props.value)}</Code></span>
-                                    )}
-                                </div>
-                            ))}
-                            {isCoordinatesValue && (
-                                <CoordinatesValue value={props.value} />
-                            )}
-                            {(!isHtmlValue && !isCoordinatesValue) && (
-                                <Value value={props.value} />
-                            )}
+                            <Value value={props.value} />
                         </div>
                     </div>
                     {isHtmlValue && (

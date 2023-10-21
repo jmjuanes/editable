@@ -1,5 +1,7 @@
 import React from "react";
 import {VALUES_TYPES} from "../constants.js";
+import {getReactElementName, getDOMElementName} from "../utils.js";
+import {isReactElement, isDOMElement, isMapCoordinate} from "../utils.js";
 
 // Get function signature
 const getFunctionSignature = value => {
@@ -54,6 +56,12 @@ export const ObjectValue = props => {
         return (
             <span className="editable-value object">
                 <em>{displayName}</em>
+                <span>{" "}</span>
+                <span className="object-more">
+                    <span className="">{type === VALUES_TYPES.ARRAY ? "[" : "{"}</span>
+                    <span>…</span>
+                    <span className="">{type === VALUES_TYPES.ARRAY ? "]" : "}"}</span>
+                </span>
             </span>
         );
     }
@@ -64,6 +72,7 @@ export const ObjectValue = props => {
         return (
             <div className="editable-value object" onClick={handleToggle}>
                 <em>{displayName}</em>
+                <span>{" "}</span>
                 <span className="">{type === VALUES_TYPES.ARRAY ? "[ " : "{ "}</span>
                 {visibleEntries.map((entry, index) => (
                     <span key={"entry" + index}>
@@ -100,6 +109,7 @@ export const ObjectValue = props => {
         <div className="editable-value object" onClick={handleToggle}>
             <div className="object-header">
                 <em>{displayName}</em>
+                <span>{" "}</span>
                 <span className="">{type === VALUES_TYPES.ARRAY ? "[ " : "{ "}</span>
             </div>
             <div className="object-body">
@@ -172,7 +182,9 @@ export const UndefinedValue = () => (
 );
 
 export const StringValue = props => (
-    <span className="editable-value string">{props.value}</span>
+    <span className="editable-value string">
+        {(props.preview && props.value.length > 10) ? props.value.substring(0, 10) + "…" : props.value}
+    </span>
 );
 
 export const NumberValue = props => (
@@ -185,13 +197,90 @@ export const BooleanValue = props => (
 
 export const FunctionValue = props => (
     <span className="editable-value function">
-        <em>{"ƒunction"} {getFunctionSignature(props.value)}</em>
+        <em>{"ƒunction"}</em>
+        <span className="">{" "}</span>
+        <span className="function-name">{getFunctionSignature(props.value)}</span>
     </span>
 );
+
+export const ReactValue = props => {
+    const name = getReactElementName(props.value);
+    const propsEntries = Object.entries(props.value.props || {}).filter(p => p[0] !== "children");
+    const visibleEntries = propsEntries.slice(0, props.maxVisibleProps);
+    const hasMoreProps = propsEntries.length > props.maxVisibleProps;
+    return (
+        <div className="editable-value react">
+            <em>{props.displayName}</em>
+            <span className="">{" "}</span>
+            <span className="">{"<"}</span>
+            <span className="react-tag">{name}</span>
+            {visibleEntries.map((entry, index) => (
+                <span key={"entry" + index}>
+                    <span>{" "}</span>
+                    <span className="">
+                        <span className="react-prop">{entry[0]}</span>
+                        <span className="">{"="}</span>
+                    </span>
+                    <span className="react-value">…</span>
+                </span>
+            ))}
+            {hasMoreProps && (
+                <span className="react-props"> …</span>
+            )}
+            <span className="">{" />"}</span>
+        </div>
+    );
+};
+
+ReactValue.defaultProps = {
+    displayName: "React Component",
+    maxVisibleProps: 2,
+    value: null,
+};
+
+export const HtmlValue = props => {
+    const name = getDOMElementName(props.value);
+    const isClosingTag = !props.nonClosingTags.includes(name);
+    return (
+        <div className="editable-value html">
+            <em>{props.displayName}</em>
+            <span className="">{" "}</span>
+            <span className="">{"<"}</span>
+            <span className="html-tag">{name}</span>
+            {isClosingTag && (
+                <span>
+                    <span>{">"}</span>
+                    <span className=""> … </span>
+                    <span className="">{"</"}</span>
+                    <span className="html-tag">{name}</span>
+                    <span className="">{">"}</span>
+                </span>
+            )}
+            {!isClosingTag && (
+                <span className="">{" />"}</span>
+            )}
+        </div>
+    );
+};
+
+HtmlValue.defaultProps = {
+    nonClosingTags: ["br", "input"],
+    value: null,
+    displayName: "HTML Element",
+};
 
 // Tiny function to get the component for the given value
 export const getValueComponentType = value => {
     const type = typeof value;
+    if (isReactElement(value)) {
+        return ReactValue;
+    }
+    if (isDOMElement(value)) {
+        return HtmlValue;
+    }
+    if (type === VALUES_TYPES.OBJECT && isMapCoordinate(value)) {
+        return CoordinatesValue;
+    }
     if (type === VALUES_TYPES.OBJECT && value === null) {
         return NullValue;
     }

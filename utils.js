@@ -8,9 +8,9 @@ export const stopEventPropagation = event => {
     event.stopPropagation();
 };
 
-// Check if the provided value is a valid map position
-export const isMapLocation = value => {
-    if (typeof value === "object" && Object.keys(value).length === 2) {
+// Check if the provided value is a valid map coordinate
+export const isMapCoordinate = value => {
+    if (typeof value === "object" && !!value && Object.keys(value).length === 2) {
         return typeof value.latitude === "number" && typeof value.longitude === "number";
     }
     return false;
@@ -22,7 +22,7 @@ export const isDOMElement = element => {
 };
 
 export const getDOMElementName = element => {
-    return `<${element.tagName.toLowerCase()} />`;
+    return element.tagName.toLowerCase();
 };
 
 // Check if the provided value is a React Element
@@ -31,14 +31,13 @@ export const isReactElement = element => {
 };
 
 export const getReactElementName = element => {
-    let displayName = "Unknown";
     if (typeof element.type === "string") {
-        displayName = element.type;
+        return element.type;
     }
     else if (typeof element.type === "function") {
-        displayName = element.type.name || element.type.displayName;
+        return element.type.name || element.type.displayName;
     }
-    return `<${displayName || "Unknown"} />`;
+    return "Unknown";
 };
 
 // Copy text to clipboard
