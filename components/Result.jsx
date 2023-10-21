@@ -135,6 +135,13 @@ const ErrorMessage = props => (
     </div>
 );
 
+// Code tag wrapper
+const Code = props => (
+    <code className="font-mono font-bold text-xs text-gray-700">
+        {props.children}
+    </code>
+);
+
 export const Result = props => {
     const container = React.useRef(null);
     const root = React.useRef(null);
@@ -179,12 +186,12 @@ export const Result = props => {
                         </div>
                         <div className="editable-result flex grow rounded-md p-3 w-full">
                             {(isHtmlValue && (
-                                <div className="text-sm">
+                                <div className="text-sm font-mono">
                                     {isReactElement(props.value) && (
-                                        <span>React Component <b>{getReactElementName(props.value)}</b></span>
+                                        <span>React Component <Code>{getReactElementName(props.value)}</Code></span>
                                     )}
                                     {isDOMElement(props.value) && (
-                                        <span>HTML Element <b>{getDOMElementName(props.value)}</b></span>
+                                        <span>HTML Element <Code>{getDOMElementName(props.value)}</Code></span>
                                     )}
                                 </div>
                             ))}
