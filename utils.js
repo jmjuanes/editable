@@ -31,7 +31,14 @@ export const isReactElement = element => {
 };
 
 export const getReactElementName = element => {
-    return `<${element.displayName || "Unknown"} />`;
+    let displayName = "Unknown";
+    if (typeof element.type === "string") {
+        displayName = element.type;
+    }
+    else if (typeof element.type === "function") {
+        displayName = element.type.name || element.type.displayName;
+    }
+    return `<${displayName || "Unknown"} />`;
 };
 
 // Copy text to clipboard
