@@ -25,6 +25,18 @@ export const CONSOLE_LEVELS = {
     ERROR: "error",
 };
 
+export const RESULT_TYPES = {
+    OBJECT: "object",
+    OBJECT_COORDINATES: "object:map",
+    OBJECT_ARRAY: "object:array",
+    REACT: "react",
+    STRING: "string",
+    FUNCTION: "function",
+    NUMBER: "number",
+    BOOLEAN: "boolean",
+    HTML: "html",
+};
+
 // Values types
 export const VALUES_TYPES = {
     OBJECT: "object",

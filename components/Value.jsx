@@ -136,6 +136,33 @@ ObjectValue.defaultProps = {
     maxClosedKeys: 5,
 };
 
+export const CoordinatesValue = props => (
+    <div className="editable-value object">
+        <em>{props.displayName}</em>
+        <span className="">{"{ "}</span>
+        {Object.entries(props.value).map((entry, index) => (
+            <span key={"entry" + index}>
+                <span className="">
+                    <span className="object-key">{entry[0]}</span>
+                    <span className="">{": "}</span>
+                </span>
+                <span className="">
+                    <Value value={entry[1]} preview={true} />
+                </span>
+                {index + 1 < Object.keys(props.value).length && (
+                    <span className="">, </span>
+                )}
+            </span>
+        ))}
+        <span className="">{" }"}</span>
+    </div>
+);
+
+CoordinatesValue.defaultProps = {
+    displayName: "Map Coordinates",
+    value: {},
+};
+
 export const NullValue = () => (
     <span className="editable-value null">null</span>
 );

@@ -8,14 +8,30 @@ export const stopEventPropagation = event => {
     event.stopPropagation();
 };
 
+// Check if the provided value is a valid map position
+export const isMapLocation = value => {
+    if (typeof value === "object" && Object.keys(value).length === 2) {
+        return typeof value.latitude === "number" && typeof value.longitude === "number";
+    }
+    return false;
+};
+
 // Check if the provided value is a DOM element
 export const isDOMElement = element => {
     return !!element && (element instanceof Element || element instanceof HTMLDocument);
 };
 
+export const getDOMElementName = element => {
+    return `<${element.tagName.toLowerCase()} />`;
+};
+
 // Check if the provided value is a React Element
 export const isReactElement = element => {
     return !!element && React.isValidElement(element);
+};
+
+export const getReactElementName = element => {
+    return `<${element.displayName || "Unknown"} />`;
 };
 
 // Copy text to clipboard
