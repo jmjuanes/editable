@@ -93,7 +93,7 @@ const getResultType = value => {
 const ResultIcon = props => {
     const {className, icon} = (resultTypes[props.type] || resultTypes[RESULT_TYPES.OBJECT]);
     return (
-        <div className={`${className} flex items-start rounded-md p-1 mt-3 mr-1`}>
+        <div className={`${className} flex items-start rounded-md p-1 mt-3 mr-2`}>
             <div className="flex text-sm">
                 {renderIcon(icon)}
             </div>
@@ -177,7 +177,7 @@ export const Result = props => {
                         <div className="flex justify-end items-start w-12">
                             <ResultIcon type={type} />
                         </div>
-                        <div className="editable-result grow rounded-md p-3 w-full">
+                        <div className="editable-result flex grow rounded-md p-3 w-full">
                             {(isHtmlValue && (
                                 <div className="text-sm">
                                     {isReactElement(props.value) && (
