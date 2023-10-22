@@ -79,7 +79,7 @@ export const Cell = props => {
                     {!props.editing && (
                         <div className="w-full" onClick={handleClick}>
                             {!value.current && (
-                                <span className="text-gray-500">Type something...</span>
+                                <span className="text-neutral-500">Type something...</span>
                             )}
                             {!!value.current && (
                                 <Markdown value={value.current} />
@@ -106,7 +106,7 @@ export const Cell = props => {
                     </div>
                     {state.running && (
                         <div className="flex flex-col items-center justify-center w-full p-8 select-none">
-                            <div className="flex text-xl text-gray-400 animation-spin">
+                            <div className="flex text-xl text-neutral-400 animation-spin">
                                 <LoaderIcon />
                             </div>
                         </div>
