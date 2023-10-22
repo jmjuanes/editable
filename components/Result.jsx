@@ -111,7 +111,7 @@ const Logs = props => {
                         {renderIcon(icon)}
                     </div>
                 </div>
-                <div className="bg-neutral-100 px-3 py-2 rounded-md w-full grow">
+                <div className="bg-gray-100 px-3 py-2 rounded-md w-full grow">
                     <div className="text-sm">{item.message}</div>
                 </div>
             </div>
@@ -179,13 +179,13 @@ export const Result = props => {
                                 <ResultIcon type={type} />
                             </div>
                             <div className="grow">
-                                <div className="flex p-3 bg-neutral-100 rounded-md">
+                                <div className="flex p-3 bg-gray-100 rounded-md">
                                     <Value value={props.value} />
                                 </div>
                                 {(isHtmlValue || isCoordinatesValue) && (
                                     <div
                                         ref={container}
-                                        className="bg-white rounded-md mt-2 border-2 border-neutral-100"
+                                        className="bg-white rounded-md mt-2 border-2 border-gray-100"
                                     />
                                 )}
                             </div>

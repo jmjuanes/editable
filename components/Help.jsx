@@ -10,10 +10,10 @@ export const Help = () => {
     return (
         <React.Fragment>
             {visible && (
-                <div className="relative border border-neutral-200 rounded-lg p-6 mb-8 text-neutral-900">
+                <div className="relative border border-gray-200 rounded-lg p-6 mb-8 text-gray-900">
                     <div className="absolute top-0 right-0 mt-4 mr-4">
                         <div className="flex items-center group cursor-pointer" onClick={() => setVisible(false)}>
-                            <div className="flex items-center text-2xl text-neutral-500 group-hover:text-neutral-900">
+                            <div className="flex items-center text-2xl text-gray-500 group-hover:text-gray-900">
                                 <CloseIcon />
                             </div>
                         </div>

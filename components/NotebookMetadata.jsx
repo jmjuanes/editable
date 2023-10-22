@@ -14,12 +14,12 @@ const TagsInput = props => {
         return props.onChange(props.value.filter((el, i) => i !== index));
     };
     return (
-        <div className="flex flex-wrap items-center gap-2 border border-neutral-100 rounded-md p-2">
+        <div className="flex flex-wrap items-center gap-2 border border-gray-200 rounded-md p-2">
             {props.value.map((tag, index) => (
-                <div className="flex items-center gap-2 pl-3 pr-2 py-2 bg-neutral-100 rounded-full" key={index}>
-                    <div className="flex items-center text-neutral-800 text-xs leading-none">{tag}</div>
+                <div className="flex items-center gap-2 pl-3 pr-2 py-2 bg-gray-100 rounded-full" key={index}>
+                    <div className="flex items-center text-gray-800 text-xs leading-none">{tag}</div>
                     <div className="flex items-center cursor-pointer group" onClick={() => handleTagRemove(index)}>
-                        <div className="flex items-center bg-neutral-500 group-hover:bg-neutral-700 text-white rounded-full">
+                        <div className="flex items-center bg-gray-500 group-hover:bg-gray-700 text-white rounded-full">
                             <CloseIcon />
                         </div>
                     </div>
@@ -46,7 +46,7 @@ const FormField = props => (
         <div className="mb-1">
             <span className="font-medium">{props.label}</span>
             {props.helper && (
-                <span className="ml-2 text-neutral-500 text-sm">{props.helper}</span>
+                <span className="ml-2 text-gray-500 text-sm">{props.helper}</span>
             )}
         </div>
         {props.children}
@@ -67,7 +67,7 @@ export const NotebookMetadata = props => {
             <FormField label="Author">
                 <input
                     type="text"
-                    className="border border-neutral-100 rounded-md px-3 py-2 text-sm w-full outline-none"
+                    className="border border-gray-200 rounded-md px-3 py-2 text-sm w-full outline-none"
                     defaultValue={author}
                     onChange={event => setAuthor(event.target.value || "")}
                 />
@@ -79,7 +79,7 @@ export const NotebookMetadata = props => {
                 />
             </FormField>
             <div className="flex justify-end select-none">
-                <button className="flex items-center rounded-md p-3 bg-neutral-950 hover:bg-neutral-900 cursor-pointer " onClick={handleSubmit}>
+                <button className="flex items-center rounded-md p-3 bg-gray-950 hover:bg-gray-900 cursor-pointer " onClick={handleSubmit}>
                     <span className="text-white text-sm font-medium">Save changes</span>
                 </button>
             </div>

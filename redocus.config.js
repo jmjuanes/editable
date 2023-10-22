@@ -16,7 +16,7 @@ const PageWrapper = props => (
             <title>{`${props.page.data.title} - ${props.site.title}`}</title>
             <style>{`.font-plex {font-family: IBM Plex Serif, serif;}`}</style>
         </head>
-        <body className="bg-white m-0 p-0 font-inter text-neutral-900 leading-normal">
+        <body className="bg-white m-0 p-0 font-inter text-gray-700 leading-normal">
             <Layout navbarLinkTarget="_self">
                 {props.page.data.layout === "default" && (
                     <React.Fragment>
