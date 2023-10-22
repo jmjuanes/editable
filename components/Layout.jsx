@@ -45,7 +45,7 @@ export const Layout = props => (
                         </div>
                     </a>
                 </div>
-                <div className="group peer sm:w-full ml-auto sm:ml-8" tabIndex="0">
+                <div className="group peer sm:w-full ml-auto sm:ml-6" tabIndex="0">
                     <div className="flex sm:hidden text-xl p-2 border border-gray-200 rounded-md cursor-pointer">
                         <BarsIcon />
                     </div>
