@@ -79,7 +79,7 @@ export const Cell = props => {
                     {!props.editing && (
                         <div className="w-full" onClick={handleClick}>
                             {!value.current && (
-                                <span className="text-neutral-500">Type something...</span>
+                                <span className="text-neutral-300">Type something...</span>
                             )}
                             {!!value.current && (
                                 <Markdown value={value.current} />
