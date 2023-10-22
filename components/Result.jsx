@@ -111,7 +111,7 @@ const Logs = props => {
                         {renderIcon(icon)}
                     </div>
                 </div>
-                <div className="editable-console px-3 py-2 rounded-md w-full grow">
+                <div className="bg-neutral-100 px-3 py-2 rounded-md w-full grow">
                     <div className="text-sm">{item.message}</div>
                 </div>
             </div>
@@ -144,6 +144,7 @@ export const Result = props => {
         "flex flex-col gap-2": true,
         "o-50": !props.isCurrentValue,
     });
+    const resultClass = classNames("")
     // Effect for mounting rendered HTML content into container
     React.useEffect(() => {
         if (!props.error && isHtmlValue) {
@@ -172,19 +173,21 @@ export const Result = props => {
                 <React.Fragment>
                     <Logs items={props.logs || []} />
                     {/* Wrapper element for displaying result value */}
-                    <div className="flex gap-0">
-                        <div className="flex justify-end items-start w-12">
-                            <ResultIcon type={type} />
-                        </div>
-                        <div className="editable-result flex grow rounded-md p-3 w-full">
-                            <Value value={props.value} />
+                    <div className="w-full">
+                        <div className="flex gap-0">
+                            <div className="flex justify-end items-start w-12">
+                                <ResultIcon type={type} />
+                            </div>
+                            <div className="grow rounded-md border-2 border-neutral-100 w-full">
+                                <div className="flex p-3 bg-neutral-100">
+                                    <Value value={props.value} />
+                                </div>
+                                {(isHtmlValue || isCoordinatesValue) && (
+                                    <div ref={container} className="bg-white rounded-bl-md rounded-br-md" />
+                                )}
+                            </div>
                         </div>
                     </div>
-                    {isHtmlValue && (
-                        <div className="ml-12 mt-1 bg-white">
-                            <div ref={container} className="p-2 border border-gray-300 rounded-md" />
-                        </div>
-                    )}
                 </React.Fragment>
             )}
         </div>
