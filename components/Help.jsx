@@ -13,7 +13,7 @@ export const Help = () => {
                 <div className="relative border border-gray-200 rounded-lg p-6 mb-8 text-gray-900">
                     <div className="absolute top-0 right-0 mt-4 mr-4">
                         <div className="flex items-center group cursor-pointer" onClick={() => setVisible(false)}>
-                            <div className="flex items-center text-2xl text-gray-400 group-hover:text-gray-900">
+                            <div className="flex items-center text-2xl text-gray-500 group-hover:text-gray-900">
                                 <CloseIcon />
                             </div>
                         </div>

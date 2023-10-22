@@ -1,5 +1,5 @@
 import React from "react";
-import {GitBranchIcon, DotsVerticalIcon, renderIcon, LockIcon} from "@josemi-icons/react";
+import {GitBranchIcon, DotsVerticalIcon, renderIcon} from "@josemi-icons/react";
 import {Dropdown, DropdownItem, DropdownSeparator} from "./Dropdown.jsx";
 
 const NotebookTitle = props => {
@@ -7,7 +7,7 @@ const NotebookTitle = props => {
     return (
         <input
             type="text"
-            className="bg-white outline-0 p-0 text-gray-800 text-4xl font-black w-full"
+            className="bg-white outline-0 p-0 text-gray-900 text-4xl font-black w-full"
             defaultValue={props.value}
             placeholder={props.placeholder || "untitled"}
             onChange={event => {
@@ -42,7 +42,7 @@ const NotebookForkBanner = props => (
 const MetadataItem = props => (
     <div className="flex items-center gap-1 select-none">
         {props.icon && (
-            <div className="flex text-gray-400 text-lg">
+            <div className="flex text-gray-500 text-lg">
                 {renderIcon(props.icon)}
             </div>
         )}
@@ -51,7 +51,7 @@ const MetadataItem = props => (
                 {props.label}
             </div>
         )}
-        <div className="text-gray-700 text-sm font-medium">
+        <div className="text-gray-800 text-sm font-medium">
             {props.children}
         </div>
     </div>
@@ -71,7 +71,7 @@ export const NotebookHeader = props => (
                 onChange={props.onTitleChange}
             />
             <div className="group flex relative" tabIndex="0">
-                <div className="rounded-md border border-gray-300 p-2 flex hover:bg-gray-100 group-focus-within:bg-gray-200 cursor-pointer">
+                <div className="rounded-md border border-gray-200 p-2 flex hover:bg-gray-50 group-focus-within:bg-gray-100 cursor-pointer">
                     <div className="flex items-center text-xl">
                         <DotsVerticalIcon />
                     </div>
@@ -103,8 +103,8 @@ export const NotebookHeader = props => (
                 <MetadataItem icon="backspace" label="Tags:">
                     <div className="flex flex-wrap gap-1 ml-1">
                         {props.tags.map((tag, index) => (
-                            <div key={index} className="flex items-center px-2 py-1 bg-gray-200 rounded-xl">
-                                <span className="text-2xs leading-none text-gray-500 font-medium">{tag}</span>
+                            <div key={index} className="flex items-center px-2 py-1 bg-gray-100 rounded-xl">
+                                <span className="text-2xs leading-none text-gray-700 font-medium">{tag}</span>
                             </div>
                         ))}
                     </div>

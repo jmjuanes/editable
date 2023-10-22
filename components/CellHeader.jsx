@@ -15,7 +15,7 @@ const CellId = props => {
     };
     return (
         <div className="flex items-center gap-1">
-            <div className="flex items-center gap-1 text-gray-400 hover:text-gray-600 cursor-pointer" onClick={handleClick}>
+            <div className="flex items-center gap-1 text-gray-300 hover:text-gray-700 cursor-pointer" onClick={handleClick}>
                 <div className="flex items-center text-xs">
                     <span>cell:<b>{props.id}</b></span>
                 </div>
@@ -39,13 +39,13 @@ CellId.defaultProps = {
 };
 
 const Button = props => (
-    <div className="flex items-center text-gray-400 hover:text-gray-600 cursor-pointer" onClick={props.onClick}>
+    <div className="flex items-center text-gray-300 hover:text-gray-700 cursor-pointer" onClick={props.onClick}>
         {renderIcon(props.icon)}
     </div>
 );
 
 const Separator = () => (
-    <div className="first:hidden h-3 w-px bg-gray-300" />
+    <div className="first:hidden h-3 w-px bg-gray-200" />
 );
 
 export const CellHeader = props => (

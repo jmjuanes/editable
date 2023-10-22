@@ -3,11 +3,11 @@ import classNames from "classnames";
 import {renderIcon} from "@josemi-icons/react";
 
 export const DropdownSeparator = () => (
-    <div className="bg-gray-200 h-px w-full my-1" />
+    <div className="bg-gray-100 h-px w-full my-1" />
 );
 
 export const DropdownGroup = props => (
-    <div className="text-xs mb-2 text-gray-500 select-none">
+    <div className="text-xs mb-2 text-gray-600 select-none">
         {props.title}
     </div>
 );
@@ -15,7 +15,7 @@ export const DropdownGroup = props => (
 export const DropdownItem = props => {
     const classList = classNames(props.className, {
         "flex items-center gap-2 rounded-md py-1 px-2 select-none": true,
-        "hover:bg-gray-200 cursor-pointer": !props.disabled,
+        "hover:bg-gray-100 cursor-pointer": !props.disabled,
         "o-80 cursor-not-allowed": props.disabled,
     });
     const handleClick = () => {
@@ -41,7 +41,7 @@ export const DropdownItem = props => {
 };
 
 DropdownItem.defaultProps = {
-    className: "text-gray-700",
+    className: "text-gray-800",
     icon: null,
     text: null,
     disabled: false,

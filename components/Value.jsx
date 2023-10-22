@@ -149,7 +149,7 @@ ObjectValue.defaultProps = {
 export const CoordinatesValue = props => (
     <div className="editable-value object">
         <em>{props.displayName}</em>
-        <span className="">{"{ "}</span>
+        <span className="">{" { "}</span>
         {Object.entries(props.value).map((entry, index) => (
             <span key={"entry" + index}>
                 <span className="">
