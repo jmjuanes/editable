@@ -178,12 +178,15 @@ export const Result = props => {
                             <div className="flex justify-end items-start w-12">
                                 <ResultIcon type={type} />
                             </div>
-                            <div className="grow rounded-md border-2 border-neutral-100 w-full">
-                                <div className="flex p-3 bg-neutral-100">
+                            <div className="grow">
+                                <div className="flex p-3 bg-neutral-100 rounded-md">
                                     <Value value={props.value} />
                                 </div>
                                 {(isHtmlValue || isCoordinatesValue) && (
-                                    <div ref={container} className="bg-white rounded-bl-md rounded-br-md" />
+                                    <div
+                                        ref={container}
+                                        className="bg-white rounded-md mt-2 border-2 border-neutral-100"
+                                    />
                                 )}
                             </div>
                         </div>
