@@ -44,9 +44,9 @@ TagsInput.defaultProps = {
 const FormField = props => (
     <div className="mb-6">
         <div className="mb-1">
-            <span className="font-medium">{props.label}</span>
+            <span className="font-medium text-gray-900 text-sm">{props.label}</span>
             {props.helper && (
-                <span className="ml-2 text-gray-500 text-sm">{props.helper}</span>
+                <span className="ml-2 text-gray-500 text-xs">{props.helper}</span>
             )}
         </div>
         {props.children}
