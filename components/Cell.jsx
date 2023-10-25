@@ -47,17 +47,15 @@ export const Cell = props => {
     };
 
     return (
-        <div className="mb-4">
+        <div className="mb-0">
             {props.showHeader && (
                 <CellHeader
                     id={props.type === CELL_TYPES.CODE ? props.id : null}
-                    showInsertButtons={props.showInsertButtons}
                     showDeleteButton={props.showDeleteButton}
                     showDuplicateButton={props.showDuplicateButton}
                     showExecuteButton={props.type === CELL_TYPES.CODE}
                     onDelete={props.onDelete}
                     onDuplicate={props.onDuplicate}
-                    onInsert={props.onInsert}
                     onExecute={handleRun}
                 />
             )}
@@ -136,12 +134,10 @@ Cell.defaultProps = {
     value: "",
     editing: false,
     showHeader: true,
-    showInsertButtons: true,
     showDeleteButton: true,
     showDuplicateButton: true,
     onUpdate: null,
     onDelete: null,
-    onInsert: null,
     onDuplicate: null,
     onEditStart: null,
     onEditEnd: null,

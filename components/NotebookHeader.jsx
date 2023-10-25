@@ -59,7 +59,7 @@ const MetadataItem = props => (
 
 // Export notebook header
 export const NotebookHeader = props => (
-    <div className="mb-0">
+    <div className="mb-4">
         {props.showForkBanner && (
             <div className="mb-4">
                 <NotebookForkBanner onClick={props.onForkNotebook} />

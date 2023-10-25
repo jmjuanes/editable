@@ -1,6 +1,5 @@
 import React from "react";
 import {CopyIcon, renderIcon} from "@josemi-icons/react";
-import {CELL_TYPES} from "../constants.js";
 import {delay, copyTextToClipboard} from "../utils.js";
 
 const CellId = props => {
@@ -39,7 +38,7 @@ CellId.defaultProps = {
 };
 
 const Button = props => (
-    <div className="flex items-center text-gray-300 hover:text-gray-700 cursor-pointer" onClick={props.onClick}>
+    <div className="flex items-center text-gray-300 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded" onClick={props.onClick}>
         {renderIcon(props.icon)}
     </div>
 );
@@ -49,13 +48,13 @@ const Separator = () => (
 );
 
 export const CellHeader = props => (
-    <div className="w-full flex justify-between items-center gap-2 py-2">
+    <div className="w-full flex justify-between items-center gap-2 mb-2">
         <div className="flex items-center gap-2">
             {props.id && (
                 <CellId id={props.id} />
             )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
             {props.showExecuteButton && (
                 <Button
                     icon="play"
@@ -67,19 +66,6 @@ export const CellHeader = props => (
                     icon="copy"
                     onClick={props.onDuplicate}
                 />
-            )}
-            {props.showInsertButtons && (
-                <React.Fragment>
-                    <Separator />
-                    <Button
-                        icon="code"
-                        onClick={() => props.onInsert(CELL_TYPES.CODE)}
-                    />
-                    <Button
-                        icon="text-left"
-                        onClick={() => props.onInsert(CELL_TYPES.TEXT)}
-                    />
-                </React.Fragment>
             )}
             {props.showDeleteButton && (
                 <React.Fragment>
@@ -96,12 +82,10 @@ export const CellHeader = props => (
 
 CellHeader.defaultProps = {
     id: null,
-    showInsertButtons: false,
     showDeleteButton: false,
     showDuplicateButton: false,
     showExecuteButton: false,
     onDelete: null,
     onDuplicate: null,
     onExecute: null,
-    onInsert: null,
 };

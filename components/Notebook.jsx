@@ -1,17 +1,18 @@
 import React from "react";
 import {Cell} from "./Cell.jsx";
+import {CellInsert} from "./CellInsert.jsx";
 import {NotebookHeader} from "./NotebookHeader.jsx";
 import {NotebookMetadata} from "./NotebookMetadata.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
 import {saveNotebookAsMarkdownFile} from "../notebook.js";
 import {stopEventPropagation} from "../utils.js";
 
-export const Notebook = () => {
+export const Notebook = props => {
     const notebook = useNotebook();
     const [editingCell, setEditingCell] = React.useState("");
     const [metadataVisible, setMetadataVisible] = React.useState(false);
     return (
-        <div className="flex flex-col gap-2 w-full" onClick={() => setEditingCell("")}>
+        <div className="flex flex-col w-full" onClick={() => setEditingCell("")}>
             <NotebookHeader
                 title={notebook.data.title}
                 author={notebook.data.author}
@@ -27,6 +28,15 @@ export const Notebook = () => {
                 }}
                 onEditMetadata={() => setMetadataVisible(true)}
             />
+            {props.showInsertCell && (
+                <CellInsert
+                    showInsertCode={true}
+                    showInsertText={true}
+                    onInsert={cellType => {
+                        notebook.insertCellBefore(notebook.data.cells[0].id, cellType);
+                    }}
+                />
+            )}
             {notebook.data.cells.map(cell => (
                 <div key={cell.id} className="" onClick={stopEventPropagation}>
                     <Cell
@@ -35,7 +45,6 @@ export const Notebook = () => {
                         type={cell.type}
                         value={cell.value}
                         editing={cell.id === editingCell}
-                        showInsertButtons={true}
                         showDeleteButton={notebook.data.cells.length > 1}
                         onUpdate={value => {
                             notebook.updateCell(cell.id, {
@@ -48,9 +57,6 @@ export const Notebook = () => {
                         onDuplicate={() => {
                             notebook.duplicateCell(cell.id);
                         }}
-                        onInsert={cellType => {
-                            notebook.insertCellAfter(cell.id, cellType);
-                        }}
                         onEditStart={() => {
                             setEditingCell(cell.id);
                         }}
@@ -58,6 +64,15 @@ export const Notebook = () => {
                             setEditingCell("");
                         }}
                     />
+                    {props.showInsertCell && (
+                        <CellInsert
+                            showInsertCode={true}
+                            showInsertText={true}
+                            onInsert={cellType => {
+                                notebook.insertCellAfter(cell.id, cellType);
+                            }}
+                        />
+                    )}
                 </div>
             ))}
             {metadataVisible && (
@@ -73,4 +88,8 @@ export const Notebook = () => {
             )}
         </div>
     );
+};
+
+Notebook.defaultProps = {
+    showInsertCell: true,
 };
