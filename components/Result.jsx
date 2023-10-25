@@ -54,15 +54,15 @@ const resultTypes = {
     },
     [VALUES_TYPES.FUNCTION]: {
         className: "bg-blue-700 text-white",
-        icon: "function-square",
+        icon: "function-x",
     },
     [VALUES_TYPES.BOOLEAN]: {
         className: "bg-indigo-600 text-white",
-        icon: "toggle-right",
+        icon: "binary",
     },
     [VALUES_TYPES.NUMBER]: {
         className: "bg-yellow-600 text-white",
-        icon: "plus",
+        icon: "numbers",
     },
 };
 

@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "@babel/standalone": "^7.18.0",
-        "@josemi-icons/react": "^0.4.0",
+        "@josemi-icons/react": "^0.5.0",
         "@mdx-js/mdx": "^2.3.0",
         "browser-fs-access": "^0.33.1",
         "classnames": "^2.3.2",

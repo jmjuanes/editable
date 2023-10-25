@@ -100,7 +100,7 @@ export const NotebookHeader = props => (
                 </MetadataItem>
             )}
             {props.tags.length > 0 && (
-                <MetadataItem icon="backspace" label="Tags:">
+                <MetadataItem icon="tags" label="Tags:">
                     <div className="flex flex-wrap gap-1 ml-1">
                         {props.tags.map((tag, index) => (
                             <div key={index} className="flex items-center px-2 py-1 bg-gray-100 rounded-xl">
