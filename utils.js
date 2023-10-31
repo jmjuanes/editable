@@ -11,7 +11,7 @@ export const stopEventPropagation = event => {
 // Check if the provided value is a valid map coordinate
 export const isMapCoordinate = value => {
     if (typeof value === "object" && !!value && Object.keys(value).length === 2) {
-        return typeof value.latitude === "number" && typeof value.longitude === "number";
+        return typeof value.latitude !== "undefined" && typeof value.longitude !== "undefined";
     }
     return false;
 };
