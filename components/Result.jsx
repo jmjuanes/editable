@@ -1,5 +1,6 @@
 import React from "react";
 import {createRoot} from "react-dom/client";
+import * as Tyler from "tyler-js";
 import classNames from "classnames";
 import {renderIcon, XCircleIcon} from "@josemi-icons/react";
 import {CONSOLE_LEVELS, VALUES_TYPES} from "../constants.js";
@@ -134,6 +135,24 @@ const ErrorMessage = props => (
     </div>
 );
 
+const MapResult = props => {
+    console.log(props);
+    const ref = React.useRef(null);
+    React.useEffect(() => {
+        Tyler.create(ref.current, {
+            center: [props.latitude, props.longitude],
+            zoom: 5,
+            zooming: true,
+            marks: [
+                Tyler.marker([props.latitude, props.longitude]),
+            ],
+        });
+    }, []);
+    return (
+        <div className="overflow-hidden rounded-md w-full" ref={ref} />
+    );
+};
+
 export const Result = props => {
     const container = React.useRef(null);
     const root = React.useRef(null);
@@ -144,7 +163,6 @@ export const Result = props => {
         "flex flex-col gap-2": true,
         "o-50": !props.isCurrentValue,
     });
-    const resultClass = classNames("")
     // Effect for mounting rendered HTML content into container
     React.useEffect(() => {
         if (!props.error && isHtmlValue) {
@@ -182,11 +200,16 @@ export const Result = props => {
                                 <div className="flex p-3 bg-gray-100 rounded-md">
                                     <Value value={props.value} />
                                 </div>
-                                {(isHtmlValue || isCoordinatesValue) && (
-                                    <div
-                                        ref={container}
-                                        className="bg-white rounded-md mt-2 border-2 border-gray-100"
-                                    />
+                                {isHtmlValue && (
+                                    <div ref={container} className="bg-white rounded-md mt-2 border-2 border-gray-100" />
+                                )}
+                                {isCoordinatesValue && (
+                                    <div className="w-full mt-2">
+                                        <MapResult
+                                            latitude={Number(props.value.latitude)}
+                                            longitude={Number(props.value.longitude)}
+                                        />
+                                    </div>
                                 )}
                             </div>
                         </div>
