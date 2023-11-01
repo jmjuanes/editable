@@ -136,26 +136,56 @@ const ErrorMessage = props => (
 );
 
 const MapResult = props => {
-    console.log(props);
-    const ref = React.useRef(null);
+    const parent = React.useRef(null);
     React.useEffect(() => {
-        Tyler.create(ref.current, {
+        Tyler.create(parent.current, {
+            width: props.width,
+            height: props.height,
             center: [props.latitude, props.longitude],
-            zoom: 5,
-            zooming: true,
+            zoom: props.zoom,
             marks: [
                 Tyler.marker([props.latitude, props.longitude]),
             ],
         });
     }, []);
     return (
-        <div className="overflow-hidden rounded-md w-full" ref={ref} />
+        <div className="overflow-hidden rounded-md w-full" ref={parent} />
+    );
+};
+
+MapResult.defaultProps = {
+    width: "100%",
+    height: "400px",
+    latitude: 0,
+    longitude: 0,
+    zoom: 5,
+};
+
+const HtmlResult = props => {
+    const parent = React.useRef(null);
+    // Effect for mounting rendered HTML content into container
+    React.useEffect(() => {
+        if (isDOMElement(props.value)) {
+            // Just append DOM element into container
+            parent.current.appendChild(props.value);
+        }
+        // Other case, value is a REACT element, so re will automatically render it
+        else {
+            const root = createRoot(parent.current);
+            root.render(props.value);
+            // Register unmount listener: unmount returned value when
+            // this component is unmounted
+            return () => {
+                root.unmount();
+            };
+        }
+    }, []);
+    return (
+        <div ref={parent} className="bg-white rounded-md border-2 border-gray-100" />
     );
 };
 
 export const Result = props => {
-    const container = React.useRef(null);
-    const root = React.useRef(null);
     const type = getResultType(props.value);
     const isCoordinatesValue = type === VALUES_TYPES.COORDINATES;
     const isHtmlValue = type === VALUES_TYPES.REACT || type === VALUES_TYPES.HTML;
@@ -163,58 +193,36 @@ export const Result = props => {
         "flex flex-col gap-2": true,
         "o-50": !props.isCurrentValue,
     });
-    // Effect for mounting rendered HTML content into container
-    React.useEffect(() => {
-        if (!props.error && isHtmlValue) {
-            if (isDOMElement(props.value)) {
-                // Just append DOM element into container
-                container.current.appendChild(props.value);
-            }
-            else {
-                // Other case, value is a REACT element, so re will automatically render it
-                root.current = createRoot(container.current);
-                root.current.render(props.value);
-                // Register unmount listener: unmount returned value when
-                // this component is unmounted
-                return () => {
-                    root.current.unmount();
-                };
-            }
-        }
-    }, []);
     return (
         <div className={classList}>
+            <Logs items={props.logs || []} />
             {props.error && (
                 <ErrorMessage type={props.errorType} message={props.errorMessage} />
             )}
             {!props.error && (
-                <React.Fragment>
-                    <Logs items={props.logs || []} />
-                    {/* Wrapper element for displaying result value */}
-                    <div className="w-full">
-                        <div className="flex gap-0">
-                            <div className="flex justify-end items-start w-12">
-                                <ResultIcon type={type} />
-                            </div>
-                            <div className="grow">
-                                <div className="flex p-3 bg-gray-100 rounded-md">
-                                    <Value value={props.value} />
-                                </div>
-                                {isHtmlValue && (
-                                    <div ref={container} className="bg-white rounded-md mt-2 border-2 border-gray-100" />
-                                )}
-                                {isCoordinatesValue && (
-                                    <div className="w-full mt-2">
-                                        <MapResult
-                                            latitude={Number(props.value.latitude)}
-                                            longitude={Number(props.value.longitude)}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                <div className="w-ful flex gap-0">
+                    <div className="flex justify-end items-start w-12">
+                        <ResultIcon type={type} />
                     </div>
-                </React.Fragment>
+                    <div className="grow">
+                        <div className="flex p-3 bg-gray-100 rounded-md">
+                            <Value value={props.value} />
+                        </div>
+                        {isHtmlValue && (
+                            <div className="w-full mt-2">
+                                <HtmlResult value={props.value} />
+                            </div>
+                        )}
+                        {isCoordinatesValue && (
+                            <div className="w-full mt-2">
+                                <MapResult
+                                    latitude={Number(props.value.latitude)}
+                                    longitude={Number(props.value.longitude)}
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
             )}
         </div>
     );
