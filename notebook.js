@@ -36,7 +36,7 @@ export const createNotebookCell = (type, initialValue = "") => {
 export const createNotebook = () => {
     return {
         version: VERSION,
-        title: "untitled",
+        title: "Untitled Notebook",
         cells: [
             // createNotebookCell(CELL_TYPES.TEXT, ""),
             createNotebookCell(CELL_TYPES.CODE, `return "Hello world!";`),

@@ -96,6 +96,12 @@ export const NotebookProvider = props => {
             setState(createNotebook());
         }
     }, []);
+    // Hook to update notebook title
+    React.useEffect(() => {
+        if (state?.title) {
+            document.title = `${state.title} | Editable`;
+        }
+    }, [state?.title]);
     // Check if we have notebook data
     if (state) {
         const contextValue = {

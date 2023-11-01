@@ -2,26 +2,26 @@ import React from "react";
 import {GitBranchIcon, DotsVerticalIcon, renderIcon} from "@josemi-icons/react";
 import {Dropdown, DropdownItem, DropdownSeparator} from "./Dropdown.jsx";
 
-const NotebookTitle = props => {
-    const value = React.useRef(props.value);
-    return (
-        <input
-            type="text"
-            className="bg-white outline-0 p-0 text-gray-900 text-4xl font-black w-full"
-            defaultValue={props.value}
-            placeholder={props.placeholder || "untitled"}
-            onChange={event => {
-                value.current = event.target.value || "";
-            }}
-            onBlur={() => {
-                // Only trigger onChange event if new title is different from current saved title
-                if (props.value !== value.current) {
-                    props.onChange(value.current);
-                }
-            }}
-        />
-    );
-};
+const NotebookTitle = props => (
+    <input
+        type="text"
+        className="bg-white outline-0 p-0 text-gray-900 text-4xl font-black w-full"
+        defaultValue={props.value}
+        placeholder={props.placeholder || "untitled"}
+        onKeyDown={event => {
+            const value = event.target.value || "";
+            if (event.key === "Enter" && props.value !== value) {
+                props.onChange(value);
+            }
+        }}
+        onBlur={event => {
+            const value = event.target.value || "";
+            if (props.value !== value) {
+                props.onChange(value);
+            }
+        }}
+    />
+);
 
 const NotebookForkBanner = props => (
     <div className="flex items-center justify-between gap-4 rounded-md bg-green-600 text-white p-4">
@@ -67,6 +67,7 @@ export const NotebookHeader = props => (
         )}
         <div className="flex items-center justify-between gap-2 mb-1">
             <NotebookTitle
+                key={props.title}
                 value={props.title}
                 onChange={props.onTitleChange}
             />
