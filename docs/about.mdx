@@ -17,7 +17,7 @@ features:
 ---
 
 <div className="w-full pt-20 md:pt-24 pb-16 md:pb-32">
-    <div className="font-plex font-black text-6xl md:text-7xl text-gray-950 tracking-tight leading-tight mb-4">
+    <div className="font-plex font-black text-6xl md:text-7xl text-neutral-950 tracking-tight leading-tight mb-4">
         <span>Code. Create. Explore.</span>
     </div>
     <div className="w-full max-w-4xl text-xl">
@@ -26,7 +26,7 @@ features:
     </div>
 </div>
 <div className="w-full pt-20 pb-20">
-    <div className="font-plex font-black text-4xl md:text-6xl text-gray-900 tracking-tight leading-tight mb-4">
+    <div className="font-plex font-black text-4xl md:text-6xl text-neutral-900 tracking-tight leading-tight mb-4">
         <span>The Editable Experience.</span>
     </div>
     <div className="text-lg mb-16">
@@ -36,10 +36,10 @@ features:
     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
         {props.page.data.features.map(feature => (
             <div key={feature.title} className="">
-                <div className="flex items-center text-6xl text-gray-800 mb-4">
+                <div className="flex items-center text-6xl text-neutral-800 mb-4">
                     <Icon icon={feature.icon} />
                 </div>
-                <div className="font-plex font-black text-3xl text-gray-900 tracking-tight leading-tight mb-4">
+                <div className="font-plex font-black text-3xl text-neutral-900 tracking-tight leading-tight mb-4">
                     <span>{feature.title}</span>
                 </div>
                 <div className="">{feature.description}</div>
@@ -48,14 +48,14 @@ features:
     </div>
 </div>
 <div className="w-full pt-20 pb-12 md:pb-20">
-    <div className="font-plex font-black text-4xl md:text-6xl text-center text-gray-900 tracking-tight leading-tight mb-4">
+    <div className="font-plex font-black text-4xl md:text-6xl text-center text-neutral-900 tracking-tight leading-tight mb-4">
         <span>Start coding with Editable</span>
     </div>
     <div className="w-full max-w-3xl mx-auto text-center text-lg mb-8">
         <span>Now that you know how to start coding with Editable, it is time to explore, create, and learn in an interactive and engaging environment.</span>
     </div>
     <div className="flex justify-center">
-        <a href="./#new" className="flex items-center gap-2 text-white bg-gray-950 hover:bg-gray-900 px-4 py-3 rounded-md">
+        <a href="./#new" className="flex items-center gap-2 text-white bg-neutral-950 hover:bg-neutral-900 px-4 py-3 rounded-md">
             <span className="flex items-center text-xl">
                 <Icon icon="file-plus" />
             </span>

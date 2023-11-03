@@ -5,7 +5,7 @@ import {Dropdown, DropdownItem, DropdownSeparator} from "./Dropdown.jsx";
 const NotebookTitle = props => (
     <input
         type="text"
-        className="bg-white outline-0 p-0 text-gray-900 text-4xl font-black w-full"
+        className="bg-white outline-0 p-0 text-neutral-900 text-4xl font-black w-full"
         defaultValue={props.value}
         placeholder={props.placeholder || "untitled"}
         onKeyDown={event => {
@@ -42,16 +42,16 @@ const NotebookForkBanner = props => (
 const MetadataItem = props => (
     <div className="flex items-center gap-1 select-none">
         {props.icon && (
-            <div className="flex text-gray-500 text-lg">
+            <div className="flex text-neutral-500 text-lg">
                 {renderIcon(props.icon)}
             </div>
         )}
         {props.label && (
-            <div className="flex items-center text-gray-700 text-xs">
+            <div className="flex items-center text-neutral-700 text-xs">
                 {props.label}
             </div>
         )}
-        <div className="text-gray-800 text-sm font-medium">
+        <div className="text-neutral-800 text-sm font-medium">
             {props.children}
         </div>
     </div>
@@ -72,7 +72,7 @@ export const NotebookHeader = props => (
                 onChange={props.onTitleChange}
             />
             <div className="group flex relative" tabIndex="0">
-                <div className="rounded-md border border-gray-200 p-2 flex hover:bg-gray-50 group-focus-within:bg-gray-100 cursor-pointer">
+                <div className="rounded-md border border-neutral-200 p-2 flex hover:bg-neutral-50 group-focus-within:bg-neutral-100 cursor-pointer">
                     <div className="flex items-center text-xl">
                         <DotsVerticalIcon />
                     </div>
@@ -110,8 +110,8 @@ export const NotebookHeader = props => (
                 <MetadataItem icon="tags" label="Tags:">
                     <div className="flex flex-wrap gap-1 ml-1">
                         {props.tags.map((tag, index) => (
-                            <div key={index} className="flex items-center px-2 py-1 bg-gray-100 rounded-xl">
-                                <span className="text-2xs leading-none text-gray-700 font-medium">{tag}</span>
+                            <div key={index} className="flex items-center px-2 py-1 bg-neutral-100 rounded-xl">
+                                <span className="text-2xs leading-none text-neutral-700 font-medium">{tag}</span>
                             </div>
                         ))}
                     </div>

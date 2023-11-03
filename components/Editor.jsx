@@ -48,7 +48,7 @@ export const Editor = props => {
                         />
                     )}
                     {props.showSubmitHint && (
-                        <div className="text-gray-400 text-sm">
+                        <div className="text-neutral-400 text-sm">
                             {props.submitHint}
                         </div>
                     )}

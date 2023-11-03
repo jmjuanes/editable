@@ -109,13 +109,13 @@ export const DataTablePagination = props => {
     return (
         <div className="flex items-center justify-between mt-2" data-testid="dt-pagination">
             {/* Left side content */}
-            <div className="text-gray-700 text-sm">
+            <div className="text-neutral-700 text-sm">
                 Showing <b>{props.rowStart + 1}</b> to <b>{props.rowEnd}</b> of <b>{props.rowSize}</b> rows.
             </div>
             {/* Right side content */}
             <div className="flex items-center gap-2 text-sm">
                 <div className="flex items-center gap-2">
-                    <div className="text-gray-700 text-sm">
+                    <div className="text-neutral-700 text-sm">
                         <span>Rows per page:</span>
                     </div>
                     <select className="py-1 pl-1 pr-8 text-sm bg-white" defaultValue={pageSize} onChange={handlePageSizeChange}>
@@ -129,7 +129,7 @@ export const DataTablePagination = props => {
                         <ChevronLeftIcon />
                         <strong>Prev</strong>
                     </div>
-                    <div className="text-gray-700">
+                    <div className="text-neutral-700">
                         Page <b>{props.page + 1}</b> of <b>{props.pages}</b>
                     </div>
                     <div className="p-2 text-sm flex items-center" onClick={nextPage}>
@@ -160,13 +160,13 @@ DataTablePagination.defaultProps = {
 export const DataTableRender = props => {
     const tableClass = classNames({
         "w-full rounded-md": true,
-        "border border-gray-200": props.border,
+        "border border-neutral-200": props.border,
     });
     // Return the table content
     return (
         <table className={tableClass} data-testid="dt-table">
             <thead className="" data-testid="dt-table-header">
-                <tr className="border-b-2 border-gray-200">
+                <tr className="border-b-2 border-neutral-200">
                     {props.selectable && (
                         <td className="p-3 w-12"></td>
                     )}
@@ -174,7 +174,7 @@ export const DataTableRender = props => {
                         const key = `header:cell:${index}`;
                         const cellClass = classNames({
                             "p-3 font-bold": true,
-                            "border-l-1 first:border-l-0 border-gray-200": props.border,
+                            "border-l-1 first:border-l-0 border-neutral-200": props.border,
                         });
                         const handleCellClick = event => {
                             return props.onHeaderCellClick(event, column.index);
@@ -203,8 +203,8 @@ export const DataTableRender = props => {
                     const isLast = rowIndex === props.data.length - 1;
                     const rowKey = `body:row:${rowIndex}`;
                     const rowClass = classNames({
-                        "odd:bg-white even:bg-gray-50": props.striped,
-                        "border-b-1 border-gray-200": !isLast && props.border,
+                        "odd:bg-white even:bg-neutral-50": props.striped,
+                        "border-b-1 border-neutral-200": !isLast && props.border,
                     });
                     const rowSelected = !!row.selected;
                     const handleRowSelect = event => {
@@ -231,7 +231,7 @@ export const DataTableRender = props => {
                                 const cellKey = `body:row${rowIndex}:cell:${cellIndex}`;
                                 const cellClass = classNames({
                                     "p-3": true,
-                                    "border-l-1 first:border-l-0 border-gray-200": props.border,
+                                    "border-l-1 first:border-l-0 border-neutral-200": props.border,
                                 });
                                 const handleCellClick = event => {
                                     return props.onBodyCellClick(event, row.index, cell.index);

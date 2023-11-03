@@ -10,7 +10,7 @@ import {isDOMElement, isReactElement, isMapCoordinate} from "../utils.js";
 // Console levels info
 const consoleLevels = {
     [CONSOLE_LEVELS.LOG]: {
-        className: "text-gray-600",
+        className: "text-neutral-600",
         icon: "info-circle",
     },
     [CONSOLE_LEVELS.INFO]: {
@@ -112,7 +112,7 @@ const Logs = props => {
                         {renderIcon(icon)}
                     </div>
                 </div>
-                <div className="bg-gray-100 px-3 py-2 rounded-md w-full grow">
+                <div className="bg-neutral-100 px-3 py-2 rounded-md w-full grow">
                     <div className="text-sm">{item.message}</div>
                 </div>
             </div>
@@ -181,7 +181,7 @@ const HtmlResult = props => {
         }
     }, []);
     return (
-        <div ref={parent} className="bg-white rounded-md border-2 border-gray-100" />
+        <div ref={parent} className="bg-white" />
     );
 };
 
@@ -205,7 +205,7 @@ export const Result = props => {
                         <ResultIcon type={type} />
                     </div>
                     <div className="grow">
-                        <div className="flex p-3 bg-gray-100 rounded-md">
+                        <div className="flex p-3 bg-neutral-100 rounded-md">
                             <Value value={props.value} />
                         </div>
                         {isHtmlValue && (

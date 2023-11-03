@@ -4,7 +4,7 @@
     padding: 0px !important;
 }
 .editable-editor .codecake-editor {
-    background-color: var(--low-gray-100);
+    background-color: var(--low-neutral-100);
     border-radius: 0.5rem;
     padding: 1rem;
 }
@@ -95,6 +95,7 @@
 .editable-markdown h4,
 .editable-markdown h5,
 .editable-markdown h6 {
+    color: var(--low-neutral-950);
     font-weight: 600;
     line-height: 1.25;
     margin-bottom: 1rem;
