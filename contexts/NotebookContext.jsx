@@ -1,5 +1,5 @@
 import React from "react";
-import {createNotebook} from "../notebook.js";
+import {importNotebook} from "../notebook.js";
 import {createNotebookCell, createNotebookContext} from "../notebook.js";
 import {useSessionStorage} from "../hooks/useStorage.js";
 
@@ -91,9 +91,14 @@ export const NotebookProvider = props => {
     }
     // Hook to import notebook data
     React.useEffect(() => {
-        // Initialize a new empty notebook
         if (!state || !state.updatedAt) {
-            setState(createNotebook());
+            importNotebook()
+                .then(notebookData => {
+                    setState(notebookData);
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         }
     }, []);
     // Hook to update notebook title

@@ -2,7 +2,8 @@ import React from "react";
 import {uid} from "uid/secure";
 import {VERSION, CDN_URL, CELL_TYPES, CONSOLE_LEVELS} from "./constants.js";
 import {ENDL, MIME_TYPES, FILE_EXTENSIONS} from "./constants.js";
-import {parseYaml, stringifyYaml, saveToFile} from "./utils.js";
+import {WELCOME_TEMPLATE_URL} from "./constants.js";
+import {fetchText, parseYaml, stringifyYaml, saveToFile} from "./utils.js";
 
 // Note: babel is added as an external dependency
 // See this issue: https://github.com/babel/babel/issues/14301
@@ -50,6 +51,18 @@ export const createNotebook = () => {
         createdAt: Date.now(),
         updatedAt: Date.now(),
     };
+};
+
+// Import notebook
+export const importNotebook = () => {
+    const request = (window.location?.hash || "").replace(/^#/, "");
+    // Requested empty notebook
+    if (request === "new") {
+        return Promise.resolve(createNotebook());
+    }
+    // Return welcome document
+    return fetchText(WELCOME_TEMPLATE_URL)
+        .then(text => parseYaml(text));
 };
 
 // Save notebook as Yaml string
