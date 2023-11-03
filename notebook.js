@@ -1,8 +1,8 @@
 import React from "react";
 import {uid} from "uid/secure";
-import {fileSave} from "browser-fs-access";
 import {VERSION, CDN_URL, CELL_TYPES, CONSOLE_LEVELS} from "./constants.js";
 import {ENDL, MIME_TYPES, FILE_EXTENSIONS} from "./constants.js";
+import {parseYaml, stringifyYaml, saveToFile} from "./utils.js";
 
 // Note: babel is added as an external dependency
 // See this issue: https://github.com/babel/babel/issues/14301
@@ -32,20 +32,39 @@ export const createNotebookCell = (type, initialValue = "") => {
     };
 };
 
+const getNotebookFilename = notebook => {
+    return (notebook?.title || "untitled").toLowerCase().trim().replace(/\s/g, "_");
+};
+
 // Create a new notebook
 export const createNotebook = () => {
     return {
         version: VERSION,
         title: "Untitled Notebook",
+        author: "",
+        tags: [],
         cells: [
             // createNotebookCell(CELL_TYPES.TEXT, ""),
             createNotebookCell(CELL_TYPES.CODE, `return "Hello world!";`),
         ],
         createdAt: Date.now(),
         updatedAt: Date.now(),
-        author: "",
-        tags: [],
     };
+};
+
+// Save notebook as Yaml string
+export const saveNotebook = notebook => {
+    return stringifyYaml(notebook);
+};
+
+// Save notebook as yaml
+export const saveNotebookAsYaml = notebook => {
+    return saveNotebook(notebook).then(data => {
+        return saveToFile(data, MIME_TYPES.YAML, {
+            name: getNotebookFilename(notebook),
+            extension: FILE_EXTENSIONS.YAML,
+        });
+    });
 };
 
 // Export notebook as markdown
@@ -54,7 +73,6 @@ export const exportNotebook = notebook => {
         const data = [
             "---",
             `title: ${JSON.stringify(notebook.title || "Untitled")}`,
-            `created_at: ${JSON.stringify(notebook.createdAt)}`,
             `author: ${JSON.stringify(notebook.author || "")}`,
             `tags: ${JSON.stringify(notebook.tags)}`,
             "---",
@@ -78,16 +96,11 @@ export const exportNotebook = notebook => {
 };
 
 // Export notebook as Markdown file
-export const saveNotebookAsMarkdownFile = notebook => {
-    const filename = (notebook.title || "untitled").toLowerCase().trim().replace(/\s/g, "_");
+export const exportNotebookToFile = notebook => {
     return exportNotebook(notebook).then(data => {
-        const blob = new Blob([data], {type: MIME_TYPES.FOLIO});
-        return fileSave(blob, {
-            description: "Export",
-            fileName: `${filename}${FILE_EXTENSIONS.MARKDOWN}`,
-            extensions: [
-                FILE_EXTENSIONS.MARKDOWN,
-            ],
+        return saveToFile(data, MIME_TYPES.MARKDOWN, {
+            name: getNotebookFilename(notebook),
+            extension: FILE_EXTENSIONS.MARKDOWN,
         });
     });
 };
