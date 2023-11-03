@@ -84,6 +84,12 @@ export const NotebookHeader = props => (
                         text="Edit metadata"
                         onClick={props.onEditMetadata}
                     />
+                    <DropdownItem
+                        disabled={false}
+                        icon="disk"
+                        text="Save as file"
+                        onClick={props.onSave}
+                    />
                     <DropdownSeparator />
                     <DropdownItem
                         disabled={props.exportDisabled}

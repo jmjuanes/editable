@@ -31,7 +31,8 @@
         "react-dom": "^18.2.0",
         "redocus": "^0.1.1",
         "tyler-js": "^0.1.1",
-        "uid": "^2.0.2"
+        "uid": "^2.0.2",
+        "yaml": "^2.3.3"
     },
     "devDependencies": {
         "@babel/core": "^7.18.0",

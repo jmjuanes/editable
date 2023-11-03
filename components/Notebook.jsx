@@ -4,7 +4,7 @@ import {CellInsert} from "./CellInsert.jsx";
 import {NotebookHeader} from "./NotebookHeader.jsx";
 import {NotebookMetadata} from "./NotebookMetadata.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
-import {saveNotebookAsMarkdownFile} from "../notebook.js";
+import {exportNotebookToFile, saveNotebookAsYaml} from "../notebook.js";
 import {stopEventPropagation} from "../utils.js";
 
 export const Notebook = props => {
@@ -22,8 +22,14 @@ export const Notebook = props => {
                 onTitleChange={newTitle => {
                     notebook.setTitle(newTitle);
                 }}
+                onSave={() => {
+                    saveNotebookAsYaml(notebook.data)
+                        .then(() => console.log("File saved"))
+                        .catch(error => console.error(error));
+                }}
                 onExport={() => {
-                    saveNotebookAsMarkdownFile(notebook.data)
+                    exportNotebookToFile(notebook.data)
+                        .then(() => console.log("File saved"))
                         .catch(error => console.error(error));
                 }}
                 onEditMetadata={() => setMetadataVisible(true)}

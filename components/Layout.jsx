@@ -23,7 +23,7 @@ const NavbarLink = props => (
 );
 
 const CreateNotebookButton = () => (
-    <a href="./" target="_blank" className="flex items-center gap-2 bg-gray-950 hover:bg-gray-900 rounded-md px-3 py-2">
+    <a href="./#new" target="_blank" className="flex items-center gap-2 bg-gray-950 hover:bg-gray-900 rounded-md px-3 py-2">
         <div className="flex items-center text-white text-xl">
             <FilePlusIcon />
         </div>

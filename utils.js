@@ -1,4 +1,6 @@
 import React from "react";
+import * as yaml from "yaml";
+import {fileSave} from "browser-fs-access";
 
 // Delay the execution of the provided function
 export const delay = (ms, callback) => window.setTimeout(callback, ms);
@@ -47,4 +49,47 @@ export const copyTextToClipboard = text => {
     }
     // TODO: use an alternate method to copy to clipboard
     return Promise.reject(null);
+};
+
+// Wrapper to parse a yaml string
+export const parseYaml = str => {
+    return new Promise(resolve => {
+        return resolve(yaml.parse(str));
+    });
+};
+
+// Wrapper to stringify a JSON to yaml
+export const stringifyYaml = json => {
+    return new Promise(resolve => {
+        return resolve(yaml.stringify(json));
+    });
+};
+
+// Wrapper for downloading a file
+export const saveToFile = (data, type, options) => {
+    const blob = new Blob([data], {type});
+    return fileSave(blob, {
+        description: options.description || "Export",
+        fileName: `${options.name}${options.extension}`,
+        extensions: [
+            options.extension,
+        ],
+    });
+};
+
+// Fetch wrapper
+const fetctUrl = url => {
+    return new Promise(async (resolve, reject) => {
+        const response = await window.fetch(url);
+        if (response.ok) {
+            return resolve(response);
+        }
+        // Reject this promise
+        reject(new Error("File not found"));
+    });
+};
+
+// Fetch a text resource
+export const fetchText = url => {
+    return fetctUrl(url).then(res => res.text());
 };
