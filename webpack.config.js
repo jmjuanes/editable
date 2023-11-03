@@ -98,6 +98,7 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 path.join(__dirname, "node_modules", "@babel/standalone", "babel.min.js"),
+                path.join(__dirname, "welcome.yml"),
             ],
         }),
     ],
