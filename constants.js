@@ -44,8 +44,10 @@ export const VALUES_TYPES = {
 
 export const MIME_TYPES = {
     MARKDOWN: "text/markdown",
+    YAML: "text/yaml",
 };
 
 export const FILE_EXTENSIONS = {
     MARKDOWN: ".md",
+    YAML: ".yml",
 };
