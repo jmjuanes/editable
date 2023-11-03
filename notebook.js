@@ -1,5 +1,6 @@
 import React from "react";
 import {uid} from "uid/secure";
+import lzString from "lz-string";
 import {VERSION, CDN_URL, CELL_TYPES, CONSOLE_LEVELS} from "./constants.js";
 import {ENDL, MIME_TYPES, FILE_EXTENSIONS} from "./constants.js";
 import {WELCOME_TEMPLATE_URL} from "./constants.js";
@@ -55,14 +56,25 @@ export const createNotebook = () => {
 
 // Import notebook
 export const importNotebook = () => {
-    const request = (window.location?.hash || "").replace(/^#/, "");
+    const request = (window.location?.hash || "");
     // Requested empty notebook
-    if (request === "new") {
+    if (request === "#new") {
         return Promise.resolve(createNotebook());
+    }
+    // Requested notebook enconded in url
+    else if (request.startsWith("#data/")) {
+        return loadNotebookFromUrl(request);
     }
     // Return welcome document
     return fetchText(WELCOME_TEMPLATE_URL)
         .then(text => parseYaml(text));
+};
+
+// Loqe notebook from Url
+export const loadNotebookFromUrl = url => {
+    return Promise.resolve(url.replace("#data/", ""))
+        .then(data => lzString.decompressFromBase64(data))
+        .then(data => parseYaml(data));
 };
 
 // Save notebook as Yaml string
@@ -78,6 +90,18 @@ export const saveNotebookAsYaml = notebook => {
             extension: FILE_EXTENSIONS.YAML,
         });
     });
+};
+
+// Save notebook as url
+export const saveNotebookAsUrl = notebook => {
+    return saveNotebook(notebook)
+        .then(data => lzString.compressToBase64(data))
+        .then(str => {
+            const newUrl = new URL(window.location);
+            newUrl.hash = `#data/${str}`;
+            return newUrl.href;
+            // return `${window.location.href}#data/${str}`;
+        })
 };
 
 // Export notebook as markdown

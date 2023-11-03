@@ -3,6 +3,7 @@ import {Cell} from "./Cell.jsx";
 import {CellInsert} from "./CellInsert.jsx";
 import {NotebookHeader} from "./NotebookHeader.jsx";
 import {NotebookMetadata} from "./NotebookMetadata.jsx";
+import {NotebookShare} from "./NotebookShare.jsx";
 import {useNotebook} from "../contexts/NotebookContext.jsx";
 import {exportNotebookToFile, saveNotebookAsYaml} from "../notebook.js";
 import {stopEventPropagation} from "../utils.js";
@@ -11,6 +12,7 @@ export const Notebook = props => {
     const notebook = useNotebook();
     const [editingCell, setEditingCell] = React.useState("");
     const [metadataVisible, setMetadataVisible] = React.useState(false);
+    const [shareVisible, setShareVisible] = React.useState(false);
     return (
         <div className="flex flex-col w-full" onClick={() => setEditingCell("")}>
             <NotebookHeader
@@ -22,6 +24,7 @@ export const Notebook = props => {
                 onTitleChange={newTitle => {
                     notebook.setTitle(newTitle);
                 }}
+                onShare={() => setShareVisible(true)}
                 onSave={() => {
                     saveNotebookAsYaml(notebook.data)
                         .then(() => console.log("File saved"))
@@ -90,6 +93,12 @@ export const Notebook = props => {
                         notebook.update(data);
                         setMetadataVisible(false);
                     }}
+                />
+            )}
+            {shareVisible && (
+                <NotebookShare
+                    notebook={notebook.data}
+                    onClose={() => setShareVisible(false)}
                 />
             )}
         </div>
