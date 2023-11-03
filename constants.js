@@ -1,6 +1,10 @@
 export const VERSION = "1";
 
 export const CDN_URL = "https://esm.sh/";
+
+export const WELCOME_TEMPLATE_URL = "./welcome.yml";
+export const WELCOME_TEMPLATE_TITLE = "Welcome to Editable!";
+
 export const ENDL = "\n";
 
 export const KEYS = {
