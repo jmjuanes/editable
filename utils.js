@@ -76,3 +76,20 @@ export const saveToFile = (data, type, options) => {
         ],
     });
 };
+
+// Fetch wrapper
+const fetctUrl = url => {
+    return new Promise(async (resolve, reject) => {
+        const response = await window.fetch(url);
+        if (response.ok) {
+            return resolve(response);
+        }
+        // Reject this promise
+        reject(new Error("File not found"));
+    });
+};
+
+// Fetch a text resource
+export const fetchText = url => {
+    return fetctUrl(url).then(res => res.text());
+};
