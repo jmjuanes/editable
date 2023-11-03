@@ -1,5 +1,5 @@
 import React from "react";
-import {GitBranchIcon, DotsVerticalIcon, renderIcon} from "@josemi-icons/react";
+import {GitBranchIcon, DotsVerticalIcon, renderIcon, SendIcon} from "@josemi-icons/react";
 import {Dropdown, DropdownItem, DropdownSeparator} from "./Dropdown.jsx";
 
 const NotebookTitle = props => (
@@ -57,6 +57,16 @@ const MetadataItem = props => (
     </div>
 );
 
+// Header button
+const Button = props => (
+    <div className="rounded-md border border-neutral-200 p-2 flex hover:bg-neutral-50 group-focus-within:bg-neutral-100 cursor-pointer" onClick={props.onClick}>
+        <div className="flex items-center text-xl">
+            {props.children}
+        </div>
+    </div>
+
+);
+
 // Export notebook header
 export const NotebookHeader = props => (
     <div className="mb-4">
@@ -71,33 +81,36 @@ export const NotebookHeader = props => (
                 value={props.title}
                 onChange={props.onTitleChange}
             />
-            <div className="group flex relative" tabIndex="0">
-                <div className="rounded-md border border-neutral-200 p-2 flex hover:bg-neutral-50 group-focus-within:bg-neutral-100 cursor-pointer">
-                    <div className="flex items-center text-xl">
+            <div className="flex items-center gap-1">
+                <Button onClick={props.onShare}>
+                    <SendIcon />
+                </Button>
+                <div className="group flex relative" tabIndex="0">
+                    <Button>
                         <DotsVerticalIcon />
-                    </div>
+                    </Button>
+                    <Dropdown className="absolute top-full right-0 mt-1 hidden group-focus-within:block z-5">
+                        <DropdownItem
+                            disabled={false}
+                            icon="edit"
+                            text="Edit metadata"
+                            onClick={props.onEditMetadata}
+                        />
+                        <DropdownItem
+                            disabled={false}
+                            icon="disk"
+                            text="Save as file"
+                            onClick={props.onSave}
+                        />
+                        <DropdownSeparator />
+                        <DropdownItem
+                            disabled={props.exportDisabled}
+                            icon="download"
+                            text="Export markdown"
+                            onClick={props.onExport}
+                        />
+                    </Dropdown>
                 </div>
-                <Dropdown className="absolute top-full right-0 mt-1 hidden group-focus-within:block z-5">
-                    <DropdownItem
-                        disabled={false}
-                        icon="edit"
-                        text="Edit metadata"
-                        onClick={props.onEditMetadata}
-                    />
-                    <DropdownItem
-                        disabled={false}
-                        icon="disk"
-                        text="Save as file"
-                        onClick={props.onSave}
-                    />
-                    <DropdownSeparator />
-                    <DropdownItem
-                        disabled={props.exportDisabled}
-                        icon="download"
-                        text="Export markdown"
-                        onClick={props.onExport}
-                    />
-                </Dropdown>
             </div>
         </div>
         <div className="flex items-center gap-4">
@@ -129,5 +142,7 @@ NotebookHeader.defaultProps = {
     showForkBanner: false,
     onTitleChange: null,
     onExport: null,
+    onSave: null,
     onEditMetadata: null,
+    onShare: null,
 };
