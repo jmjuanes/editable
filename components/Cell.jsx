@@ -76,12 +76,16 @@ export const Cell = props => {
                     )}
                     {!props.editing && (
                         <div className="w-full" onClick={handleClick}>
-                            {!value.current && (
-                                <span className="text-neutral-300">Type something...</span>
-                            )}
-                            {!!value.current && (
-                                <Markdown value={value.current} />
-                            )}
+                            <div className="w-full max-w-3xl font-plex-serif">
+                                {!value.current && (
+                                    <span className="text-neutral-500">
+                                        <span>Type something...</span>
+                                    </span>
+                                )}
+                                {!!value.current && (
+                                    <Markdown value={value.current} />
+                                )}
+                            </div>
                         </div>
                     )}
                 </React.Fragment>

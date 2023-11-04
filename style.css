@@ -98,18 +98,14 @@
     color: var(--low-neutral-950);
     font-weight: 600;
     line-height: 1.25;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     margin-top: 1.5rem;
 }
 .editable-markdown h1 {
-    border-bottom: 1px solid #d0d7de;
     font-size: 2em;
-    padding-bottom: 0.5rem;
 }
 .editable-markdown h2 {
-    border-bottom: 1px solid #d0d7de;
     font-size: 1.5rem;
-    padding-bottom: 0.5rem;
 }
 .editable-markdown h3 {
     font-size: 1.25rem;
