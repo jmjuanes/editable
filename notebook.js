@@ -42,15 +42,16 @@ const getNotebookFilename = notebook => {
 export const createNotebook = () => {
     return {
         version: VERSION,
+        id: uid(6),
+        created_at: Date.now(),
+        updated_at: Date.now(),
         title: "Untitled Notebook",
+        description: "",
         author: "",
         tags: [],
         cells: [
-            // createNotebookCell(CELL_TYPES.TEXT, ""),
             createNotebookCell(CELL_TYPES.CODE, `return "Hello world!";`),
         ],
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
     };
 };
 

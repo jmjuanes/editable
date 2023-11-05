@@ -17,7 +17,7 @@ export const useNotebook = () => {
         (index === cells.length - 1) ? cells.push(newCell) : cells.splice(index + 1, 0, newCell);
         return notebook.setState({
             cells: cells,
-            updatedAt: Date.now(),
+            updated_at: Date.now(),
         });
     };
     return {
@@ -27,13 +27,13 @@ export const useNotebook = () => {
         setTitle: newTitle => {
             notebook.setState({
                 title: newTitle,
-                updatedAt: Date.now(),
+                updated_at: Date.now(),
             });
         },
         update: newData => {
             return notebook.setState({
                 ...newData,
-                updatedAt: Date.now(),
+                updated_at: Date.now(),
             });
         },
         updateCell: (id, newData) => {
@@ -50,14 +50,14 @@ export const useNotebook = () => {
             // Save state
             notebook.setState({
                 cells: updatedCells,
-                updatedAt: Date.now(),
+                updated_at: Date.now(),
             });
         },
         deleteCell: id => {
             const cells = notebook.state.cells;
             notebook.setState({
                 cells: cells.filter(cell => cell.id !== id),
-                updatedAt: Date.now(),
+                updated_at: Date.now(),
             });
         },
         duplicateCell: id => {
@@ -75,7 +75,7 @@ export const useNotebook = () => {
             (index === 0) ? cells.unshift(newCell) : cells.splice(index - 1, 0, newCell);
             return notebook.setState({
                 cells: cells,
-                updatedAt: Date.now(),
+                updated_at: Date.now(),
             });
         },
     };
@@ -91,7 +91,7 @@ export const NotebookProvider = props => {
     }
     // Hook to import notebook data
     React.useEffect(() => {
-        if (!state || !state.updatedAt) {
+        if (!state || !state.updated_at) {
             importNotebook()
                 .then(notebookData => {
                     setState(notebookData);
@@ -110,7 +110,7 @@ export const NotebookProvider = props => {
     // Check if we have notebook data
     if (state) {
         const contextValue = {
-            id: props.id || null,
+            id: state?.id || props.id || "",
             context: context.current,
             state: state,
             setState: newState => {

@@ -1,5 +1,9 @@
 version: "1"
+id: welcome
+created_at: 1699036378003
+updated_at: 1699036643292
 title: Welcome to Editable!
+description: An example notebook
 author: The Editable Team
 tags:
   - Welcome
@@ -11,8 +15,7 @@ cells:
   - id: afca28
     type: text
     value: >
-      # What is 'Editable'?
-
+      # What is Editable?
 
       **Editable** is an innovative JavaScript notebook application that combines the power of interactive coding, data visualization, and narrative documentation. It is designed to make JavaScript exploration, prototyping, and learning an enjoyable and interactive experience.
   - id: "272575"
@@ -20,13 +23,11 @@ cells:
     value: >
       ## Notebook Structure
 
-
       In **Editable**, your notebook is organized into cells. These cells can contain a mix of Markdown text (like this one!) and executable JavaScript code. This allows you to create dynamic and informative documents that bring your JavaScript code to life.
   - id: b4bb6f
     type: text
     value: >
       ### Cells can execute JavaScript code
-
 
       Code cells in **Editable** can execute JavaScript code. Think of each code cell as an ES6 module. You can use `import` and `export` within a cell, and import functions from other cells. 
   - id: e18eca
@@ -55,7 +56,6 @@ cells:
     value: >
       ### Cells can render HTML
 
-
       Code cells can also render HTML content. You can generate dynamic HTML output, such as charts or data visualizations, right within your notebook. Here's an example that creates an HTML element dynamically:
   - id: "3750e1"
     type: code
@@ -68,7 +68,6 @@ cells:
     type: text
     value: >
       ### Cells can render React Components
-
 
       One of **Editable**'s standout features is its native support for [React](https://www.react.dev). You can create and render React components directly within a code cell, making UI prototyping and development straightforward.
   - id: f2f93b
@@ -88,7 +87,6 @@ cells:
     value: >
       ## Cells can import packages from the NPM registry
 
-
       You can easily import packages from the NPM registry right within **Editable**. We use [esm.sh CDN](https://esm.sh/) for importing ES6 modules.
   - id: 6b6cf6
     type: code
@@ -101,5 +99,3 @@ cells:
 
       const position = await getJson("http://api.open-notify.org/iss-now.json");
       return position.iss_position;
-createdAt: 1699036378003
-updatedAt: 1699036643292

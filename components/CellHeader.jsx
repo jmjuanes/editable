@@ -48,7 +48,7 @@ const Separator = () => (
 );
 
 export const CellHeader = props => (
-    <div className="w-full flex justify-between items-center gap-2 mb-2">
+    <div className="w-full flex justify-between items-center gap-2 mb-0">
         <div className="flex items-center gap-2">
             {props.id && (
                 <CellId id={props.id} />

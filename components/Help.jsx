@@ -5,7 +5,7 @@ import {useSessionStorage} from "../hooks/useStorage.js";
 
 export const Help = () => {
     const notebook = useNotebook();
-    const defaultVisible = notebook.data.createdAt === notebook.data.updatedAt;
+    const defaultVisible = notebook.data.created_at === notebook.data.updated_at;
     const [visible, setVisible] = useSessionStorage("editable-help-visible", defaultVisible);
     return (
         <React.Fragment>
