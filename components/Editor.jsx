@@ -20,9 +20,9 @@ export const Editor = props => {
             code: props.value || "",
             className: "codecake-light editable-editor",
             language: props.language,
-            lineNumbers: true,
+            lineNumbers: props.lineNumbers,
+            lineWrap: props.lineWrap,
             readOnly: props.readOnly,
-            highlight: CodeCake.highlight,
         });
         // Register event listeners
         cake.onChange(props.onChange);
@@ -61,6 +61,8 @@ export const Editor = props => {
 Editor.defaultProps = {
     value: "",
     language: "",
+    lineNumbers: true,
+    lineWrap: true,
     readOnly: false,
     submitHint: "Press 'Shift' + 'Enter' to execute this code cell.",
     submitText: "Execute",
