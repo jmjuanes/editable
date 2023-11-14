@@ -1,5 +1,5 @@
 import React from "react";
-import {VALUES_TYPES} from "../constants.js";
+import {MAX_STRING_SIZE, MAX_STRING_SIZE_PREVIEW, VALUES_TYPES} from "../constants.js";
 import {getReactElementName, getDOMElementName} from "../utils.js";
 import {isReactElement, isDOMElement, isMapCoordinate} from "../utils.js";
 
@@ -181,11 +181,14 @@ export const UndefinedValue = () => (
     <span className="editable-value undefined">undefined</span>
 );
 
-export const StringValue = props => (
-    <span className="editable-value string">
-        {(props.preview && props.value.length > 10) ? props.value.substring(0, 10) + "…" : props.value}
-    </span>
-);
+export const StringValue = props => {
+    const maxSize = props.preview ? MAX_STRING_SIZE_PREVIEW : MAX_STRING_SIZE;
+    return (
+        <span className="editable-value string" title={props.value}>
+            {(props.value.length > maxSize) ? props.value.substring(0, maxSize) + "…" : props.value}
+        </span>
+    );
+};
 
 export const NumberValue = props => (
     <span className="editable-value number">{props.value}</span>

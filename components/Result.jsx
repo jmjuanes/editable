@@ -50,7 +50,7 @@ const resultTypes = {
         icon: "code",
     },
     [VALUES_TYPES.STRING]: {
-        className: "bg-green-400 text-white",
+        className: "bg-green-600 text-white",
         icon: "text-left",
     },
     [VALUES_TYPES.FUNCTION]: {

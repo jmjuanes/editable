@@ -7,6 +7,9 @@ export const WELCOME_TEMPLATE_TITLE = "Welcome to Editable!";
 
 export const ENDL = "\n";
 
+export const MAX_STRING_SIZE = 80;
+export const MAX_STRING_SIZE_PREVIEW = 10;
+
 export const KEYS = {
     ENTER: "Enter",
     BACKSPACE: "Backspace",
